@@ -1,5 +1,4 @@
-﻿using Application.Interfaces;
-using Domain.Entities.Activity;
+﻿using Domain.Entities.Activity;
 using Domain.Entities.Asset;
 using Domain.Entities.Attribute;
 using Domain.Entities.Character;
@@ -9,20 +8,12 @@ using Domain.Entities.Payment;
 using Domain.Entities.Transaction;
 using Domain.Entities.User;
 using Domain.Entities.Wallet;
-using Infrastructure.Extensions;
 using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructure.Contexts;
-public class ApplicationDbContext : DbContext, IApplicationDbContext
+namespace Application.Interfaces;
+
+public interface IApplicationDbContext
 {
-    public ApplicationDbContext(DbContextOptions options) : base(options) { }
-
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(EntityTypeConfiguration).Assembly);
-        modelBuilder.AddIsDeletedQueryFilter();
-    }
-
     public DbSet<ActivityEntity> Activities { get; set; }
     public DbSet<ActivityType> ActivityTypes { get; set; }
     public DbSet<AssetAttribute> AssetAttributes { get; set; }
@@ -43,4 +34,5 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<UserEntity> Users { get; set; }
     public DbSet<WalletCategory> WalletCategories { get; set; }
     public DbSet<WalletEntity> Wallets { get; set; }
+
 }

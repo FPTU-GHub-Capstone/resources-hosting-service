@@ -1,4 +1,6 @@
 ﻿using Domain.Common.BaseEntity;
+using Domain.Entities.Activity;
+using Domain.Entities.Character;
 using Domain.Entities.User;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -13,4 +15,6 @@ public class GameEntity : BaseEntity
     // 1 User - M Games
     public Guid UserId { get; set; }
     public UserEntity User { get; set; }
+    // 1 Game - M Activity Type
+    public virtual ICollection<ActivityType> ActivityTypes { get; set; }
 }

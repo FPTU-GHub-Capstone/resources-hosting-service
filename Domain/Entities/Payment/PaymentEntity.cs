@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Domain.Entities.Payment;
 
 [Table("Payment")]
-public class Payment : BaseEntity
+public class PaymentEntity : BaseEntity
 {
     public int Amount { get; set; }
     public DateTime Date { get; set;}
@@ -21,6 +21,5 @@ public class Payment : BaseEntity
     public Guid UserId { get; set;}
     public UserEntity User { get; set;}
     //1 Wallet - 1 Payment
-    public Guid WalletId { get; set; }
     public WalletEntity Wallet { get; set;}
 }

@@ -11,4 +11,6 @@ public class WalletCategory :BaseEntity
     //1 Game - M Wallet Category
     public Guid GameId { get; set; }
     public GameEntity Game { get; set; }
+    // 1 Wallet Category - M Wallet
+    public virtual ICollection<WalletEntity> WalletEntities { get; set; }
 }

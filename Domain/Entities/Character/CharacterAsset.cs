@@ -13,9 +13,9 @@ public class CharacterAsset : BaseEntity
 
     //1 Asset - M CharacterAsset
     public Guid AssetId { get; set; }
-    public AssetEntity AssetEntity { get; set; }
+    public AssetEntity Assets { get; set; }
     //1 Character - M CharacterAsset
     public Guid CharacterId { get; set; }
-    public CharacterEntity CharacterEntity { get; set; }
+    public CharacterEntity Characters { get; set; }
 
 }

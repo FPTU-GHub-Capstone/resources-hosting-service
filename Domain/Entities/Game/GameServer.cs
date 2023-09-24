@@ -1,5 +1,6 @@
 ﻿
 using Domain.Common.BaseEntity;
+using Domain.Entities.Character;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities.Game;
@@ -13,4 +14,6 @@ public class GameServer : BaseEntity
     // 1 Game - M Game Server
     public Guid GameId { get; set; }
     public GameEntity Game { get; set; }
+    //1 GameServer - M Character
+    public virtual ICollection<CharacterEntity> Characters { get; set; }
 }

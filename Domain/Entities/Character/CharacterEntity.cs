@@ -19,4 +19,6 @@ public class CharacterEntity : BaseEntity
     //1 GameServer - M Character
     public Guid GameServerId { get; set; }
     public GameServer GameServer { get; set; }
+    //1 Character - M CharacterAsset
+    public virtual ICollection<CharacterAsset> CharacterAssets { get;set; }
 }
