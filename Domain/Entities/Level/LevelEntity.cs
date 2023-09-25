@@ -13,6 +13,5 @@ public class LevelEntity : BaseEntity
     public Guid GameId { get; set; }
     public GameEntity Game { get; set; }
     // 1 Level Progress - 1 Level 
-    public Guid LevelProgressId { get; set; }
     public LevelProgress LevelProgress{ get; set; }
 }

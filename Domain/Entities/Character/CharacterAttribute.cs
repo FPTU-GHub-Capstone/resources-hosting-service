@@ -14,6 +14,6 @@ public class CharacterAttribute : BaseEntity
     public Guid CharacterId { get; set; }
     public CharacterEntity Character { get; set; }
     //1 Attribute Group - M Character Attribute
-    public Guid AttributeId { get; set; }
+    public Guid AttributeGroupId { get; set; }
     public AttributeGroup AttributeGroup { get; set; }
 }

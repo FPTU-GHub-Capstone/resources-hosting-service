@@ -12,7 +12,7 @@ public class CharacterAsset : BaseEntity
     public DateTime ExpiredDate { get; set; }
 
     //1 Asset - M CharacterAsset
-    public Guid AssetId { get; set; }
+    public Guid AssetsId { get; set; }
     public AssetEntity Assets { get; set; }
     //1 Character - M CharacterAsset
     public Guid CharacterId { get; set; }

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Infrastructure.Migrations
 {
-    public partial class AddDatabase : Migration
+    public partial class Create_Database : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -172,6 +172,27 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Level",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LevelUpPoint = table.Column<int>(type: "int", nullable: false),
+                    GameId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    isDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Level", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Level_Game_GameId",
+                        column: x => x.GameId,
+                        principalTable: "Game",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "WalletCategory",
                 columns: table => new
                 {
@@ -306,7 +327,6 @@ namespace Infrastructure.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Value = table.Column<int>(type: "int", nullable: false),
                     ExpiredDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    AssetId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     AssetsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CharacterId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     isDeleted = table.Column<bool>(type: "bit", nullable: false)
@@ -334,7 +354,6 @@ namespace Infrastructure.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Value = table.Column<int>(type: "int", nullable: false),
                     CharacterId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    AttributeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     AttributeGroupId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     isDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
@@ -376,6 +395,11 @@ namespace Infrastructure.Migrations
                         principalTable: "Character",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_LevelProgress_Level_LevelId",
+                        column: x => x.LevelId,
+                        principalTable: "Level",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -405,33 +429,6 @@ namespace Infrastructure.Migrations
                         name: "FK_Payment_User_UserId",
                         column: x => x.UserId,
                         principalTable: "User",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Level",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LevelUpPoint = table.Column<int>(type: "int", nullable: false),
-                    GameId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    LevelProgressId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    isDeleted = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Level", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Level_Game_GameId",
-                        column: x => x.GameId,
-                        principalTable: "Game",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Level_LevelProgress_LevelProgressId",
-                        column: x => x.LevelProgressId,
-                        principalTable: "LevelProgress",
                         principalColumn: "Id");
                 });
 
@@ -617,15 +614,15 @@ namespace Infrastructure.Migrations
                 column: "GameId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Level_LevelProgressId",
-                table: "Level",
-                column: "LevelProgressId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_LevelProgress_CharacterId",
                 table: "LevelProgress",
                 column: "CharacterId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LevelProgress_LevelId",
+                table: "LevelProgress",
+                column: "LevelId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Payment_CharacterId",
@@ -682,7 +679,7 @@ namespace Infrastructure.Migrations
                 name: "ClientUserEntity");
 
             migrationBuilder.DropTable(
-                name: "Level");
+                name: "LevelProgress");
 
             migrationBuilder.DropTable(
                 name: "ActivityType");
@@ -700,7 +697,7 @@ namespace Infrastructure.Migrations
                 name: "Client");
 
             migrationBuilder.DropTable(
-                name: "LevelProgress");
+                name: "Level");
 
             migrationBuilder.DropTable(
                 name: "Wallet");

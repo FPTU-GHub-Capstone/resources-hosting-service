@@ -205,9 +205,6 @@ namespace Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("AssetId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("AssetsId")
                         .HasColumnType("uniqueidentifier");
 
@@ -239,9 +236,6 @@ namespace Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("AttributeGroupId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("AttributeId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("CharacterId")
@@ -400,9 +394,6 @@ namespace Infrastructure.Migrations
                     b.Property<Guid>("GameId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("LevelProgressId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<int>("LevelUpPoint")
                         .HasColumnType("int");
 
@@ -416,9 +407,6 @@ namespace Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("GameId");
-
-                    b.HasIndex("LevelProgressId")
-                        .IsUnique();
 
                     b.ToTable("Level");
                 });
@@ -451,6 +439,9 @@ namespace Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CharacterId");
+
+                    b.HasIndex("LevelId")
+                        .IsUnique();
 
                     b.ToTable("LevelProgress");
                 });
@@ -864,15 +855,7 @@ namespace Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Entities.Level.LevelProgress", "LevelProgress")
-                        .WithOne("Level")
-                        .HasForeignKey("Domain.Entities.Level.LevelEntity", "LevelProgressId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
                     b.Navigation("Game");
-
-                    b.Navigation("LevelProgress");
                 });
 
             modelBuilder.Entity("Domain.Entities.Level.LevelProgress", b =>
@@ -883,7 +866,15 @@ namespace Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Domain.Entities.Level.LevelEntity", "Level")
+                        .WithOne("LevelProgress")
+                        .HasForeignKey("Domain.Entities.Level.LevelProgress", "LevelId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.Navigation("Character");
+
+                    b.Navigation("Level");
                 });
 
             modelBuilder.Entity("Domain.Entities.Payment.PaymentEntity", b =>
@@ -969,9 +960,9 @@ namespace Infrastructure.Migrations
                     b.Navigation("Characters");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Level.LevelProgress", b =>
+            modelBuilder.Entity("Domain.Entities.Level.LevelEntity", b =>
                 {
-                    b.Navigation("Level")
+                    b.Navigation("LevelProgress")
                         .IsRequired();
                 });
 
