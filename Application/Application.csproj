@@ -20,14 +20,7 @@
     <Folder Include="Extensions\" />
     <Folder Include="Models\" />
     <Folder Include="Services\AssetServices\" />
-    <Folder Include="Services\AttributeServices\" />
-    <Folder Include="Services\CharacterServices\" />
-    <Folder Include="Services\GameServices\" />
-    <Folder Include="Services\LevelServices\" />
-    <Folder Include="Services\WalletServices\" />
-    <Folder Include="Services\UserServices\" />
     <Folder Include="Services\TransactionServices\" />
-    <Folder Include="Services\PaymentServices\" />
     <Folder Include="Utilities\" />
   </ItemGroup>
 
