@@ -6,7 +6,7 @@ using System;
 
 namespace Application.Services.WalletServices;
 
-public class WalletServices
+public class WalletServices : IWalletServices
 {
     public readonly IGenericRepository<WalletCategory> _walletCategoryRepo;
     public readonly IGenericRepository<WalletEntity> _walletRepo;
