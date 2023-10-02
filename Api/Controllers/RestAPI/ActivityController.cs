@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
 {
-    [Route("api")]
+    [Route("api/Activity")]
     [ApiController]
     [AllowAnonymous]
     public class ActivityController : ControllerBase
@@ -21,7 +21,6 @@ namespace Api.Controllers
             _activityRepo = activityRepo;
         }
         // GET: api/<ActivityController>
-        [Route("Activity")]
         [HttpGet]
         public async Task<IActionResult> GetActivitíes()
         {

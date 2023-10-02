@@ -124,12 +124,7 @@ public class EntityTypeConfiguration :
     //Level Progress
     public void Configure(EntityTypeBuilder<LevelProgress> builder)
     {
-        //1 Level Progress - 1 Level
-        //builder
-        //    .HasOne(l => l.Level)
-        //    .WithOne(pId => pId.LevelProgress)
-        //    .HasForeignKey<LevelEntity>(id => id.LevelProgressId)
-        //    .OnDelete(DeleteBehavior.NoAction);
+
     }
     //Payment Entity
     public void Configure(EntityTypeBuilder<PaymentEntity> builder)

@@ -1,14 +1,27 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Application.Interfaces;
+using Domain.Entities.Attribute;
+using Domain.Entities.User;
+using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Api.Controllers.RestAPI
 {
-    [Route("api/[controller]")]
+    [Route("api")]
     [ApiController]
     public class UserController : ControllerBase
     {
+        private readonly IUserServices _userServices;
+        private readonly IGenericRepository<Client> _clientRepo;
+        private readonly IGenericRepository<UserEntity> _userRepo;
+        public UserController(IUserServices userServices, IGenericRepository<Client> clientRepo, IGenericRepository<UserEntity> userRepo)
+        {
+            _userServices = userServices;
+            _clientRepo = clientRepo;
+            _userRepo = userRepo;
+        }
         // GET: api/<UserController>
+        [Route("Client")]
         [HttpGet]
         public IEnumerable<string> Get()
         {
@@ -38,6 +51,30 @@ namespace Api.Controllers.RestAPI
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+        }
+
+        // GET: api/User
+        [Route("User")]
+        [HttpGet]
+        public async Task<IActionResult> GetUsers()
+        {
+            var users = await _userServices.GetUsers();
+            return Ok(users);
+        }
+
+        // GET api/User/5
+        [Route("User/{id}")]
+        [HttpGet]
+        public async Task<IActionResult> GetUser(string id)
+        {
+            try
+            {
+                var user = await _userServices.GetUser(Guid.Parse(id));
+                return Ok(user);
+            } catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

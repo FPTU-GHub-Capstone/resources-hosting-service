@@ -1,5 +1,6 @@
 ﻿using Domain.Common.BaseEntity;
 using Domain.Entities.Activity;
+using Domain.Entities.Attribute;
 using Domain.Entities.Character;
 using Domain.Entities.User;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -17,4 +18,6 @@ public class GameEntity : BaseEntity
     public UserEntity User { get; set; }
     // 1 Game - M Activity Type
     public virtual ICollection<ActivityType> ActivityTypes { get; set; }
+    // M Game - M Attribute Group
+    public virtual ICollection<AttributeGroup> AttributeGroups { get; set; }
 }

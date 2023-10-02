@@ -2,6 +2,7 @@
 using Domain.Entities.Activity;
 using Domain.Entities.Attribute;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -33,17 +34,52 @@ namespace Api.Controllers.RestAPI
             }
         }
 
+        // GET: api/<AttributeController>/Count
+        [Route("Count")]
+        [HttpGet]
+        public async Task<IActionResult> Count()
+        {
+            var count = await _attributeServices.CountAttributeGroups();
+            return Ok(count);
+        }
+
         // GET api/<AttributeController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<IActionResult> Get(string id)
         {
-            return "value";
+            try
+            {
+                var attribute = _attributeServices.GetAttributeGroup(Guid.Parse(id));
+                return Ok(attribute.Result);
+            } catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         // POST api/<AttributeController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> Post([FromBody] AttributeGroup attributeGroup)
         {
+            try
+            {
+                attributeGroup.Id = Guid.NewGuid();
+                attributeGroup.isDeleted = false;
+                var attGrps = _attributeServices.GetAttributeGroups();
+                foreach(var attgrp in attGrps.Result)
+                {
+                    if(attgrp.Name == attributeGroup.Name)
+                    {
+                        return Conflict(attgrp);
+                    } else
+                    continue;
+                }
+                await _attributeServices.CreateAttributeGroup(attributeGroup);
+                return NoContent();
+            } catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         // PUT api/<AttributeController>/5
