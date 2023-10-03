@@ -10,13 +10,12 @@ public class TransactionServices : ITransactionServices
     {
         _transactionRepo = transactionRepo;
     }
-    //Transaction
-    public async Task<ICollection<TransactionEntity>> GetTransactions()
+    public async Task<ICollection<TransactionEntity>> List()
     {
         var trans = await _transactionRepo.ListAsync();
         return trans;
     }
-    public async Task<TransactionEntity> GetTransaction(Guid transactionId)
+    public async Task<TransactionEntity> GetById(Guid transactionId)
     {
         var trans = await _transactionRepo.FindByIdAsync(transactionId);
         if (trans == null)
@@ -28,7 +27,7 @@ public class TransactionServices : ITransactionServices
             return trans;
         }
     }
-    public async Task<ICollection<TransactionEntity>> GetTransactions(Guid walletId)
+    public async Task<ICollection<TransactionEntity>> GetByWalletId(Guid walletId)
     {
         var trans = await _transactionRepo.WhereAsync(
             t => t.WalletId.Equals(walletId));
@@ -41,12 +40,11 @@ public class TransactionServices : ITransactionServices
             return trans;
         }
     }
-    public async Task<int> CountTransaction()
+    public async Task<int> Count()
     {
-        var trans = await _transactionRepo.ListAsync();
-        return trans.Count;
+        return await _transactionRepo.CountAsync();
     }
-    public async Task CreateTransaction(TransactionEntity transaction) { }
-    public async Task UpdateTransaction(Guid transactionId, TransactionEntity transaction) { }
-    public async Task DeleteTransaction(Guid transactionId) { }
+    public async Task Create(TransactionEntity transaction) { }
+    public async Task Update(Guid transactionId, TransactionEntity transaction) { }
+    public async Task Delete(Guid transactionId) { }
 }

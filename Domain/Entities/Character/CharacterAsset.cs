@@ -10,7 +10,6 @@ public class CharacterAsset : BaseEntity
 {
     public int Value { get; set; }
     public DateTime ExpiredDate { get; set; }
-
     //1 Asset - M CharacterAsset
     public Guid AssetsId { get; set; }
     public AssetEntity Assets { get; set; }

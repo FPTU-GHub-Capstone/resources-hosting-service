@@ -12,7 +12,7 @@ namespace Infrastructure.Extensions
         {
             var entityTypes = modelBuilder.Model.GetEntityTypes();
 
-            Expression<Func<BaseEntity, bool>> filterExpression = entity => !entity.isDeleted;
+            Expression<Func<BaseEntity, bool?>> filterExpression = entity => !entity.isDeleted;
 
             foreach (var entityType in entityTypes)
             {

@@ -12,18 +12,17 @@ public class PaymentServices : IPaymentServices
     {
         _paymentRepo = paymentRepo;
     }
-    //Payment
-    public async Task<ICollection<PaymentEntity>> GetPayments()
+    public async Task<ICollection<PaymentEntity>> List()
     {
         var pm = await _paymentRepo.ListAsync();
         return pm;
     }
-    public async Task<PaymentEntity> GetPayment(Guid paymentId)
+    public async Task<PaymentEntity> GetById(Guid paymentId)
     {
         var pm = await _paymentRepo.FindByIdAsync(paymentId);
         return pm;
     }
-    public async Task<ICollection<PaymentEntity>> GetPayments(Guid id, int typeId)
+    public async Task<ICollection<PaymentEntity>> GetById(Guid id, int typeId)
     { // typeId: 1: CharacterId, 2: UserId
         ICollection<PaymentEntity> payments = new Collection<PaymentEntity>();
         if (typeId == 1)
@@ -46,12 +45,11 @@ public class PaymentServices : IPaymentServices
             return payments;
         }
     }
-    public async Task<int> CountPayments()
+    public async Task<int> Count()
     {
-        var pm = await _paymentRepo.ListAsync();
-        return pm.Count;
+        return await _paymentRepo.CountAsync();
     }
-    public async Task CreatePayment(PaymentEntity entity) { }
-    public async Task UpdatePayment(Guid paymentId, PaymentEntity entity) { }
-    public async Task DeletePayment(Guid paymentId) { }
+    public async Task Create(PaymentEntity entity) { }
+    public async Task Update(Guid paymentId, PaymentEntity entity) { }
+    public async Task Delete(Guid paymentId) { }
 }

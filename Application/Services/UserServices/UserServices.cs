@@ -6,49 +6,18 @@ namespace Application.Services.UserServices;
 
 public class UserServices : IUserServices
 {
-    public readonly IGenericRepository<Client> _clientRepo;
     public readonly IGenericRepository<UserEntity> _userRepo;
 
-    public UserServices(IGenericRepository<Client> clientRepo, IGenericRepository<UserEntity> userRepo)
+    public UserServices(IGenericRepository<UserEntity> userRepo)
     {
-        _clientRepo = clientRepo;
         _userRepo = userRepo;
     }
-    //Clients
-    public async Task<ICollection<Client>> GetClients()
-    {
-        var cli = await _clientRepo.ListAsync();
-        return cli;
-    }
-    public async Task<Client> GetClient(Guid ClientId)
-    {
-        var client = await _clientRepo.FindByIdAsync(ClientId);
-        if (client == null)
-        {
-            throw new Exception($"Client not exist");
-        }
-        else
-        {
-            return client;
-        }
-    }
-    public async Task<int> CountClient()
-    {
-        var cli = await _clientRepo.ListAsync();
-        return cli.Count;
-    }
-    public async Task CreateClient(Client client) { }
-    public async Task UpdateClient(Guid ClientId, Client client) { }
-    public async Task DeleteClient(Guid ClientId) { }
-    //Client x UserEntity
-
-    //Users
-    public async Task<ICollection<UserEntity>> GetUsers()
+    public async Task<ICollection<UserEntity>> List()
     {
         var user = await _userRepo.ListAsync();
         return user;
     }
-    public async Task<UserEntity> GetUser(Guid UserId)
+    public async Task<UserEntity> GetById(Guid UserId)
     {
         var user = await _userRepo.FindByIdAsync(UserId);
         if (user == null)
@@ -60,12 +29,11 @@ public class UserServices : IUserServices
             return user;
         }
     }
-    public async Task<int> CountUsers()
+    public async Task<int> Count()
     {
-        var user = await _userRepo.ListAsync();
-        return user.Count;
+        return await _userRepo.CountAsync();
     }
-    public async Task CreateUser(UserEntity user) { }
-    public async Task UpdateUser(Guid UserId, UserEntity user) { }
-    public async Task DeleteUser(Guid UserId) { }
+    public async Task Create(UserEntity user) { }
+    public async Task Update(Guid UserId, UserEntity user) { }
+    public async Task Delete(Guid UserId) { }
 }

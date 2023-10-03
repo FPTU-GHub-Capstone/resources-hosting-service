@@ -10,12 +10,12 @@ public class AttributeServices : IAttributeServices
     {
         _attributeRepo = attributeRepo;
     }
-    public async Task<ICollection<AttributeGroup>> GetAttributeGroups()
+    public async Task<ICollection<AttributeGroup>> List()
     {
         var attGrps = await _attributeRepo.ListAsync();
         return attGrps;
     }
-    public async Task<AttributeGroup> GetAttributeGroup(Guid attributeGroupid)
+    public async Task<AttributeGroup> GetById(Guid attributeGroupid)
     {
         var attGrps = await _attributeRepo.FindByIdAsync(attributeGroupid);
         if (attGrps == null)
@@ -27,20 +27,37 @@ public class AttributeServices : IAttributeServices
             return attGrps;
         }
     }
-    public async Task<int> CountAttributeGroups()
+    public async Task<int> Count()
     {
-        var attGrps = await _attributeRepo.ListAsync();
-        return attGrps.Count;
+        return await _attributeRepo.CountAsync();
     }
-    public async Task CreateAttributeGroup(AttributeGroup attributeGroup)
+    public async Task Create(AttributeGroup attributeGroup)
     {
-        await _attributeRepo.CreateAsync(attributeGroup);
+        var attList = List();
+        var check = false;
+        foreach (var attgrp in attList.Result)
+        {
+            if (attgrp.Name == attributeGroup.Name)
+            {
+                check = true;
+                break;
+            }
+            else continue;
+        }
+        var attGrp = new AttributeGroup{
+            Name = attributeGroup.Name,
+            Effect = attributeGroup.Effect
+        };
+        if (check == false)
+        {
+            await _attributeRepo.CreateAsync(attGrp);
+        }
     }
-    public async Task UpdateAttributeGroup(Guid attributeGroupid, AttributeGroup attributeGroup)
+    public async Task Update(Guid attributeGroupid, AttributeGroup attributeGroup)
     {
 
     }
-    public async Task DeleteAttributeGroup(Guid attributeGroupid)
+    public async Task Delete(Guid attributeGroupid)
     {
 
     }

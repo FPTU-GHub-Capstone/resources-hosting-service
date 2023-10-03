@@ -6,20 +6,18 @@ namespace Application.Services.GameServices;
 public class GameServices : IGameServices
 {
     public readonly IGenericRepository<GameEntity> _gameRepo;
-    public readonly IGenericRepository<GameServer> _gameServerRepo;
     
-    public GameServices(IGenericRepository<GameEntity> gameRepo, IGenericRepository<GameServer> gameServerRepo)
+    public GameServices(IGenericRepository<GameEntity> gameRepo)
     {
         _gameRepo = gameRepo;
-        _gameServerRepo = gameServerRepo;
     }
 
     //Game
-    public async Task<ICollection<GameEntity>> GetGames() {
+    public async Task<ICollection<GameEntity>> List() {
         var games = await _gameRepo.ListAsync();
         return games;
     }
-    public async Task<GameEntity> GetGame(Guid gameId)
+    public async Task<GameEntity> GetById(Guid gameId)
     {
         var game = await _gameRepo.FindByIdAsync(gameId);
         if (game == null)
@@ -31,7 +29,7 @@ public class GameServices : IGameServices
             return game;
         }
     }
-    public async Task<ICollection<GameEntity>> GetGames(Guid userId)
+    public async Task<ICollection<GameEntity>> GetByUserId(Guid userId)
     {
         var games = await _gameRepo.WhereAsync(
             g => g.UserId.Equals(userId));
@@ -45,67 +43,20 @@ public class GameServices : IGameServices
             return games;
         }
     }
-    public async Task<int> CountGames()
+    public async Task<int> Count()
     {
-        var games = await _gameRepo.ListAsync();
-        return games.Count;
+        return await _gameRepo.CountAsync();
     }
-    public async Task CreateGame(GameEntity game)
-    {
-
-    }
-    public async Task UpdateGame(Guid gameId, GameEntity game)
+    public async Task Create(GameEntity game)
     {
 
     }
-    public async Task DeleteGame(Guid gameId)
+    public async Task Update(Guid gameId, GameEntity game)
     {
 
     }
-    //Game Server
-    public async Task<ICollection<GameServer>> GetGameServers()
-    {
-        var gameServer = await _gameServerRepo.ListAsync();
-        return gameServer;
-    }
-    public async Task<GameServer> GetGameServer(Guid gameServerId)
-    {
-        var gameServer = await _gameServerRepo.FindByIdAsync(gameServerId);
-        if (gameServer == null)
-        {
-            throw new Exception($"Game server not exist");
-        }
-        else
-        {
-            return gameServer;
-        }
-    }
-    public async Task<ICollection<GameServer>> GetGameServers(Guid gameId)
-    {
-        var gameServers = await _gameServerRepo.WhereAsync(
-            g => g.GameId.Equals(gameId));
-        //Return if exist
-        if (gameServers.Count == 0)
-        {
-            throw new Exception($"Game Server or Game not found");
-        }
-        else
-        {
-            return gameServers;
-        }
-    }
-    public async Task<int> CountGameServers()
-    {
-        var gameServer = await _gameServerRepo.ListAsync();
-        return gameServer.Count;
-    }
-    public async Task CreateGameServer(GameServer gameServer)
-    {
-        
-    }
-    public async Task UpdateGameServer(Guid gameServerId, GameServer gameServer)
+    public async Task Delete(Guid gameId)
     {
 
     }
-    public async Task DeleteGameServer(Guid gameServerId) { }
 }

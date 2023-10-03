@@ -71,7 +71,7 @@ namespace Infrastructure.Migrations
                     b.Property<Guid>("TransactionId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("isDeleted")
+                    b.Property<bool?>("isDeleted")
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
@@ -99,7 +99,7 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("isDeleted")
+                    b.Property<bool?>("isDeleted")
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
@@ -126,7 +126,7 @@ namespace Infrastructure.Migrations
                     b.Property<int>("Value")
                         .HasColumnType("int");
 
-                    b.Property<bool>("isDeleted")
+                    b.Property<bool?>("isDeleted")
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
@@ -159,7 +159,7 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("isDeleted")
+                    b.Property<bool?>("isDeleted")
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
@@ -182,7 +182,7 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("isDeleted")
+                    b.Property<bool?>("isDeleted")
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
@@ -206,7 +206,7 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("isDeleted")
+                    b.Property<bool?>("isDeleted")
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
@@ -232,7 +232,7 @@ namespace Infrastructure.Migrations
                     b.Property<int>("Value")
                         .HasColumnType("int");
 
-                    b.Property<bool>("isDeleted")
+                    b.Property<bool?>("isDeleted")
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
@@ -259,7 +259,7 @@ namespace Infrastructure.Migrations
                     b.Property<int>("Value")
                         .HasColumnType("int");
 
-                    b.Property<bool>("isDeleted")
+                    b.Property<bool?>("isDeleted")
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
@@ -293,7 +293,7 @@ namespace Infrastructure.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("isDeleted")
+                    b.Property<bool?>("isDeleted")
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
@@ -328,7 +328,7 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("isDeleted")
+                    b.Property<bool?>("isDeleted")
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
@@ -359,7 +359,7 @@ namespace Infrastructure.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("isDeleted")
+                    b.Property<bool?>("isDeleted")
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
@@ -390,7 +390,7 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("isDeleted")
+                    b.Property<bool?>("isDeleted")
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
@@ -416,7 +416,7 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("isDeleted")
+                    b.Property<bool?>("isDeleted")
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
@@ -448,7 +448,7 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("isDeleted")
+                    b.Property<bool?>("isDeleted")
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
@@ -491,7 +491,7 @@ namespace Infrastructure.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("isDeleted")
+                    b.Property<bool?>("isDeleted")
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
@@ -519,7 +519,7 @@ namespace Infrastructure.Migrations
                     b.Property<Guid>("WalletId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("isDeleted")
+                    b.Property<bool?>("isDeleted")
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
@@ -550,7 +550,7 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("isDeleted")
+                    b.Property<bool?>("isDeleted")
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
@@ -602,7 +602,7 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("isDeleted")
+                    b.Property<bool?>("isDeleted")
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
@@ -623,7 +623,7 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("isDeleted")
+                    b.Property<bool?>("isDeleted")
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
@@ -655,7 +655,7 @@ namespace Infrastructure.Migrations
                     b.Property<Guid>("WalletCategoryId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("isDeleted")
+                    b.Property<bool?>("isDeleted")
                         .HasColumnType("bit");
 
                     b.HasKey("Id");

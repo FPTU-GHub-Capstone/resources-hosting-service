@@ -19,7 +19,6 @@
     <Folder Include="Exceptions\" />
     <Folder Include="Extensions\" />
     <Folder Include="Models\" />
-    <Folder Include="Services\AssetServices\" />
     <Folder Include="Services\TransactionServices\" />
     <Folder Include="Utilities\" />
   </ItemGroup>

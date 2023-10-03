@@ -126,4 +126,10 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
         _context.UpdateRange(entities);
         await _context.SaveChangesAsync();
     }
+
+    public async Task<int> CountAsync()
+    {
+        return await dbSet.AsNoTracking().CountAsync();
+
+    }
 }
