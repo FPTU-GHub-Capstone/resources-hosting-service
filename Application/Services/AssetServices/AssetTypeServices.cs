@@ -1,7 +1,5 @@
 ﻿using Application.Interfaces;
 using Domain.Entities;
-using Domain.Entities.Activity;
-using System.Collections.ObjectModel;
 
 namespace Application.Services.AssetServices;
 

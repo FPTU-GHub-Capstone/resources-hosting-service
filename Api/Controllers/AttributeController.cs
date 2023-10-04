@@ -1,8 +1,6 @@
 ﻿using Application.Interfaces;
 using Domain.Entities;
-using Domain.Entities.Activity;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections;
 
 namespace Api.Controllers
 {

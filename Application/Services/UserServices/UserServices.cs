@@ -1,6 +1,5 @@
 ﻿using Application.Interfaces;
 using Domain.Entities;
-using Domain.Entities.Attribute;
 
 namespace Application.Services.UserServices;
 
@@ -54,10 +53,9 @@ public class UserServices : IUserServices
         }
     }
     public async Task Update(Guid UserId, UserEntity user) {
-        var users = await GetById(UserId);
-        if(users is not null)
+        var target = await GetById(UserId);
+        if(target is not null)
         {
-            user.Id = users.Id;
             await _userRepo.UpdateAsync(user);
         }
     }

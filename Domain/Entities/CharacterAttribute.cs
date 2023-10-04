@@ -1,6 +1,4 @@
-﻿using Domain.Entities.Game;
-using Domain.Entities.User;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities;
 

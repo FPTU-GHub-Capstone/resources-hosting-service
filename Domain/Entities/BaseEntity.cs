@@ -8,6 +8,11 @@ namespace Domain.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; init; }
-        public bool? isDeleted { get; set; } = false; //false: not deleted, true: deleted
+
+        public DateTime? CreatedAt { get; set; }
+
+        public DateTime? ModifiedAt { get; set; }
+
+        public DateTime? DeletedAt { get; set; }
     }
 }

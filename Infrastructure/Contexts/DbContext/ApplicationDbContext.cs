@@ -11,7 +11,14 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(EntityTypeConfiguration).Assembly);
-        modelBuilder.AddIsDeletedQueryFilter();
+        foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+        {
+            //other automated configurations left out
+            if (typeof(BaseEntity).IsAssignableFrom(entityType.ClrType))
+            {
+                entityType.AddSoftDeleteQueryFilter();
+            }
+        }
     }
 
     public DbSet<ActivityEntity> Activities { get; set; }
