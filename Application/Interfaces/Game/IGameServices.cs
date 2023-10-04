@@ -2,7 +2,6 @@
 
 namespace Application.Interfaces; 
 public interface IGameServices {
-    //Game
     Task<ICollection<GameEntity>> List();
     Task<GameEntity> GetById(Guid gameId);
     Task<ICollection<GameEntity>> GetByUserId(Guid userId);

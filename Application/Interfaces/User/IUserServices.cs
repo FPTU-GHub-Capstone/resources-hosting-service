@@ -2,7 +2,6 @@
 
 namespace Application.Interfaces; 
 public interface IUserServices {
-    //Users
     Task<ICollection<UserEntity>> List();
     Task<UserEntity> GetById(Guid UserId);
     Task<int> Count();

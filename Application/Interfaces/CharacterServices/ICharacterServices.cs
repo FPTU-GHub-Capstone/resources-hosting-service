@@ -4,10 +4,11 @@ namespace Application.Interfaces;
 
 public interface ICharacterServices
 {
-    //Character
     Task<ICollection<CharacterEntity>> List();
     Task<CharacterEntity> GetById(Guid characterId);
-    Task<ICollection<CharacterEntity>> GetById(Guid id, int typeId); // TypeId: 1: UserId, 2: CharacterTypeId, 3: GameServerId
+    Task<ICollection<CharacterEntity>> GetByUserId(Guid id);
+    Task<ICollection<CharacterEntity>> GetByCharacterTypeId(Guid id);
+    Task<ICollection<CharacterEntity>> GetByGameServerId(Guid id);
     Task<int> Count();
     Task Create(CharacterEntity character);
     Task Update(Guid characterId, CharacterEntity character);

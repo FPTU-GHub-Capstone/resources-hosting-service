@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces;
 using Domain.Entities.Transaction;
+using System.Diagnostics;
 
 namespace Application.Services.TransactionServices;
 
@@ -12,33 +13,15 @@ public class TransactionServices : ITransactionServices
     }
     public async Task<ICollection<TransactionEntity>> List()
     {
-        var trans = await _transactionRepo.ListAsync();
-        return trans;
+        return await _transactionRepo.ListAsync();
     }
     public async Task<TransactionEntity> GetById(Guid transactionId)
     {
-        var trans = await _transactionRepo.FindByIdAsync(transactionId);
-        if (trans == null)
-        {
-            throw new Exception($"Transaction not exist");
-        }
-        else
-        {
-            return trans;
-        }
+        return await _transactionRepo.FindByIdAsync(transactionId);
     }
     public async Task<ICollection<TransactionEntity>> GetByWalletId(Guid walletId)
     {
-        var trans = await _transactionRepo.WhereAsync(
-            t => t.WalletId.Equals(walletId));
-        if (trans.Count == 0 || trans == null)
-        {
-            throw new Exception($"Transaction or wallet not found");
-        }
-        else
-        {
-            return trans;
-        }
+        return await _transactionRepo.WhereAsync(t => t.WalletId.Equals(walletId));
     }
     public async Task<int> Count()
     {

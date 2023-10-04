@@ -12,20 +12,11 @@ public class AttributeServices : IAttributeServices
     }
     public async Task<ICollection<AttributeGroup>> List()
     {
-        var attGrps = await _attributeRepo.ListAsync();
-        return attGrps;
+        return await _attributeRepo.ListAsync();
     }
     public async Task<AttributeGroup> GetById(Guid attributeGroupid)
     {
-        var attGrps = await _attributeRepo.FindByIdAsync(attributeGroupid);
-        if (attGrps == null)
-        {
-            throw new Exception($"Attribute group not exist");
-        }
-        else
-        {
-            return attGrps;
-        }
+        return await _attributeRepo.FindByIdAsync(attributeGroupid);
     }
     public async Task<int> Count()
     {

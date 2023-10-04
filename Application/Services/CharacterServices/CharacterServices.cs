@@ -15,48 +15,23 @@ public class CharacterServices : ICharacterServices
     }
     public async Task<ICollection<CharacterEntity>> List()
     {
-        var cha = await _characterRepo.ListAsync();
-        return cha;
+        return await _characterRepo.ListAsync();
     }
     public async Task<CharacterEntity> GetById(Guid characterId)
     {
-        var cha = await _characterRepo.FindByIdAsync(characterId);
-        if (cha == null)
-        {
-            throw new Exception($"Character not exist");
-        }
-        else
-        {
-            return cha;
-        }
+        return await _characterRepo.FindByIdAsync(characterId);
     }
-    public async Task<ICollection<CharacterEntity>> GetById(Guid id, int typeId)
-    { // TypeId: 1: UserId, 2: CharacterTypeId, 3: GameServerId
-        ICollection<CharacterEntity> cha = new Collection<CharacterEntity>();
-        if (typeId == 1)
-        {
-            cha = await _characterRepo.WhereAsync(
-                c => c.UserId.Equals(id));
-        }
-        else if (typeId == 2)
-        {
-            cha = await _characterRepo.WhereAsync(
-                c => c.CharacterTypeId.Equals(id));
-        }
-        else if (typeId == 3)
-        {
-            cha = await _characterRepo.WhereAsync(
-                c => c.GameServerId.Equals(id));
-        }
-        //Return if exist
-        if (cha.Count == 0)
-        {
-            throw new Exception($"Character or User/ Character Type/ Game Server not found");
-        }
-        else
-        {
-            return cha;
-        }
+    public async Task<ICollection<CharacterEntity>> GetByUserId(Guid id)
+    { 
+        return await _characterRepo.WhereAsync(c=>c.UserId == id);
+    }
+    public async Task<ICollection<CharacterEntity>> GetByCharacterTypeId(Guid id)
+    {
+        return await _characterRepo.WhereAsync(c => c.CharacterTypeId == id);
+    }
+    public async Task<ICollection<CharacterEntity>> GetByGameServerId(Guid id)
+    {
+        return await _characterRepo.WhereAsync(c => c.GameServerId == id);
     }
     public async Task<int> Count()
     {

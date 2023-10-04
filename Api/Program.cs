@@ -10,12 +10,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<ApplicationDbContext>
-    (options => options.UseSqlServer("name=ConnectionStrings:GHub_Connection", b=>b.MigrationsAssembly("Infrastructure")));
 
 #region Add configurations to Services
 var services = builder.Services;
 services.AddAppServices();
+services.AddDbServices();
 #endregion
 
 var app = builder.Build();

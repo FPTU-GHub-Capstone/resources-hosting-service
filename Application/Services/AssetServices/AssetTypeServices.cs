@@ -15,33 +15,16 @@ public class AssetTypeServices : IAssetTypeServices
     }
     public async Task<ICollection<AssetType>> List()
     {
-        var assTyp = await _assetTypeRepo.ListAsync();
-        return assTyp;
+        return await _assetTypeRepo.ListAsync();
     }
     public async Task<AssetType> GetById(Guid assetTypeId)
-    { // Get By AssetTypeId
-        var assTyp = await _assetTypeRepo.FindByIdAsync(assetTypeId);
-        if (assTyp == null)
-        {
-            throw new Exception($"Asset type not exist");
-        }
-        else
-        {
-            return assTyp;
-        }
+    {
+        return await _assetTypeRepo.FindByIdAsync(assetTypeId);
     }
     public async Task<ICollection<AssetType>> GetByGameId(Guid gameId)
-    { // Get By GameId
-        var assTyp = await _assetTypeRepo.WhereAsync(
+    {
+        return await _assetTypeRepo.WhereAsync(
             a=>a.GameId.Equals(gameId));
-        if (assTyp.Count == 0 || assTyp == null)
-        {
-            throw new Exception($"Asset type or Game not found");
-        }
-        else
-        {
-            return assTyp;
-        }
     }
     public async Task<int> Count()
     {

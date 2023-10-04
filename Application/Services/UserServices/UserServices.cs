@@ -14,20 +14,11 @@ public class UserServices : IUserServices
     }
     public async Task<ICollection<UserEntity>> List()
     {
-        var user = await _userRepo.ListAsync();
-        return user;
+        return await _userRepo.ListAsync();
     }
     public async Task<UserEntity> GetById(Guid UserId)
     {
-        var user = await _userRepo.FindByIdAsync(UserId);
-        if (user == null)
-        {
-            throw new Exception($"User not exist");
-        }
-        else
-        {
-            return user;
-        }
+        return await _userRepo.FindByIdAsync(UserId);
     }
     public async Task<int> Count()
     {

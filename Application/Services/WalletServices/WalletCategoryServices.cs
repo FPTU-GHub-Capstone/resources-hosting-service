@@ -14,20 +14,11 @@ public class WalletCategoryServices : IWalletCategoryServices
     }
     public async Task<ICollection<WalletCategory>> List()
     {
-        var walCat = await _walletCategoryRepo.ListAsync();
-        return walCat;
+        return await _walletCategoryRepo.ListAsync();
     }
     public async Task<WalletCategory> GetById(Guid categoryId)
     {
-        var walCat = await _walletCategoryRepo.FindByIdAsync(categoryId);
-        if (walCat == null)
-        {
-            throw new Exception($"Wallet category not exist");
-        }
-        else
-        {
-            return walCat;
-        }
+        return await _walletCategoryRepo.FindByIdAsync(categoryId);
     }
     public async Task<ICollection<WalletCategory>> GetByGameId(Guid gameId)
     {

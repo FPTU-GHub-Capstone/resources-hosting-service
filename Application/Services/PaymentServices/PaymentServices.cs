@@ -14,36 +14,19 @@ public class PaymentServices : IPaymentServices
     }
     public async Task<ICollection<PaymentEntity>> List()
     {
-        var pm = await _paymentRepo.ListAsync();
-        return pm;
+        return await _paymentRepo.ListAsync();
     }
     public async Task<PaymentEntity> GetById(Guid paymentId)
     {
-        var pm = await _paymentRepo.FindByIdAsync(paymentId);
-        return pm;
+        return await _paymentRepo.FindByIdAsync(paymentId);
     }
-    public async Task<ICollection<PaymentEntity>> GetById(Guid id, int typeId)
-    { // typeId: 1: CharacterId, 2: UserId
-        ICollection<PaymentEntity> payments = new Collection<PaymentEntity>();
-        if (typeId == 1)
-        {
-            payments = await _paymentRepo.WhereAsync(
-                a => a.CharacterId.Equals(id));
-        }
-        else if (typeId == 2)
-        {
-            payments = await _paymentRepo.WhereAsync(
-                a => a.UserId.Equals(id));
-        }
-        //Return if exist
-        if (payments.Count == 0 || payments == null)
-        {
-            throw new Exception($"Payment or Character/User not found");
-        }
-        else
-        {
-            return payments;
-        }
+    public async Task<ICollection<PaymentEntity>> GetByCharacterId(Guid id)
+    {
+        return await _paymentRepo.WhereAsync(c=>c.CharacterId== id);
+    }
+    public async Task<ICollection<PaymentEntity>> GetByUserId(Guid id)
+    {
+        return await _paymentRepo.WhereAsync(c => c.UserId == id);
     }
     public async Task<int> Count()
     {

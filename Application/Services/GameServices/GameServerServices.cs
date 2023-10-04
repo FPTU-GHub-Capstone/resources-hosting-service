@@ -30,17 +30,7 @@ public class GameServerServices : IGameServerServices
     }
     public async Task<ICollection<GameServer>> GetByGameId(Guid gameId)
     {
-        var gameServers = await _gameServerRepo.WhereAsync(
-            g => g.GameId.Equals(gameId));
-        //Return if exist
-        if (gameServers.Count == 0)
-        {
-            throw new Exception($"Game Server or Game not found");
-        }
-        else
-        {
-            return gameServers;
-        }
+        return await _gameServerRepo.WhereAsync(g => g.GameId.Equals(gameId));
     }
     public async Task<int> Count()
     {

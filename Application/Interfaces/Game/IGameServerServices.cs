@@ -2,7 +2,6 @@
 
 namespace Application.Interfaces; 
 public interface IGameServerServices {
-    //Game Server
     Task <ICollection<GameServer>> List();
     Task <GameServer> GetById(Guid gameServerId);
     Task<ICollection<GameServer>> GetByGameId(Guid gameId);

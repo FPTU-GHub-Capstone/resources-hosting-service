@@ -4,7 +4,6 @@ namespace Application.Interfaces;
 
 public interface IAttributeServices
 {
-    //Attribute Group
     Task<ICollection<AttributeGroup>> List();
     Task<AttributeGroup> GetById(Guid attributeGroupid);
     Task<int> Count();

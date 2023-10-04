@@ -15,33 +15,16 @@ public class AssetServices : IAssetServices
     }
     public async Task<ICollection<AssetEntity>> List()
     {
-        var assets = await _assetRepo.ListAsync();
-        return assets;
+        return await _assetRepo.ListAsync();
     }
     public async Task<AssetEntity> GetById(Guid assetId)
-    { // Get By AssetId
-        var asset = await _assetRepo.FindByIdAsync(assetId);
-        if (asset == null)
-        {
-            throw new Exception($"Asset not exist");
-        }
-        else
-        {
-            return asset;
-        }
+    {
+        return await _assetRepo.FindByIdAsync(assetId);
     }
     public async Task<ICollection<AssetEntity>> GetByAssetTypeId(Guid assetTypeid)
-    { // Get By AssetTypeId
-        var assets = await _assetRepo.WhereAsync(
+    {
+        return await _assetRepo.WhereAsync(
             a => a.AssetTypeId.Equals(assetTypeid));
-        if (assets.Count == 0 || assets == null)
-        {
-            throw new Exception($"Asset or Asset type not found");
-        }
-        else
-        {
-            return assets;
-        }
     }
     public async Task<int> Count()
     {

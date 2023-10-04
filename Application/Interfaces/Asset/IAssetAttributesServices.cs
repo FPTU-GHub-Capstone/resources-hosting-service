@@ -4,10 +4,10 @@ namespace Application.Interfaces;
 
 public interface IAssetAttributeServices
 {
-    //Asset Attributes
     Task<ICollection<AssetAttribute>> List();
     Task<AssetAttribute> GetById(Guid assetAttributeId); // Get By AssetAttributeId
-    Task<ICollection<AssetAttribute>> GetById(Guid id, int typeId); // typeId: 1: AssetId, 2: AttributeGroupId
+    Task<ICollection<AssetAttribute>> GetByAssetId(Guid assetId);
+    Task<ICollection<AssetAttribute>> GetByAttGroupId(Guid attributeGroupId);
     Task<int> Count();
     Task Create(AssetAttribute assetAttribute);
     Task Update(Guid assetAttributeId, AssetAttribute assetAttribute);

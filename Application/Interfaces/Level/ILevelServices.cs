@@ -2,7 +2,6 @@
 
 namespace Application.Interfaces; 
 public interface ILevelServices {
-    //Level
     Task<ICollection<LevelEntity>> List();
     Task<LevelEntity> GetById(Guid levelId);
     Task<ICollection<LevelEntity>> GetByGameId(Guid gameId);

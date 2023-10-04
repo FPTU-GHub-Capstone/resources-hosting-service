@@ -2,7 +2,6 @@
 
 namespace Application.Interfaces;
 public interface ITransactionServices {
-    //Transaction
     Task<ICollection<TransactionEntity>> List();
     Task<TransactionEntity> GetById(Guid transactionId);
     Task<ICollection<TransactionEntity>> GetByWalletId(Guid walletId);

@@ -14,36 +14,19 @@ public class LevelProgressServices : ILevelProgressServices
     }
     public async Task<ICollection<LevelProgress>> List()
     {
-        var levelProgress = await _levelProgressRepo.ListAsync();
-        return levelProgress;
+        return await _levelProgressRepo.ListAsync();
     }
     public async Task<LevelProgress> GetById(Guid levelProgressId)
     {
-        var levelProgress = await _levelProgressRepo.FindByIdAsync(levelProgressId);
-        return levelProgress;
+        return await _levelProgressRepo.FindByIdAsync(levelProgressId);
     }
-    public async Task<ICollection<LevelProgress>> GetById(Guid id, int typeId)
-    { // TypeID: 1: CharacterId, 2: LevelId
-        ICollection<LevelProgress> levelProgresses = new Collection<LevelProgress>();
-        if (typeId == 1)
-        {
-            levelProgresses = await _levelProgressRepo.WhereAsync(
-                a => a.CharacterId.Equals(id));
-        }
-        else if (typeId == 2)
-        {
-            levelProgresses = await _levelProgressRepo.WhereAsync(
-                a => a.LevelId.Equals(id));
-        }
-        //Return if exist
-        if (levelProgresses.Count == 0 || levelProgresses == null)
-        {
-            throw new Exception($"Level progress or character/level not found");
-        }
-        else
-        {
-            return levelProgresses;
-        }
+    public async Task<ICollection<LevelProgress>> GetByCharacterId(Guid id)
+    {
+        return await _levelProgressRepo.WhereAsync(lp => lp.CharacterId.Equals(id));
+    }
+    public async Task<ICollection<LevelProgress>> GetByLevelId(Guid id)
+    {
+        return await _levelProgressRepo.WhereAsync(lp => lp.LevelId.Equals(id));
     }
     public async Task<int> Count()
     {

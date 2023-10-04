@@ -15,47 +15,23 @@ public class WalletServices : IWalletServices
     }
     public async Task<ICollection<WalletEntity>> List()
     {
-        var wal = await _walletRepo.ListAsync();
-        return wal;
+        return await _walletRepo.ListAsync();
     }
     public async Task<WalletEntity> GetById(Guid walletId)
     {
-        var wal = await _walletRepo.FindByIdAsync(walletId);
-        if (wal == null)
-        {
-            throw new Exception($"Wallet not exist");
-        }
-        else
-        {
-            return wal;
-        }
+        return await _walletRepo.FindByIdAsync(walletId);
     }
-    public async Task<ICollection<WalletEntity>> GetById(Guid id, int typeId)
-    { //typeId: 1: WalletCategoryId, 2: CharacterId, 3: PaymentId
-        ICollection<WalletEntity> wallets = new Collection<WalletEntity>();
-        if (typeId == 1)
-        {
-            wallets = await _walletRepo.WhereAsync(
-                w => w.WalletCategoryId.Equals(id));
-        }
-        else if (typeId == 2)
-        {
-            wallets = await _walletRepo.WhereAsync(
-                w => w.CharacterId.Equals(id));
-        }
-        else if (typeId == 3)
-        {
-            wallets = await _walletRepo.WhereAsync(
-                w => w.PaymentId.Equals(id));
-        }
-        if (wallets.Count == 0 || wallets == null)
-        {
-            throw new Exception($"Wallets or wallet category/character/payment not found");
-        }
-        else
-        {
-            return wallets;
-        }
+    public async Task<ICollection<WalletEntity>> GetByWalletCategoryId(Guid id)
+    {
+        return await _walletRepo.WhereAsync(w => w.WalletCategoryId.Equals(id));
+    }
+    public async Task<ICollection<WalletEntity>> GetByCharacterId(Guid id)
+    {
+        return await _walletRepo.WhereAsync(w => w.CharacterId.Equals(id));
+    }
+    public async Task<ICollection<WalletEntity>> GetByPaymentId(Guid id)
+    {
+        return await _walletRepo.WhereAsync(w => w.PaymentId.Equals(id));
     }
     public async Task<int> Count()
     {

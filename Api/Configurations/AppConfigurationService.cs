@@ -1,4 +1,5 @@
-﻿using Application.Interfaces;
+﻿using Application.AppConfig;
+using Application.Interfaces;
 using Application.Interfaces.Activity;
 using Application.Services.ActivityServices;
 using Application.Services.AssetServices;
@@ -10,7 +11,10 @@ using Application.Services.PaymentServices;
 using Application.Services.TransactionServices;
 using Application.Services.UserServices;
 using Application.Services.WalletServices;
+using Infrastructure.Contexts;
 using Infrastructure.Repositories;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace Api.Configurations
 {
@@ -25,7 +29,6 @@ namespace Api.Configurations
             services.AddScoped<IAssetServices, AssetServices>();
             services.AddScoped<IAssetAttributeServices, AssetAttributeServices>();
             services.AddScoped<IAttributeServices, AttributeServices>();
-            services.AddScoped<IActivityServices, ActivityServices>();
             services.AddScoped<ICharacterAssetServices, CharacterAssetServices>();
             services.AddScoped<ICharacterAttributeServices, CharacterAttributeServices>();
             services.AddScoped<ICharacterServices, CharacterServices>();
@@ -39,6 +42,11 @@ namespace Api.Configurations
             services.AddScoped<IUserServices, UserServices>();
             services.AddScoped<IWalletCategoryServices, WalletCategoryServices>();
             services.AddScoped<IWalletServices, WalletServices>();
+        }
+        public static void AddDbServices(this IServiceCollection services)
+        {
+            services.AddDbContext<ApplicationDbContext>
+                (options => options.UseSqlServer("name=ConnectionStrings:GHub_Connection", b => b.MigrationsAssembly("Infrastructure")));
         }
     }
 }

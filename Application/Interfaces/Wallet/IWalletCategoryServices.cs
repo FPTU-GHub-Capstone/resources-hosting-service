@@ -3,7 +3,6 @@
 namespace Application.Interfaces; 
 public interface IWalletCategoryServices 
 {
-    //Wallet Category
     Task<ICollection<WalletCategory>> List();
     Task<WalletCategory> GetById(Guid categoryId);
     Task<ICollection<WalletCategory>> GetByGameId(Guid gameId);

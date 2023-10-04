@@ -15,7 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="AppConfig\" />
     <Folder Include="Exceptions\" />
     <Folder Include="Extensions\" />
     <Folder Include="Models\" />

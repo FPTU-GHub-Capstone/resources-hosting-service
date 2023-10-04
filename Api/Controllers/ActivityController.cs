@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
 {
-    [AllowAnonymous]
     public class ActivityController : BaseController
     {
         private readonly IActivityServices _activityServices;
@@ -19,14 +18,19 @@ namespace Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetActivitíes()
         {
-            var activities = await _activityServices.List();
-            return Ok(activities);
+            return Ok(await _activityServices.List());
         }
 
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("id/{id}")]
+        public async Task<IActionResult> GetActivityById(string id)
         {
-            return "value";
+            return Ok(await _activityServices.Search(Guid.Parse(id)));
+        }
+
+        [HttpGet("name/{name}")]
+        public async Task<IActionResult> GetActivityByName(string name)
+        {
+            return Ok(await _activityServices.Search(name));
         }
 
         [HttpPost]

@@ -15,43 +15,19 @@ public class AssetAttributeServices : IAssetAttributeServices
     }
 
     public async Task<ICollection<AssetAttribute>> List() {
-        var assAtt = await _assetAttributeRepo.ListAsync();
-        return assAtt;
+        return await _assetAttributeRepo.ListAsync();
     }
     public async Task<AssetAttribute> GetById(Guid assetAttributeId)
-    { // Get By AssetAttributeId
-        var assAtt = await _assetAttributeRepo.FindByIdAsync(assetAttributeId);
-        if(assAtt == null)
-        {
-            throw new Exception($"Asset attribute not exist");
-        }
-        else
-        {
-            return assAtt;
-        }
+    { 
+        return await _assetAttributeRepo.FindByIdAsync(assetAttributeId);
     }
-    public async Task<ICollection<AssetAttribute>> GetById(Guid id, int typeId)
-    { // typeId: 1: AssetId, 2: AttributeGroupId
-        ICollection<AssetAttribute> assAtt = new Collection<AssetAttribute>();
-        if(typeId == 1)
-        {
-            assAtt = await _assetAttributeRepo.WhereAsync(
-                a => a.AssetId.Equals(id));
-        }
-        else if(typeId == 2)
-        {
-            assAtt = await _assetAttributeRepo.WhereAsync(
-                a => a.AttributeGroupId.Equals(id));
-        }
-        //Return if exist
-        if(assAtt.Count == 0 || assAtt == null)
-        {
-            throw new Exception($"Asset attribute or Asset ID/ Attribute Group not found");
-        }
-        else
-        {
-            return assAtt;
-        }
+    public async Task<ICollection<AssetAttribute>> GetByAssetId(Guid assetId)
+    {
+        return await _assetAttributeRepo.WhereAsync(a=>a.AssetId == assetId);
+    }
+    public async Task<ICollection<AssetAttribute>> GetByAttributeGroupId(Guid attributeGroupId)
+    {
+        return await _assetAttributeRepo.WhereAsync(a => a.AttributeGroupId == attributeGroupId);
     }
     public async Task<int> Count()
     {

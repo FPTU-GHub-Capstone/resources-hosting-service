@@ -4,7 +4,6 @@ namespace Application.Interfaces;
 
 public interface ICharacterTypeServices
 {
-    //Character Type
     Task<ICollection<CharacterType>> List();
     Task<CharacterType> GetById(Guid characterTypeId);
     Task<ICollection<CharacterType>> GetByGameId(Guid gameId);

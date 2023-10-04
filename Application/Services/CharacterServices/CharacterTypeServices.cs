@@ -15,33 +15,15 @@ public class CharacterTypeServices : ICharacterTypeServices
     }
     public async Task<ICollection<CharacterType>> List()
     {
-        var chaTy = await _characterTypeRepo.ListAsync();
-        return chaTy;
+        return await _characterTypeRepo.ListAsync();
     }
     public async Task<CharacterType> GetById(Guid characterTypeId)
     {
-        var chaTy = await _characterTypeRepo.FindByIdAsync(characterTypeId);
-        if (chaTy == null)
-        {
-            throw new Exception($"Asset attribute not exist");
-        }
-        else
-        {
-            return chaTy;
-        }
+        return await _characterTypeRepo.FindByIdAsync(characterTypeId);
     }
     public async Task<ICollection<CharacterType>> GetByGameId(Guid gameId)
     {
-        ICollection<CharacterType> cha = await _characterTypeRepo.WhereAsync(
-            c => c.GameId.Equals(gameId));
-        if (cha.Count == 0)
-        {
-            throw new Exception($"Character Type or Game not found");
-        }
-        else
-        {
-            return cha;
-        }
+        return await _characterTypeRepo.WhereAsync(c => c.GameId.Equals(gameId));
     }
     public async Task<int> Count()
     {

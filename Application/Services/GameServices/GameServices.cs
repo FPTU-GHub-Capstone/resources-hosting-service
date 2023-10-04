@@ -14,34 +14,15 @@ public class GameServices : IGameServices
 
     //Game
     public async Task<ICollection<GameEntity>> List() {
-        var games = await _gameRepo.ListAsync();
-        return games;
+        return await _gameRepo.ListAsync();
     }
     public async Task<GameEntity> GetById(Guid gameId)
     {
-        var game = await _gameRepo.FindByIdAsync(gameId);
-        if (game == null)
-        {
-            throw new Exception($"Game not exist");
-        }
-        else
-        {
-            return game;
-        }
+        return await _gameRepo.FindByIdAsync(gameId);
     }
     public async Task<ICollection<GameEntity>> GetByUserId(Guid userId)
     {
-        var games = await _gameRepo.WhereAsync(
-            g => g.UserId.Equals(userId));
-        //Return if exist
-        if (games.Count == 0)
-        {
-            throw new Exception($"Game or User not found");
-        }
-        else
-        {
-            return games;
-        }
+        return await _gameRepo.WhereAsync(g => g.UserId.Equals(userId));
     }
     public async Task<int> Count()
     {

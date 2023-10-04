@@ -4,7 +4,6 @@ namespace Application.Interfaces;
 
 public interface IAssetServices
 {
-    //Asset
     Task<ICollection<AssetEntity>> List();
     Task<AssetEntity> GetById(Guid assetId); // Get By AssetId
     Task<ICollection<AssetEntity>> GetByAssetTypeId(Guid assetTypeid); // Get By AssetTypeId

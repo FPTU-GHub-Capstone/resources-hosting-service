@@ -15,42 +15,19 @@ public class CharacterAssetServices : ICharacterAssetServices
     }
     public async Task<ICollection<CharacterAsset>> List()
     {
-        var charAss = await _characterAssetRepo.ListAsync();
-        return charAss;
+        return await _characterAssetRepo.ListAsync();
     }
     public async Task<CharacterAsset> GetById(Guid characterAssetId)
     {
-        var charAss = await _characterAssetRepo.FindByIdAsync(characterAssetId);
-        if (charAss == null)
-        {
-            throw new Exception($"Character asset not exist");
-        }
-        else
-        {
-            return charAss;
-        }
+        return await _characterAssetRepo.FindByIdAsync(characterAssetId);
     }
-    public async Task<ICollection<CharacterAsset>> GetById(Guid id, int typeId)
-    { // Type ID: 1: AssetId, 2: CharacterId
-        ICollection<CharacterAsset> charAss = new Collection<CharacterAsset>();
-        if (typeId == 1)
-        {
-            charAss = await _characterAssetRepo.WhereAsync(
-                cA => cA.AssetsId.Equals(id));
-        }
-        else if (typeId == 2)
-        {
-            charAss = await _characterAssetRepo.WhereAsync(
-                cA => cA.CharacterId.Equals(id));
-        }
-        if (charAss.Count == 0)
-        {
-            throw new Exception($"Character Asset or Asset Id / CharacterId not found");
-        }
-        else
-        {
-            return charAss;
-        }
+    public async Task<ICollection<CharacterAsset>> GetByAssetId(Guid id)
+    {
+        return await _characterAssetRepo.WhereAsync(cA => cA.AssetsId.Equals(id));
+    }
+    public async Task<ICollection<CharacterAsset>> GetByCharacterId(Guid id)
+    {
+        return await _characterAssetRepo.WhereAsync(cA => cA.CharacterId.Equals(id));
     }
     public async Task<int> Count()
     {

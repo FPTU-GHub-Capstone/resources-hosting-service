@@ -15,33 +15,15 @@ public class LevelServices : ILevelServices
     //Level
     public async Task<ICollection<LevelEntity>> List()
     {
-        var levels = await _levelRepo.ListAsync();
-        return levels;
+        return await _levelRepo.ListAsync();
     }
     public async Task<LevelEntity> GetById(Guid levelId)
     {
-        var level = await _levelRepo.FindByIdAsync(levelId);
-        if (level == null)
-        {
-            throw new Exception($"Level not exist");
-        }
-        else
-        {
-            return level;
-        }
+        return await _levelRepo.FindByIdAsync(levelId);
     }
     public async Task<ICollection<LevelEntity>> GetByGameId(Guid gameId)
     {
-        var levels = await _levelRepo.WhereAsync(
-            l => l.GameId.Equals(gameId));
-        if (levels == null || levels.Count == 0)
-        {
-            throw new Exception($"Level or Game not exist");
-        }
-        else
-        {
-            return levels;
-        }
+        return await _levelRepo.WhereAsync(l => l.GameId.Equals(gameId));
     }
     public async Task<int> Count()
     {
@@ -49,16 +31,8 @@ public class LevelServices : ILevelServices
     }
     public async Task<int> Count(Guid gameId)
     { // Count levels in 1 game
-        var levels = await _levelRepo.WhereAsync(
-            l => l.GameId.Equals(gameId));
-        if (levels == null || levels.Count == 0)
-        {
-            throw new Exception($"Level or Game not exist");
-        }
-        else
-        {
-            return levels.Count;
-        }
+        var levels = await _levelRepo.WhereAsync(l => l.GameId.Equals(gameId));
+        return levels.Count();
     }
     public async Task Create(LevelEntity level)
     {
