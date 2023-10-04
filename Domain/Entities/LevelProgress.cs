@@ -1,9 +1,6 @@
-﻿
-using Domain.Common.BaseEntity;
-using Domain.Entities.Character;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Domain.Entities.Level;
+namespace Domain.Entities;
 
 [Table("LevelProgress")]
 public class LevelProgress : BaseEntity

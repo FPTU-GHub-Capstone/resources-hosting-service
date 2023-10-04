@@ -1,6 +1,6 @@
-﻿using Domain.Entities.Level;
+﻿using Domain.Entities;
 
-namespace Application.Interfaces; 
+namespace Application.Interfaces;
 public interface ILevelServices {
     Task<ICollection<LevelEntity>> List();
     Task<LevelEntity> GetById(Guid levelId);

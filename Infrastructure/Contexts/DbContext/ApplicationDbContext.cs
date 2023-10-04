@@ -1,14 +1,5 @@
 ﻿using Application.Interfaces;
-using Domain.Entities.Activity;
-using Domain.Entities.Asset;
-using Domain.Entities.Attribute;
-using Domain.Entities.Character;
-using Domain.Entities.Game;
-using Domain.Entities.Level;
-using Domain.Entities.Payment;
-using Domain.Entities.Transaction;
-using Domain.Entities.User;
-using Domain.Entities.Wallet;
+using Domain.Entities;
 using Infrastructure.Extensions;
 using Microsoft.EntityFrameworkCore;
 

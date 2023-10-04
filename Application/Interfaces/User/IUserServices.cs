@@ -1,6 +1,6 @@
-﻿using Domain.Entities.User;
+﻿using Domain.Entities;
 
-namespace Application.Interfaces; 
+namespace Application.Interfaces;
 public interface IUserServices {
     Task<ICollection<UserEntity>> List();
     Task<UserEntity> GetById(Guid UserId);

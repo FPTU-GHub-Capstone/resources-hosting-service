@@ -1,11 +1,5 @@
-using Application.Interfaces;
-using Application.Services.ActivityServices;
-using Infrastructure.Repositories;
-using Infrastructure.Contexts;
-using Microsoft.EntityFrameworkCore;
 using Api.Configurations;
 using Application.AppConfig;
-using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,8 +12,8 @@ var configuration = builder.Configuration;
 {
     var services = builder.Services;
     services.Configure<AppSettings>(configuration.GetSection(nameof(AppSettings)));
-    services.AddAppServices();
     services.AddDbServices();
+    services.AddAppServices();
 }
 #endregion
 

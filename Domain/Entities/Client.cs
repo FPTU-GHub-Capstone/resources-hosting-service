@@ -1,14 +1,12 @@
-﻿
-using Domain.Common.BaseEntity;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Domain.Entities.User;
+namespace Domain.Entities;
 
 [Table("Client")]
-public class Client :BaseEntity
+public class Client : BaseEntity
 {
     public string Name { get; set; }
-    public string Scope { get;set; }
+    public string Scope { get; set; }
     public Guid ClientId { get; set; }
     public string ClientSecret { get; set; }
     // M Client - M User

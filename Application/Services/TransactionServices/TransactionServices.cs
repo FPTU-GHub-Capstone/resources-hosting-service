@@ -1,5 +1,5 @@
 ﻿using Application.Interfaces;
-using Domain.Entities.Transaction;
+using Domain.Entities;
 using System.Diagnostics;
 
 namespace Application.Services.TransactionServices;

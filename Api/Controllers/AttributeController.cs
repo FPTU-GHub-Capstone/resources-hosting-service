@@ -1,6 +1,6 @@
 ﻿using Application.Interfaces;
+using Domain.Entities;
 using Domain.Entities.Activity;
-using Domain.Entities.Attribute;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections;
 

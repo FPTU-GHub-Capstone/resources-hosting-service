@@ -1,4 +1,4 @@
-﻿using Domain.Entities.Activity;
+﻿using Domain.Entities;
 
 namespace Application.Interfaces.Activity;
 

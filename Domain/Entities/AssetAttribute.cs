@@ -1,8 +1,6 @@
-﻿using Domain.Common.BaseEntity;
-using Domain.Entities.Attribute;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Domain.Entities.Asset;
+namespace Domain.Entities;
 
 [Table("AssetAttribute")]
 public class AssetAttribute : BaseEntity
@@ -13,5 +11,5 @@ public class AssetAttribute : BaseEntity
     public AssetEntity Asset { get; set; }
     //1 Attribute Group - M Asset Attribute
     public Guid AttributeGroupId { get; set; }
-    public AttributeGroup AttributeGroup { get;set; }
+    public AttributeGroup AttributeGroup { get; set; }
 }

@@ -1,7 +1,6 @@
-﻿using Domain.Common.BaseEntity;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Domain.Entities.Asset;
+namespace Domain.Entities;
 
 [Table("Asset")]
 public class AssetEntity : BaseEntity

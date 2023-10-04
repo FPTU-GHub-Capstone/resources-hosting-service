@@ -1,10 +1,8 @@
-﻿using Domain.Common.BaseEntity;
-using Domain.Entities.Attribute;
-using Domain.Entities.Game;
+﻿using Domain.Entities.Game;
 using Domain.Entities.User;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Domain.Entities.Character;
+namespace Domain.Entities;
 
 [Table("CharacterAttribute")]
 public class CharacterAttribute : BaseEntity

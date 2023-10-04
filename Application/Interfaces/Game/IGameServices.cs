@@ -1,6 +1,6 @@
-﻿using Domain.Entities.Game;
+﻿using Domain.Entities;
 
-namespace Application.Interfaces; 
+namespace Application.Interfaces;
 public interface IGameServices {
     Task<ICollection<GameEntity>> List();
     Task<GameEntity> GetById(Guid gameId);

@@ -1,9 +1,6 @@
-﻿
-using Domain.Common.BaseEntity;
-using Domain.Entities.Character;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Domain.Entities.Game;
+namespace Domain.Entities;
 
 [Table("GameServer")]
 public class GameServer : BaseEntity

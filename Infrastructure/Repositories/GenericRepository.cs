@@ -1,5 +1,5 @@
 ﻿using Application.Interfaces;
-using Domain.Common.BaseEntity;
+using Domain.Entities;
 using Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
 using System.Collections;

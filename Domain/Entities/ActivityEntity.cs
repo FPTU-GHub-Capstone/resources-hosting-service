@@ -1,8 +1,6 @@
-﻿using Domain.Common.BaseEntity;
-using Domain.Entities.Transaction;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Domain.Entities.Activity;
+namespace Domain.Entities;
 
 [Table("Activity")]
 public class ActivityEntity : BaseEntity
@@ -14,5 +12,5 @@ public class ActivityEntity : BaseEntity
     public ActivityType ActivityType { get; set; }
     // 1 Transaction - 1 or M Activity
     public Guid TransactionId { get; set; }
-    public TransactionEntity Transaction { get;set; }
+    public TransactionEntity Transaction { get; set; }
 }

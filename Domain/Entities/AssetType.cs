@@ -1,10 +1,6 @@
-﻿
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
-using Domain.Common.BaseEntity;
-using Domain.Entities.Game;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace Domain.Entities.Asset;
+namespace Domain.Entities;
 
 [Table("AssetType")]
 public class AssetType : BaseEntity

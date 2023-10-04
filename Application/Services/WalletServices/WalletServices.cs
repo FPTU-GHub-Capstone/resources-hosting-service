@@ -1,8 +1,8 @@
 ﻿using Application.Interfaces;
 using Domain.Entities.Character;
-using Domain.Entities.Wallet;
 using System.Collections.ObjectModel;
 using System;
+using Domain.Entities;
 
 namespace Application.Services.WalletServices;
 

@@ -1,5 +1,5 @@
 ﻿using Application.Interfaces;
-using Domain.Entities.Character;
+using Domain.Entities;
 using System;
 using System.Collections.ObjectModel;
 

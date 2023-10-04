@@ -1,9 +1,6 @@
-﻿using Domain.Common.BaseEntity;
-using Domain.Entities.Character;
-using Domain.Entities.Payment;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Domain.Entities.Wallet;
+namespace Domain.Entities;
 
 [Table("Wallet")]
 public class WalletEntity : BaseEntity

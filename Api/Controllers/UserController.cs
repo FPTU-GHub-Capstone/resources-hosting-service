@@ -1,6 +1,5 @@
 ﻿using Application.Interfaces;
-using Domain.Entities.Attribute;
-using Domain.Entities.User;
+using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers

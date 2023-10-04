@@ -1,5 +1,5 @@
 ﻿using Application.Interfaces;
-using Domain.Entities.Attribute;
+using Domain.Entities;
 
 namespace Application.Services.AttributeServices;
 

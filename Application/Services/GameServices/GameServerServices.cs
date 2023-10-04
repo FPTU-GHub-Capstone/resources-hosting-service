@@ -1,5 +1,5 @@
 ﻿using Application.Interfaces;
-using Domain.Entities.Game;
+using Domain.Entities;
 
 namespace Application.Services.GameServices;
 

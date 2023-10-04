@@ -1,6 +1,6 @@
 ﻿using Application.Interfaces;
+using Domain.Entities;
 using Domain.Entities.Activity;
-using Domain.Entities.Asset;
 using System.Collections.ObjectModel;
 
 namespace Application.Services.AssetServices;

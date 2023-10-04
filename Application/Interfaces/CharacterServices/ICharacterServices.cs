@@ -1,4 +1,4 @@
-﻿using Domain.Entities.Character;
+﻿using Domain.Entities;
 
 namespace Application.Interfaces;
 

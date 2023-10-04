@@ -1,5 +1,5 @@
 ﻿using Application.Interfaces;
-using Domain.Entities.Payment;
+using Domain.Entities;
 using System.Collections.ObjectModel;
 
 namespace Application.Services.PaymentServices;

@@ -1,11 +1,9 @@
-﻿using Domain.Common.BaseEntity;
-using Domain.Entities.Game;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Domain.Entities.Attribute;
+namespace Domain.Entities;
 
 [Table("AttributeGroup")]
-public class AttributeGroup :BaseEntity
+public class AttributeGroup : BaseEntity
 {
     public string Name { get; set; }
     public string Effect { get; set; } // JSON

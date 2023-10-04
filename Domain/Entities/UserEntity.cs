@@ -1,17 +1,14 @@
-﻿using Domain.Common.BaseEntity;
-using Domain.Entities.Character;
-using Domain.Entities.Payment;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Domain.Entities.User;
+namespace Domain.Entities;
 
 [Table("User")]
 public class UserEntity : BaseEntity
 {
     public string Username { get; set; }
     public string Password { get; set; }
-    public string FirstName { get;set; }
-    public string LastName { get;set; }
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
     public string Avatar { get; set; }
     public string Email { get; set; }
     public string Phone { get; set; }

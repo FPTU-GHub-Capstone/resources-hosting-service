@@ -1,11 +1,7 @@
-﻿using Domain.Common.BaseEntity;
-using Domain.Entities.Activity;
-using Domain.Entities.Attribute;
-using Domain.Entities.Character;
-using Domain.Entities.User;
+﻿using Domain.Entities.Character;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Domain.Entities.Game;
+namespace Domain.Entities;
 
 [Table("Game")]
 public class GameEntity : BaseEntity

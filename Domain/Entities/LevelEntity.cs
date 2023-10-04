@@ -1,8 +1,6 @@
-﻿using Domain.Common.BaseEntity;
-using Domain.Entities.Game;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Domain.Entities.Level;
+namespace Domain.Entities;
 
 [Table("Level")]
 public class LevelEntity : BaseEntity
@@ -13,5 +11,5 @@ public class LevelEntity : BaseEntity
     public Guid GameId { get; set; }
     public GameEntity Game { get; set; }
     // 1 Level Progress - 1 Level 
-    public LevelProgress LevelProgress{ get; set; }
+    public LevelProgress LevelProgress { get; set; }
 }

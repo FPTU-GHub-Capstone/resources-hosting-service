@@ -1,4 +1,4 @@
-﻿using Domain.Entities.Payment;
+﻿using Domain.Entities;
 
 namespace Application.Interfaces;
 public interface IPaymentServices {

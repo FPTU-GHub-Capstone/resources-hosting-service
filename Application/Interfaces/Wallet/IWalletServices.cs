@@ -1,6 +1,6 @@
-﻿using Domain.Entities.Wallet;
+﻿using Domain.Entities;
 
-namespace Application.Interfaces; 
+namespace Application.Interfaces;
 public interface IWalletServices 
 {
     Task<ICollection<WalletEntity>> List();

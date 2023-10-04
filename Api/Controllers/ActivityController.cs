@@ -1,6 +1,6 @@
 ﻿using Application.Interfaces;
 using Application.Interfaces.Activity;
-using Domain.Entities.Activity;
+using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

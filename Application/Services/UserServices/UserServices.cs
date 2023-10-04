@@ -1,6 +1,6 @@
 ﻿using Application.Interfaces;
+using Domain.Entities;
 using Domain.Entities.Attribute;
-using Domain.Entities.User;
 
 namespace Application.Services.UserServices;
 

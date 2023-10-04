@@ -1,4 +1,4 @@
-﻿using Domain.Entities.Transaction;
+﻿using Domain.Entities;
 
 namespace Application.Interfaces;
 public interface ITransactionServices {

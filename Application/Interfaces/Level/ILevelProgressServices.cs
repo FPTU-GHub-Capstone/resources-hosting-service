@@ -1,6 +1,6 @@
-﻿using Domain.Entities.Level;
+﻿using Domain.Entities;
 
-namespace Application.Interfaces; 
+namespace Application.Interfaces;
 public interface ILevelProgressServices {
     Task<ICollection<LevelProgress>> List();
     Task<LevelProgress> GetById(Guid levelProgressId);
