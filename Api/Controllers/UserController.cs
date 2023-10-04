@@ -16,8 +16,6 @@ namespace Api.Controllers
             _clientRepo = clientRepo;
             _userRepo = userRepo;
         }
-
-        [Route("User")]
         [HttpGet]
         public async Task<IActionResult> GetUsers()
         {
@@ -25,12 +23,25 @@ namespace Api.Controllers
             return Ok(users);
         }
 
-        [Route("User/{id}")]
-        [HttpGet]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetUser(string id)
         {
             var user = await _userServices.GetById(Guid.Parse(id));
             return Ok(user);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateUser([FromBody] UserEntity user)
+        {
+            await _userServices.Create(user);
+            return Ok();
+        }
+        
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateUser(string id, [FromBody] UserEntity user)
+        {
+            await _userServices.Update(Guid.Parse(id), user);
+            return Ok();
         }
     }
 }

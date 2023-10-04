@@ -17,7 +17,7 @@ public class GameEntity : BaseEntity
     public Guid UserId { get; set; }
     public UserEntity User { get; set; }
     // 1 Game - M Activity Type
-    public virtual ICollection<ActivityType> ActivityTypes { get; set; }
+    public virtual ICollection<ActivityType>? ActivityTypes { get; set; }
     // M Game - M Attribute Group
-    public virtual ICollection<AttributeGroup> AttributeGroups { get; set; }
+    public virtual ICollection<AttributeGroup>? AttributeGroups { get; set; }
 }

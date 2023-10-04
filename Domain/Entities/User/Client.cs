@@ -12,5 +12,5 @@ public class Client :BaseEntity
     public Guid ClientId { get; set; }
     public string ClientSecret { get; set; }
     // M Client - M User
-    public virtual ICollection<UserEntity> Users { get; set; }
+    public virtual ICollection<UserEntity>? Users { get; set; }
 }

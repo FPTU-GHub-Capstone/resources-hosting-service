@@ -25,7 +25,7 @@ public class AssetAttributeServices : IAssetAttributeServices
     {
         return await _assetAttributeRepo.WhereAsync(a=>a.AssetId == assetId);
     }
-    public async Task<ICollection<AssetAttribute>> GetByAttributeGroupId(Guid attributeGroupId)
+    public async Task<ICollection<AssetAttribute>> GetByAttGroupId(Guid attributeGroupId)
     {
         return await _assetAttributeRepo.WhereAsync(a => a.AttributeGroupId == attributeGroupId);
     }

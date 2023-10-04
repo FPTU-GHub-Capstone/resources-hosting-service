@@ -22,16 +22,7 @@ public class WalletCategoryServices : IWalletCategoryServices
     }
     public async Task<ICollection<WalletCategory>> GetByGameId(Guid gameId)
     {
-        var walCat = await _walletCategoryRepo.WhereAsync(
-            wc => wc.GameId.Equals(gameId));
-        if (walCat.Count == 0)
-        {
-            throw new Exception($"Wallet category or game not found");
-        }
-        else
-        {
-            return walCat;
-        }
+        return await _walletCategoryRepo.WhereAsync(wc => wc.GameId.Equals(gameId));
     }
     public async Task<int> Count() {
         return await _walletCategoryRepo.CountAsync();

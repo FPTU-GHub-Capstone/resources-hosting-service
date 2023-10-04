@@ -19,10 +19,10 @@ public class UserEntity : BaseEntity
     public int Status { get; set; }
     public float Balance { get; set; }
     // M User - M Client
-    public virtual ICollection<Client> Clients { get; set; }
+    public virtual ICollection<Client>? Clients { get; set; }
     // 1 User - M Characters
-    public virtual ICollection<CharacterEntity> Characters { get; set; }
+    public virtual ICollection<CharacterEntity>? Characters { get; set; }
     //1 User - M Payment
-    public virtual ICollection<PaymentEntity> Payments { get; set; }
+    public virtual ICollection<PaymentEntity>? Payments { get; set; }
 
 }

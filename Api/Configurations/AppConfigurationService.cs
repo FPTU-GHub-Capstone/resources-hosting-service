@@ -14,6 +14,7 @@ using Application.Services.WalletServices;
 using Infrastructure.Contexts;
 using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 
 namespace Api.Configurations
@@ -45,8 +46,17 @@ namespace Api.Configurations
         }
         public static void AddDbServices(this IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>
-                (options => options.UseSqlServer("name=ConnectionStrings:GHub_Connection", b => b.MigrationsAssembly("Infrastructure")));
+            var settings = services.BuildServiceProvider().GetService<IOptions<AppSettings>>();
+            Console.WriteLine(settings);
+            services.AddDbContext<ApplicationDbContext>(
+                options =>
+                    options.UseSqlServer(
+                        settings.Value.ConnectionStrings.DefaultConnection
+                    )
+            );
+            services.AddScoped<IApplicationDbContext>(
+                provider => provider.GetService<ApplicationDbContext>()
+            );
         }
     }
 }

@@ -33,14 +33,14 @@ public class AttributeServices : IAttributeServices
                 check = true;
                 break;
             }
-            else continue;
         }
-        var attGrp = new AttributeGroup{
-            Name = attributeGroup.Name,
-            Effect = attributeGroup.Effect
-        };
-        if (check == false)
+        if (!check)
         {
+            var attGrp = new AttributeGroup
+            {
+                Name = attributeGroup.Name,
+                Effect = attributeGroup.Effect
+            };
             await _attributeRepo.CreateAsync(attGrp);
         }
     }

@@ -15,5 +15,5 @@ public class GameServer : BaseEntity
     public Guid GameId { get; set; }
     public GameEntity Game { get; set; }
     //1 GameServer - M Character
-    public virtual ICollection<CharacterEntity> Characters { get; set; }
+    public virtual ICollection<CharacterEntity>? Characters { get; set; }
 }

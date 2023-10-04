@@ -14,5 +14,5 @@ public class TransactionEntity : BaseEntity
     public Guid WalletId { get;set; }
     public WalletEntity Wallet { get; set; }
     // 1 Transaction - 1 or M Activity
-    public virtual ICollection<ActivityEntity> Activities { get;set; }
+    public virtual ICollection<ActivityEntity>? Activities { get;set; }
 }

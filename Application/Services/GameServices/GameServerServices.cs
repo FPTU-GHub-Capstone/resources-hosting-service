@@ -18,15 +18,7 @@ public class GameServerServices : IGameServerServices
     }
     public async Task<GameServer> GetById(Guid gameServerId)
     {
-        var gameServer = await _gameServerRepo.FindByIdAsync(gameServerId);
-        if (gameServer == null)
-        {
-            throw new Exception($"Game server not exist");
-        }
-        else
-        {
-            return gameServer;
-        }
+        return await _gameServerRepo.FindByIdAsync(gameServerId);
     }
     public async Task<ICollection<GameServer>> GetByGameId(Guid gameId)
     {
