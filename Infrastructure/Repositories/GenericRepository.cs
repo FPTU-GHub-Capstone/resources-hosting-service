@@ -1,12 +1,11 @@
 ﻿using System.Linq.Expressions;
-using Application.Interfaces;
-using Domain.Entities;
-using Infrastructure.Contexts;
+using DomainLayer.Entities;
 using Microsoft.EntityFrameworkCore;
+using RepositoryLayer.Contexts;
 
 
 
-namespace Infrastructure.Repositories;
+namespace RepositoryLayer.Repositories;
 public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
 {
     protected ApplicationDbContext _context;

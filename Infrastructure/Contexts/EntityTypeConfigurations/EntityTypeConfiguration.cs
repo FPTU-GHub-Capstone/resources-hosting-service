@@ -1,19 +1,18 @@
-﻿using Domain.Entities;
+﻿using DomainLayer.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Infrastructure.Contexts;
+namespace RepositoryLayer.Contexts;
 public class EntityTypeConfiguration : 
-    IEntityTypeConfiguration<ActivityType>, IEntityTypeConfiguration<ActivityEntity>,
-    IEntityTypeConfiguration<AssetAttribute>, IEntityTypeConfiguration<AssetEntity>,
-    IEntityTypeConfiguration<AssetType>, IEntityTypeConfiguration<AttributeGroup>,
-    IEntityTypeConfiguration<CharacterAsset>, IEntityTypeConfiguration<CharacterAttribute>,
-    IEntityTypeConfiguration<CharacterEntity>, IEntityTypeConfiguration<CharacterType>,
-    IEntityTypeConfiguration<GameEntity>, IEntityTypeConfiguration<GameServer>,
-    IEntityTypeConfiguration<LevelEntity>, IEntityTypeConfiguration<LevelProgress>,
+    IEntityTypeConfiguration<ActivityTypeEntity>, IEntityTypeConfiguration<ActivityEntity>,
+    IEntityTypeConfiguration<AssetAttributeEntity>, IEntityTypeConfiguration<AssetEntity>,
+    IEntityTypeConfiguration<AssetTypeEntity>, IEntityTypeConfiguration<AttributeGroupEntity>,
+    IEntityTypeConfiguration<CharacterAssetEntity>, IEntityTypeConfiguration<CharacterAttributeEntity>,
+    IEntityTypeConfiguration<CharacterEntity>, IEntityTypeConfiguration<CharacterTypeEntity>,
+    IEntityTypeConfiguration<GameEntity>, IEntityTypeConfiguration<GameServerEntity>,
+    IEntityTypeConfiguration<LevelEntity>, IEntityTypeConfiguration<LevelProgressEntity>,
     IEntityTypeConfiguration<PaymentEntity>, IEntityTypeConfiguration<TransactionEntity>,
-    IEntityTypeConfiguration<Client>, IEntityTypeConfiguration<UserEntity>,
-    IEntityTypeConfiguration<WalletCategory>, IEntityTypeConfiguration<WalletEntity>
+    IEntityTypeConfiguration<WalletCategoryEntity>, IEntityTypeConfiguration<WalletEntity>
 {
     //Activity Entity
     public void Configure(EntityTypeBuilder<ActivityEntity> builder)
@@ -26,7 +25,7 @@ public class EntityTypeConfiguration :
             .OnDelete(DeleteBehavior.NoAction);
     }
     //Activity Type
-    public void Configure(EntityTypeBuilder<ActivityType> builder)
+    public void Configure(EntityTypeBuilder<ActivityTypeEntity> builder)
     {
         // 1 Game - M Activity Type
         builder
@@ -36,7 +35,7 @@ public class EntityTypeConfiguration :
             .OnDelete(DeleteBehavior.NoAction);
     }
     //Asset Attribute
-    public void Configure(EntityTypeBuilder<AssetAttribute> builder)
+    public void Configure(EntityTypeBuilder<AssetAttributeEntity> builder)
     {
         
     }
@@ -46,17 +45,17 @@ public class EntityTypeConfiguration :
 
     }
     //Asset Type
-    public void Configure(EntityTypeBuilder<AssetType> builder)
+    public void Configure(EntityTypeBuilder<AssetTypeEntity> builder)
     {
 
     }
     //Attribute Group
-    public void Configure(EntityTypeBuilder<AttributeGroup> builder)
+    public void Configure(EntityTypeBuilder<AttributeGroupEntity> builder)
     {
 
     }
     //Character Asset
-    public void Configure(EntityTypeBuilder<CharacterAsset> builder)
+    public void Configure(EntityTypeBuilder<CharacterAssetEntity> builder)
     {
         //1 Character - M CharacterAsset
         builder
@@ -66,7 +65,7 @@ public class EntityTypeConfiguration :
             .OnDelete(DeleteBehavior.NoAction);
     }
     //Character Attribute
-    public void Configure(EntityTypeBuilder<CharacterAttribute> builder)
+    public void Configure(EntityTypeBuilder<CharacterAttributeEntity> builder)
     {
 
     }
@@ -88,7 +87,7 @@ public class EntityTypeConfiguration :
             .OnDelete(DeleteBehavior.NoAction);
     }
     //Character Type
-    public void Configure(EntityTypeBuilder<CharacterType> builder)
+    public void Configure(EntityTypeBuilder<CharacterTypeEntity> builder)
     {
 
     }
@@ -98,7 +97,7 @@ public class EntityTypeConfiguration :
 
     }
     //Game Server
-    public void Configure(EntityTypeBuilder<GameServer> builder)
+    public void Configure(EntityTypeBuilder<GameServerEntity> builder)
     {
 
     }
@@ -109,11 +108,11 @@ public class EntityTypeConfiguration :
         builder
             .HasOne(l => l.LevelProgress)
             .WithOne(pId => pId.Level)
-            .HasForeignKey<LevelProgress>(id => id.LevelId)
+            .HasForeignKey<LevelProgressEntity>(id => id.LevelId)
             .OnDelete(DeleteBehavior.NoAction);
     }
     //Level Progress
-    public void Configure(EntityTypeBuilder<LevelProgress> builder)
+    public void Configure(EntityTypeBuilder<LevelProgressEntity> builder)
     {
 
     }
@@ -138,18 +137,13 @@ public class EntityTypeConfiguration :
     {
 
     }
-    //Client
-    public void Configure(EntityTypeBuilder<Client> builder)
-    {
-
-    }
     //User Entity
     public void Configure(EntityTypeBuilder<UserEntity> builder)
     {
 
     }
     //Wallet Category
-    public void Configure(EntityTypeBuilder<WalletCategory> builder)
+    public void Configure(EntityTypeBuilder<WalletCategoryEntity> builder)
     {
 
     }

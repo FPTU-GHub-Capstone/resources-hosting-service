@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi", "Api\WebApi.csproj", "{EE7EED3F-FD46-45C4-AFEF-435CE5C3CE86}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApiLayer", "Api\WebApiLayer.csproj", "{EE7EED3F-FD46-45C4-AFEF-435CE5C3CE86}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "Application\Application.csproj", "{35DF4AED-A3A6-4688-A14E-FD1EC8142667}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceLayer", "Application\ServiceLayer.csproj", "{35DF4AED-A3A6-4688-A14E-FD1EC8142667}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csproj", "{F506329C-F22F-4D8B-9A41-E1D1CE20DAF5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DomainLayer", "Domain\DomainLayer.csproj", "{F506329C-F22F-4D8B-9A41-E1D1CE20DAF5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{1F74A1E9-5972-4A6A-84CB-F0B416843AB1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RepositoryLayer", "Infrastructure\RepositoryLayer.csproj", "{1F74A1E9-5972-4A6A-84CB-F0B416843AB1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Domain.Entities;
+namespace DomainLayer.Entities;
 
 [Table("User")]
 public class UserEntity : BaseEntity
@@ -15,8 +15,6 @@ public class UserEntity : BaseEntity
     public string Code { get; set; }
     public int Status { get; set; }
     public float Balance { get; set; }
-    // M User - M Client
-    public virtual ICollection<Client>? Clients { get; set; }
     // 1 User - M Characters
     public virtual ICollection<CharacterEntity>? Characters { get; set; }
     //1 User - M Payment

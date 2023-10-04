@@ -1,18 +1,17 @@
-﻿using Application.Interfaces;
-using Domain.Entities;
+﻿using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
+using RepositoryLayer.Repositories;
+using ServiceLayer.Business.UserServices;
 
-namespace Api.Controllers
+namespace WebApiLayer.Controllers
 {
     public class UserController : BaseController
     {
         private readonly IUserServices _userServices;
-        private readonly IGenericRepository<Client> _clientRepo;
         private readonly IGenericRepository<UserEntity> _userRepo;
-        public UserController(IUserServices userServices, IGenericRepository<Client> clientRepo, IGenericRepository<UserEntity> userRepo)
+        public UserController(IUserServices userServices, IGenericRepository<UserEntity> userRepo)
         {
             _userServices = userServices;
-            _clientRepo = clientRepo;
             _userRepo = userRepo;
         }
         [HttpGet]

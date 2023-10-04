@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Infrastructure.Migrations
+namespace RepositoryLayer.Migrations
 {
     public partial class Update_GameAttributeGroup_Relation : Migration
     {

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Domain.Entities;
+namespace DomainLayer.Entities;
 
 [Table("Transaction")]
 public class TransactionEntity : BaseEntity

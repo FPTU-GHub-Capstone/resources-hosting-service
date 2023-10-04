@@ -1,5 +1,5 @@
-using Api.Configurations;
-using Application.AppConfig;
+using ServiceLayer.AppConfig;
+using WebApiLayer.Configurations;
 
 var builder = WebApplication.CreateBuilder(args);
 

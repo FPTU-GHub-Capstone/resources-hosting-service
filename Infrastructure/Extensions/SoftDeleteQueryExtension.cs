@@ -1,11 +1,11 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
-using Domain.Entities;
+using DomainLayer.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Query;
 
-namespace Infrastructure.Extensions
+namespace RepositoryLayer.Extensions
 {
     public static class SoftDeleteQueryExtension
     {

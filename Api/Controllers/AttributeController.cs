@@ -1,14 +1,16 @@
-﻿using Application.Interfaces;
-using Domain.Entities;
+﻿using Domain.Entities;
+using DomainLayer.Entities;
 using Microsoft.AspNetCore.Mvc;
+using RepositoryLayer.Repositories;
+using ServiceLayer.Business.AttributeServices;
 
-namespace Api.Controllers
+namespace WebApiLayer.Controllers
 {
     public class AttributeController : BaseController
     {
-        private readonly IAttributeServices _attributeServices;
-        private readonly IGenericRepository<AttributeGroup> _attributeRepo;
-        public AttributeController(IAttributeServices attributeServices, IGenericRepository<AttributeGroup> attributeRepo)
+        private readonly IAttributeGroupServices _attributeServices;
+        private readonly IGenericRepository<AttributeGroupEntity> _attributeRepo;
+        public AttributeController(IAttributeGroupServices attributeServices, IGenericRepository<AttributeGroupEntity> attributeRepo)
         {
             _attributeServices = attributeServices;
             _attributeRepo = attributeRepo;
@@ -28,7 +30,7 @@ namespace Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] AttributeGroup attributeGroup)
+        public async Task<IActionResult> Post([FromBody] AttributeGroupEntity attributeGroup)
         {
             await _attributeServices.Create(attributeGroup);
             return NoContent();

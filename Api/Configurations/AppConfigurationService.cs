@@ -1,23 +1,8 @@
-﻿using Application.AppConfig;
-using Application.Interfaces;
-using Application.Interfaces.Activity;
-using Application.Services.ActivityServices;
-using Application.Services.AssetServices;
-using Application.Services.AttributeServices;
-using Application.Services.CharacterServices;
-using Application.Services.GameServices;
-using Application.Services.LevelServices;
-using Application.Services.PaymentServices;
-using Application.Services.TransactionServices;
-using Application.Services.UserServices;
-using Application.Services.WalletServices;
-using Infrastructure.Contexts;
-using Infrastructure.Repositories;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using RepositoryLayer.Repositories;
 
-namespace Api.Configurations
+namespace WebApiLayer.Configurations
 {
     public static class AppConfigurationService
     {

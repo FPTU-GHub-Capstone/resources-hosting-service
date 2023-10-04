@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Domain.Entities;
+namespace DomainLayer.Entities;
 
 [Table("Game")]
 public class GameEntity : BaseEntity
@@ -12,7 +12,7 @@ public class GameEntity : BaseEntity
     public Guid UserId { get; set; }
     public UserEntity User { get; set; }
     // 1 Game - M Activity Type
-    public virtual ICollection<ActivityType>? ActivityTypes { get; set; }
+    public virtual ICollection<ActivityTypeEntity>? ActivityTypes { get; set; }
     // M Game - M Attribute Group
-    public virtual ICollection<AttributeGroup>? AttributeGroups { get; set; }
+    public virtual ICollection<AttributeGroupEntity>? AttributeGroups { get; set; }
 }

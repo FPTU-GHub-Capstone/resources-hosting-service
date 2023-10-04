@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace Infrastructure.Migrations
+namespace RepositoryLayer.Migrations
 {
     public partial class Add_Key : Migration
     {

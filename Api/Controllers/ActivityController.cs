@@ -1,9 +1,9 @@
-﻿using Application.Interfaces;
-using Application.Interfaces.Activity;
-using Domain.Entities;
+﻿using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
+using RepositoryLayer.Repositories;
+using ServiceLayer.Business.ActivityServices;
 
-namespace Api.Controllers
+namespace WebApiLayer.Controllers
 {
     public class ActivityController : BaseController
     {
