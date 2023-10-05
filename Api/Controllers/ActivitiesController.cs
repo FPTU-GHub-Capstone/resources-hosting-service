@@ -20,7 +20,6 @@ public class ActivitiesController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetActivitíes()
     {
-        throw new BadRequestException();
         return Ok(await _activityServices.List());
     }
 
