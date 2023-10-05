@@ -1,6 +1,6 @@
 ﻿using DomainLayer.Entities;
 
-namespace ServiceLayer.Business.ActivityType;
+namespace ServiceLayer.Business;
 
 public interface IActivityTypeServices
 {

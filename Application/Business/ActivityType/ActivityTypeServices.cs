@@ -1,7 +1,7 @@
 ﻿using DomainLayer.Entities;
 using RepositoryLayer.Repositories;
 
-namespace ServiceLayer.Business.ActivityType;
+namespace ServiceLayer.Business;
 
 public class ActivityTypeServices : IActivityTypeServices
 {

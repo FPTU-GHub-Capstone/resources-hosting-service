@@ -1,6 +1,6 @@
 ﻿using DomainLayer.Entities;
 
-namespace ServiceLayer.Business.CharacterType;
+namespace ServiceLayer.Business;
 
 public interface ICharacterTypeServices
 {

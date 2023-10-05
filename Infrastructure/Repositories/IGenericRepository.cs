@@ -3,7 +3,7 @@ using DomainLayer.Entities;
 
 namespace RepositoryLayer.Repositories;
 
-public interface IGenericRepository<T> where T: BaseEntity
+public interface IGenericRepository<T>
 {
     Task CreateAsync(T entity);
     Task CreateRangeAsync(IEnumerable<T> entities);

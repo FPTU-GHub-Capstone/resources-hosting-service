@@ -1,8 +1,7 @@
-﻿using Domain.Entities;
-using DomainLayer.Entities;
+﻿using DomainLayer.Entities;
 using Microsoft.AspNetCore.Mvc;
 using RepositoryLayer.Repositories;
-using ServiceLayer.Business.AttributeServices;
+using ServiceLayer.Business;
 
 namespace WebApiLayer.Controllers
 {

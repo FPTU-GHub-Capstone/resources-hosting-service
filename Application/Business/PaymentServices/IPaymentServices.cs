@@ -1,6 +1,6 @@
 ﻿using DomainLayer.Entities;
 
-namespace ServiceLayer.Business.PaymentServices;
+namespace ServiceLayer.Business;
 public interface IPaymentServices
 {
     Task<ICollection<PaymentEntity>> List();

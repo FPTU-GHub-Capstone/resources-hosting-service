@@ -10,8 +10,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
 {
     protected ApplicationDbContext _context;
     protected DbSet<T> dbSet;
-    public GenericRepository(
-        ApplicationDbContext context)
+    public GenericRepository(ApplicationDbContext context)
     {
         _context = context;
         dbSet = context.Set<T>();

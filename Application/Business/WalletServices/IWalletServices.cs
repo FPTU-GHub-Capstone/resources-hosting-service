@@ -1,6 +1,6 @@
 ﻿using DomainLayer.Entities;
 
-namespace ServiceLayer.Business.WalletServices;
+namespace ServiceLayer.Business;
 public interface IWalletServices
 {
     Task<ICollection<WalletEntity>> List();

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RepositoryLayer.Contexts;
 
@@ -11,9 +12,10 @@ using RepositoryLayer.Contexts;
 namespace RepositoryLayer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231005022804_ReDirectoryEntities")]
+    partial class ReDirectoryEntities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,7 +36,7 @@ namespace RepositoryLayer.Migrations
 
                     b.HasIndex("GamesId");
 
-                    b.ToTable("AttributeGroupEntityGameEntity", (string)null);
+                    b.ToTable("AttributeGroupEntityGameEntity");
                 });
 
             modelBuilder.Entity("DomainLayer.Entities.ActivityEntity", b =>
@@ -73,7 +75,7 @@ namespace RepositoryLayer.Migrations
 
                     b.HasIndex("TransactionId");
 
-                    b.ToTable("Activity", (string)null);
+                    b.ToTable("Activity");
                 });
 
             modelBuilder.Entity("DomainLayer.Entities.ActivityTypeEntity", b =>
@@ -109,7 +111,7 @@ namespace RepositoryLayer.Migrations
 
                     b.HasIndex("GameId");
 
-                    b.ToTable("ActivityType", (string)null);
+                    b.ToTable("ActivityType");
                 });
 
             modelBuilder.Entity("DomainLayer.Entities.AssetAttributeEntity", b =>
@@ -144,7 +146,7 @@ namespace RepositoryLayer.Migrations
 
                     b.HasIndex("DeletedAt");
 
-                    b.ToTable("AssetAttribute", (string)null);
+                    b.ToTable("AssetAttribute");
                 });
 
             modelBuilder.Entity("DomainLayer.Entities.AssetEntity", b =>
@@ -183,7 +185,7 @@ namespace RepositoryLayer.Migrations
 
                     b.HasIndex("DeletedAt");
 
-                    b.ToTable("Asset", (string)null);
+                    b.ToTable("Asset");
                 });
 
             modelBuilder.Entity("DomainLayer.Entities.AssetTypeEntity", b =>
@@ -214,7 +216,7 @@ namespace RepositoryLayer.Migrations
 
                     b.HasIndex("GameId");
 
-                    b.ToTable("AssetType", (string)null);
+                    b.ToTable("AssetType");
                 });
 
             modelBuilder.Entity("DomainLayer.Entities.AttributeGroupEntity", b =>
@@ -244,7 +246,7 @@ namespace RepositoryLayer.Migrations
 
                     b.HasIndex("DeletedAt");
 
-                    b.ToTable("AttributeGroup", (string)null);
+                    b.ToTable("AttributeGroup");
                 });
 
             modelBuilder.Entity("DomainLayer.Entities.CharacterAssetEntity", b =>
@@ -282,7 +284,7 @@ namespace RepositoryLayer.Migrations
 
                     b.HasIndex("DeletedAt");
 
-                    b.ToTable("CharacterAsset", (string)null);
+                    b.ToTable("CharacterAsset");
                 });
 
             modelBuilder.Entity("DomainLayer.Entities.CharacterAttributeEntity", b =>
@@ -317,7 +319,7 @@ namespace RepositoryLayer.Migrations
 
                     b.HasIndex("DeletedAt");
 
-                    b.ToTable("CharacterAttribute", (string)null);
+                    b.ToTable("CharacterAttribute");
                 });
 
             modelBuilder.Entity("DomainLayer.Entities.CharacterEntity", b =>
@@ -361,7 +363,7 @@ namespace RepositoryLayer.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Character", (string)null);
+                    b.ToTable("Character");
                 });
 
             modelBuilder.Entity("DomainLayer.Entities.CharacterTypeEntity", b =>
@@ -400,7 +402,7 @@ namespace RepositoryLayer.Migrations
 
                     b.HasIndex("GameId");
 
-                    b.ToTable("CharacterType", (string)null);
+                    b.ToTable("CharacterType");
                 });
 
             modelBuilder.Entity("DomainLayer.Entities.GameEntity", b =>
@@ -439,7 +441,7 @@ namespace RepositoryLayer.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Game", (string)null);
+                    b.ToTable("Game");
                 });
 
             modelBuilder.Entity("DomainLayer.Entities.GameServerEntity", b =>
@@ -478,7 +480,7 @@ namespace RepositoryLayer.Migrations
 
                     b.HasIndex("GameId");
 
-                    b.ToTable("GameServer", (string)null);
+                    b.ToTable("GameServer");
                 });
 
             modelBuilder.Entity("DomainLayer.Entities.LevelEntity", b =>
@@ -512,7 +514,7 @@ namespace RepositoryLayer.Migrations
 
                     b.HasIndex("GameId");
 
-                    b.ToTable("Level", (string)null);
+                    b.ToTable("Level");
                 });
 
             modelBuilder.Entity("DomainLayer.Entities.LevelProgressEntity", b =>
@@ -555,7 +557,7 @@ namespace RepositoryLayer.Migrations
                     b.HasIndex("LevelId")
                         .IsUnique();
 
-                    b.ToTable("LevelProgress", (string)null);
+                    b.ToTable("LevelProgress");
                 });
 
             modelBuilder.Entity("DomainLayer.Entities.PaymentEntity", b =>
@@ -605,7 +607,7 @@ namespace RepositoryLayer.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Payment", (string)null);
+                    b.ToTable("Payment");
                 });
 
             modelBuilder.Entity("DomainLayer.Entities.TransactionEntity", b =>
@@ -639,7 +641,7 @@ namespace RepositoryLayer.Migrations
 
                     b.HasIndex("WalletId");
 
-                    b.ToTable("Transaction", (string)null);
+                    b.ToTable("Transaction");
                 });
 
             modelBuilder.Entity("DomainLayer.Entities.UserEntity", b =>
@@ -699,7 +701,7 @@ namespace RepositoryLayer.Migrations
 
                     b.HasIndex("DeletedAt");
 
-                    b.ToTable("User", (string)null);
+                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("DomainLayer.Entities.WalletCategoryEntity", b =>
@@ -730,7 +732,7 @@ namespace RepositoryLayer.Migrations
 
                     b.HasIndex("GameId");
 
-                    b.ToTable("WalletCategory", (string)null);
+                    b.ToTable("WalletCategory");
                 });
 
             modelBuilder.Entity("DomainLayer.Entities.WalletEntity", b =>
@@ -775,7 +777,7 @@ namespace RepositoryLayer.Migrations
 
                     b.HasIndex("WalletCategoryId");
 
-                    b.ToTable("Wallet", (string)null);
+                    b.ToTable("Wallet");
                 });
 
             modelBuilder.Entity("AttributeGroupEntityGameEntity", b =>

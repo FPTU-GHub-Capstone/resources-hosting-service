@@ -1,7 +1,7 @@
 ﻿using DomainLayer.Entities;
 using RepositoryLayer.Repositories;
 
-namespace ServiceLayer.Business.LevelServices;
+namespace ServiceLayer.Business;
 
 public class LevelServices : ILevelServices
 {

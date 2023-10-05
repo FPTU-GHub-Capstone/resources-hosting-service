@@ -1,6 +1,6 @@
 ﻿using DomainLayer.Entities;
 
-namespace ServiceLayer.Business.UserServices;
+namespace ServiceLayer.Business;
 public interface IUserServices
 {
     Task<ICollection<UserEntity>> List();

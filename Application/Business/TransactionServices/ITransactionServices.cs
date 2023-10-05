@@ -1,6 +1,6 @@
 ﻿using DomainLayer.Entities;
 
-namespace ServiceLayer.Business.TransactionServices;
+namespace ServiceLayer.Business;
 public interface ITransactionServices
 {
     Task<ICollection<TransactionEntity>> List();

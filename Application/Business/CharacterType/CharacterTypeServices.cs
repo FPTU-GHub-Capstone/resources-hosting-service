@@ -1,7 +1,7 @@
 ﻿using DomainLayer.Entities;
 using RepositoryLayer.Repositories;
 
-namespace ServiceLayer.Business.CharacterType;
+namespace ServiceLayer.Business;
 
 public class CharacterTypeServices : ICharacterTypeServices
 {

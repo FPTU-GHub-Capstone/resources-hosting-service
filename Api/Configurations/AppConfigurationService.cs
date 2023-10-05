@@ -1,6 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using RepositoryLayer.Contexts;
 using RepositoryLayer.Repositories;
+using ServiceLayer.AppConfig;
+using ServiceLayer.Business;
 
 namespace WebApiLayer.Configurations
 {
@@ -14,7 +17,7 @@ namespace WebApiLayer.Configurations
             services.AddScoped<IAssetAttributeServices, AssetAttributeServices>();
             services.AddScoped<IAssetServices, AssetServices>();
             services.AddScoped<IAssetAttributeServices, AssetAttributeServices>();
-            services.AddScoped<IAttributeServices, AttributeServices>();
+            services.AddScoped<IAttributeGroupServices, AttributeGroupServices>();
             services.AddScoped<ICharacterAssetServices, CharacterAssetServices>();
             services.AddScoped<ICharacterAttributeServices, CharacterAttributeServices>();
             services.AddScoped<ICharacterServices, CharacterServices>();

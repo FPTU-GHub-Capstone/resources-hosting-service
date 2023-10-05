@@ -1,6 +1,6 @@
 ﻿using DomainLayer.Entities;
 
-namespace ServiceLayer.Business.LevelProgress;
+namespace ServiceLayer.Business;
 public interface ILevelProgressServices
 {
     Task<ICollection<LevelProgressEntity>> List();

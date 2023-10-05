@@ -1,7 +1,7 @@
 ﻿using DomainLayer.Entities;
 using RepositoryLayer.Repositories;
 
-namespace ServiceLayer.Business.WalletCategory;
+namespace ServiceLayer.Business;
 
 public class WalletCategoryServices : IWalletCategoryServices
 {

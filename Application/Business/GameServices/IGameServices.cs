@@ -1,6 +1,6 @@
 ﻿using DomainLayer.Entities;
 
-namespace ServiceLayer.Business.GameServices;
+namespace ServiceLayer.Business;
 public interface IGameServices
 {
     Task<ICollection<GameEntity>> List();

@@ -1,6 +1,6 @@
 ﻿using DomainLayer.Entities;
 
-namespace ServiceLayer.Business.LevelServices;
+namespace ServiceLayer.Business;
 public interface ILevelServices
 {
     Task<ICollection<LevelEntity>> List();

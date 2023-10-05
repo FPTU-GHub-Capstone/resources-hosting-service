@@ -1,7 +1,7 @@
 ﻿using DomainLayer.Entities;
 using RepositoryLayer.Repositories;
 
-namespace ServiceLayer.Business.AssetType;
+namespace ServiceLayer.Business;
 
 public class AssetTypeServices : IAssetTypeServices
 {

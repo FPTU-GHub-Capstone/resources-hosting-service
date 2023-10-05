@@ -1,6 +1,6 @@
 ﻿using DomainLayer.Entities;
 
-namespace ServiceLayer.Business.AssetAttribute;
+namespace ServiceLayer.Business;
 
 public interface IAssetAttributeServices
 {

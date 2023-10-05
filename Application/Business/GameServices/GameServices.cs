@@ -1,7 +1,7 @@
 ﻿using DomainLayer.Entities;
 using RepositoryLayer.Repositories;
 
-namespace ServiceLayer.Business.GameServices;
+namespace ServiceLayer.Business;
 
 public class GameServices : IGameServices
 {

@@ -1,7 +1,7 @@
 ﻿using DomainLayer.Entities;
 using RepositoryLayer.Repositories;
 
-namespace ServiceLayer.Business.UserServices;
+namespace ServiceLayer.Business;
 
 public class UserServices : IUserServices
 {

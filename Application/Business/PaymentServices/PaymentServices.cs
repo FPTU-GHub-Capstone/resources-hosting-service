@@ -1,7 +1,7 @@
 ﻿using DomainLayer.Entities;
 using RepositoryLayer.Repositories;
 
-namespace ServiceLayer.Business.PaymentServices;
+namespace ServiceLayer.Business;
 
 public class PaymentServices : IPaymentServices
 {
