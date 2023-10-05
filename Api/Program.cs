@@ -1,19 +1,21 @@
+using System.Reflection;
 using ServiceLayer.AppConfig;
 using WebApiLayer.Configurations;
 
 var builder = WebApplication.CreateBuilder(args);
+var services = builder.Services;
 
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+services.AddControllers();
+services.AddEndpointsApiExplorer();
+services.AddSwaggerGen();
 
 var configuration = builder.Configuration;
 #region Add configurations to Services
 {
-    var services = builder.Services;
     services.Configure<AppSettings>(configuration.GetSection(nameof(AppSettings)));
     services.AddDbServices();
     services.AddAppServices();
+    services.AddAutoMapper(Assembly.GetExecutingAssembly());
 }
 #endregion
 
@@ -25,10 +27,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseAutoWrapper();
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();

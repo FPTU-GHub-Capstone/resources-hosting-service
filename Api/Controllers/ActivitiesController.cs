@@ -1,5 +1,6 @@
 ﻿using DomainLayer.Constants;
 using DomainLayer.Entities;
+using DomainLayer.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using RepositoryLayer.Repositories;
 using ServiceLayer.Business;
@@ -19,6 +20,7 @@ public class ActivitiesController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetActivitíes()
     {
+        throw new BadRequestException();
         return Ok(await _activityServices.List());
     }
 

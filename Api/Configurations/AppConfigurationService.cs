@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoWrapper;
+using DomainLayer.Constants;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using RepositoryLayer.Contexts;
 using RepositoryLayer.Repositories;
@@ -45,6 +47,19 @@ namespace WebApiLayer.Configurations
             services.AddScoped<IApplicationDbContext>(
                 provider => provider.GetService<ApplicationDbContext>()
             );
+        }
+
+        public static WebApplication UseAutoWrapper(this WebApplication app)
+        {
+            app.UseApiResponseAndExceptionWrapper(
+                new AutoWrapperOptions
+                {
+                    IsApiOnly = false,
+                    ShowIsErrorFlagForSuccessfulResponse = true,
+                    WrapWhenApiPathStartsWith = $"/{Constants.HTTP.API_VERSION}",
+                }
+            );
+            return app;
         }
     }
 }
