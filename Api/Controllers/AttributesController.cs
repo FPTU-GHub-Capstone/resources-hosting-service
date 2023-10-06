@@ -17,33 +17,37 @@ public class AttributesController : BaseController
         _attributeRepo = attributeRepo;
     }
     [HttpGet]
-    public async Task<IActionResult> Get()
+    public async Task<IActionResult> GetAttributeGroups()
     {
         var attribute = await _attributeServices.List();
         return Ok(attribute);
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> Get(string id)
+    public async Task<IActionResult> GetAttributeGroup(string id)
     {
         var attribute = _attributeServices.GetById(Guid.Parse(id));
         return Ok(attribute.Result);
     }
 
     [HttpPost]
-    public async Task<IActionResult> Post([FromBody] AttributeGroupEntity attributeGroup)
+    public async Task<IActionResult> CreateAttributeGroup([FromBody] AttributeGroupEntity attributeGroup)
     {
         await _attributeServices.Create(attributeGroup);
-        return NoContent();
+        return Ok();
     }
 
     [HttpPut("{id}")]
-    public void Put(int id, [FromBody] string value)
+    public async Task<IActionResult> UpdateAttributeGroup(string id, [FromBody] AttributeGroupEntity attributeGroup)
     {
+        await _attributeServices.Update(Guid.Parse(id),attributeGroup);
+        return Ok();
     }
 
     [HttpDelete("{id}")]
-    public void Delete(int id)
+    public async Task<IActionResult> Delete(string id)
     {
+        await _attributeServices.Delete(Guid.Parse(id));
+        return Ok();
     }
 }

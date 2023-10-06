@@ -63,8 +63,8 @@ public class UserServices : IUserServices
         }
     }
     public async Task Delete(Guid UserId) {
-        var user = await _userRepo.DeleteSoftAsync(UserId);
-        if(user is null)
+        var target = await _userRepo.DeleteSoftAsync(UserId);
+        if(target is null)
         {
             throw new NotFoundException("User not exist");
         }
