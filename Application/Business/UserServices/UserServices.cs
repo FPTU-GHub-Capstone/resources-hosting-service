@@ -1,4 +1,6 @@
-﻿using DomainLayer.Entities;
+﻿using AutoMapper;
+using DomainLayer.Entities;
+using DomainLayer.Exceptions;
 using RepositoryLayer.Repositories;
 
 namespace ServiceLayer.Business;
@@ -36,19 +38,6 @@ public class UserServices : IUserServices
         }
         if(!check)
         {
-            var newUser = new UserEntity
-            {
-                Username = user.Username,
-                Password = user.Password,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Avatar = user.Avatar,
-                Email = user.Email,
-                Phone = user.Phone,
-                Code = user.Code,
-                Status = user.Status,
-                Balance = user.Balance
-            };
             await _userRepo.CreateAsync(user);
         }
     }
@@ -56,8 +45,28 @@ public class UserServices : IUserServices
         var target = await GetById(UserId);
         if(target is not null)
         {
-            await _userRepo.UpdateAsync(user);
+            target.Username = user.Username;
+            target.Password = user.Password;
+            target.FirstName = user.FirstName;
+            target.LastName = user.LastName;
+            target.Avatar = user.Avatar;
+            target.Email = user.Email;
+            target.Phone = user.Phone;
+            target.Code = user.Code;
+            target.Status = user.Status;
+            target.Balance = user.Balance;
+            await _userRepo.UpdateAsync(target);
+        }
+        else
+        {
+            throw new NotFoundException("User not exist");
         }
     }
-    public async Task Delete(Guid UserId) { }
+    public async Task Delete(Guid UserId) {
+        var user = await _userRepo.DeleteSoftAsync(UserId);
+        if(user is null)
+        {
+            throw new NotFoundException("User not exist");
+        }
+    }
 }

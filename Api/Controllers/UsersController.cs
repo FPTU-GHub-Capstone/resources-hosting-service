@@ -43,4 +43,11 @@ public class UsersController : BaseController
         await _userServices.Update(Guid.Parse(id), user);
         return Ok();
     }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteUser(string id)
+    {
+        await _userServices.Delete(Guid.Parse(id));
+        return Ok();
+    }
 }

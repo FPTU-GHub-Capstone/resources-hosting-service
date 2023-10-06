@@ -22,7 +22,6 @@
     <Folder Include="Filters\" />
     <Folder Include="Mappings\" />
     <Folder Include="MockData\" />
-    <Folder Include="UserFeatures\" />
     <Folder Include="Services\" />
   </ItemGroup>
 
