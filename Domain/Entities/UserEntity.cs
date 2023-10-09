@@ -12,9 +12,9 @@ public class UserEntity : BaseEntity
     public string Avatar { get; set; }
     public string Email { get; set; }
     public string Phone { get; set; }
-    public string Code { get; set; }
-    public int Status { get; set; }
-    public float Balance { get; set; }
+    public string Code { get; set; } = "";
+    public int Status { get; set; } = 0;
+    public float Balance { get; set; } = 0;
     // 1 User - M Characters
     public virtual ICollection<CharacterEntity>? Characters { get; set; }
     //1 User - M Payment

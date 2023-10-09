@@ -3,6 +3,7 @@ using DomainLayer.Entities;
 using Microsoft.AspNetCore.Mvc;
 using RepositoryLayer.Repositories;
 using ServiceLayer.Business;
+using WebApiLayer.UserFeatures.Requests;
 
 namespace WebApiLayer.Controllers;
 
@@ -26,28 +27,32 @@ public class AttributesController : BaseController
     [HttpGet("{id}")]
     public async Task<IActionResult> GetAttributeGroup(string id)
     {
-        var attribute = _attributeServices.GetById(Guid.Parse(id));
-        return Ok(attribute.Result);
+        var attribute = await _attributeServices.GetById(Guid.Parse(id));
+        return Ok(attribute);
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateAttributeGroup([FromBody] AttributeGroupEntity attributeGroup)
+    public async Task<IActionResult> CreateAttributeGroup([FromBody] CreateAttributeGroupRequest attributeGroup)
     {
-        await _attributeServices.Create(attributeGroup);
-        return Ok();
+        AttributeGroupEntity attGrpEnt = new AttributeGroupEntity();
+        Mapper.Map(attributeGroup,attGrpEnt);
+        await _attributeServices.Create(attGrpEnt);
+        return CreatedAtAction(nameof(GetAttributeGroup), new { id = attGrpEnt.Id }, attGrpEnt);
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateAttributeGroup(string id, [FromBody] AttributeGroupEntity attributeGroup)
+    public async Task<IActionResult> UpdateAttributeGroup(string id, [FromBody] UpdateAttributeGroupRequest attributeGroup)
     {
-        await _attributeServices.Update(Guid.Parse(id),attributeGroup);
-        return Ok();
+        AttributeGroupEntity attGrpEnt = new AttributeGroupEntity();
+        Mapper.Map(attributeGroup, attGrpEnt);
+        await _attributeServices.Update(Guid.Parse(id), attGrpEnt);
+        return NoContent();
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(string id)
     {
         await _attributeServices.Delete(Guid.Parse(id));
-        return Ok();
+        return NoContent();
     }
 }

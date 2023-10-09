@@ -2,6 +2,8 @@
 using DomainLayer.Entities;
 using DomainLayer.Exceptions;
 using RepositoryLayer.Repositories;
+using ServiceLayer.Extensions;
+using System.Data;
 
 namespace ServiceLayer.Business;
 
@@ -27,19 +29,14 @@ public class UserServices : IUserServices
     }
     public async Task Create(UserEntity user) {
         var userList = List();
-        var check = false;
         foreach(var User in userList.Result)
         {
             if(User.Email == user.Email)
             {
-                check = true;
-                break;
+                throw new ConflictException("Email exists");
             }
         }
-        if(!check)
-        {
-            await _userRepo.CreateAsync(user);
-        }
+        await _userRepo.CreateAsync(user);
     }
     public async Task Update(Guid UserId, UserEntity user) {
         var target = await GetById(UserId);

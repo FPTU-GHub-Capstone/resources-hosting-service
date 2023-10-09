@@ -3,6 +3,7 @@ using DomainLayer.Entities;
 using Microsoft.AspNetCore.Mvc;
 using RepositoryLayer.Repositories;
 using ServiceLayer.Business;
+using WebApiLayer.UserFeatures.Requests;
 
 namespace WebApiLayer.Controllers;
 
@@ -31,8 +32,10 @@ public class UsersController : BaseController
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateUser([FromBody] UserEntity user)
+    public async Task<IActionResult> CreateUser([FromBody] CreateUserRequest cUser)
     {
+        UserEntity user = new UserEntity();
+        Mapper.Map(cUser, user);
         await _userServices.Create(user);
         return Ok();
     }

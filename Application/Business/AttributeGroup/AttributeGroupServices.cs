@@ -1,6 +1,9 @@
 ﻿using DomainLayer.Entities;
 using DomainLayer.Exceptions;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.ValueGeneration;
 using RepositoryLayer.Repositories;
+using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 
 namespace ServiceLayer.Business;
@@ -25,32 +28,26 @@ public class AttributeGroupServices : IAttributeGroupServices
         return await _attributeRepo.CountAsync();
     }
     public async Task Create(AttributeGroupEntity attributeGroup){
-        var attList = List();
-        var check = false;
-        foreach (var attgrp in attList.Result)
-        {
-            if (attgrp.Name == attributeGroup.Name)
-            {
-                check = true;
-                break;
-            }
-        }
-        if (!check)
-        {
-            await _attributeRepo.CreateAsync(attributeGroup);
-        }
-        else
-        {
-            throw new BadRequestException("Name already exist.");
-        }
+        await _attributeRepo.CreateAsync(attributeGroup);
     }
     public async Task Update(Guid attributeGroupid, AttributeGroupEntity attributeGroup)
     {
         var target = await GetById(attributeGroupid);
         if(target is not null)
         {
-            target.Name = attributeGroup.Name;
-            target.Effect = attributeGroup.Effect;
+            Type entityType = typeof(AttributeGroupEntity);
+            foreach (PropertyInfo propertyInfo in entityType.GetProperties())
+            {
+                // Get the value of the property in attributeGroup
+                object value = propertyInfo.GetValue(attributeGroup);
+
+                // Check if the value is not null and update the corresponding property in target
+                if (value != null && value.ToString() != "00000000-0000-0000-0000-000000000000")
+                {
+                    propertyInfo.SetValue(target, value);
+                }
+            }
+            //Insert changes here
             await _attributeRepo.UpdateAsync(target);
         }
         else
