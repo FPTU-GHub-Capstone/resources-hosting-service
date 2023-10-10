@@ -6,6 +6,9 @@ using RepositoryLayer.Contexts;
 using RepositoryLayer.Repositories;
 using ServiceLayer.AppConfig;
 using ServiceLayer.Business;
+using System.Text.Json.Serialization;
+using System.Text.Json;
+using WebApiLayer.Filters;
 
 namespace WebApiLayer.Configurations
 {
@@ -48,7 +51,6 @@ namespace WebApiLayer.Configurations
                 provider => provider.GetService<ApplicationDbContext>()
             );
         }
-
         public static WebApplication UseAutoWrapper(this WebApplication app)
         {
             app.UseApiResponseAndExceptionWrapper(
@@ -60,6 +62,24 @@ namespace WebApiLayer.Configurations
                 }
             );
             return app;
+        }
+        public static void AddValidationServices(this IServiceCollection services)
+        {
+            services
+            .AddControllers(
+                options =>
+                {
+                    options.SuppressAsyncSuffixInActionNames = false;
+                    options.Filters.Add<ValidateModelStateFilter>();
+                }
+            )
+            .AddJsonOptions(
+                options =>
+                {
+                    options.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
+                    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+                }
+            );
         }
     }
 }
