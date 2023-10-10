@@ -25,9 +25,9 @@ public class UsersController : BaseController
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetUser(string id)
+    public async Task<IActionResult> GetUser(Guid id)
     {
-        var user = await _userServices.GetById(Guid.Parse(id));
+        var user = await _userServices.GetById(id);
         return Ok(user);
     }
 
@@ -37,20 +37,22 @@ public class UsersController : BaseController
         UserEntity user = new UserEntity();
         Mapper.Map(cUser, user);
         await _userServices.Create(user);
-        return Ok();
+        return CreatedAtAction(nameof(GetUser),new {id=user.Id}, user);
     }
     
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateUser(string id, [FromBody] UserEntity user)
+    public async Task<IActionResult> UpdateUser(Guid id, [FromBody] UpdateUserRequest user)
     {
-        await _userServices.Update(Guid.Parse(id), user);
+        var currentUser = await _userServices.GetById(id);
+        Mapper.Map(user, currentUser);
+        await _userServices.Update(id, currentUser);
         return Ok();
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteUser(string id)
+    public async Task<IActionResult> DeleteUser(Guid id)
     {
-        await _userServices.Delete(Guid.Parse(id));
+        await _userServices.Delete(id);
         return Ok();
     }
 }

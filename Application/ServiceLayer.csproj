@@ -13,12 +13,12 @@
 
   <ItemGroup>
     <Folder Include="Exceptions\" />
+    <Folder Include="Extensions\" />
     <Folder Include="Models\" />
     <Folder Include="Utilities\" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Domain\DomainLayer.csproj" />
     <ProjectReference Include="..\Infrastructure\RepositoryLayer.csproj" />
   </ItemGroup>
 

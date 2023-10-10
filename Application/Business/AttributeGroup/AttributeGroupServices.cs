@@ -35,19 +35,6 @@ public class AttributeGroupServices : IAttributeGroupServices
         var target = await GetById(attributeGroupid);
         if(target is not null)
         {
-            Type entityType = typeof(AttributeGroupEntity);
-            foreach (PropertyInfo propertyInfo in entityType.GetProperties())
-            {
-                // Get the value of the property in attributeGroup
-                object value = propertyInfo.GetValue(attributeGroup);
-
-                // Check if the value is not null and update the corresponding property in target
-                if (value != null && value.ToString() != "00000000-0000-0000-0000-000000000000")
-                {
-                    propertyInfo.SetValue(target, value);
-                }
-            }
-            //Insert changes here
             await _attributeRepo.UpdateAsync(target);
         }
         else
@@ -57,10 +44,15 @@ public class AttributeGroupServices : IAttributeGroupServices
     }
     public async Task Delete(Guid attributeGroupid)
     {
-        var target = await _attributeRepo.DeleteSoftAsync(attributeGroupid);
+
+        var target = await GetById(attributeGroupid);
         if (target is null)
         {
             throw new NotFoundException("Attribute group not exist");
+        }
+        else
+        {
+            await _attributeRepo.DeleteSoftAsync(attributeGroupid);
         }
     }
 }

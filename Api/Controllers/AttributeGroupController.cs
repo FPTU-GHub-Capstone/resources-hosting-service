@@ -7,12 +7,12 @@ using WebApiLayer.UserFeatures.Requests;
 
 namespace WebApiLayer.Controllers;
 
-[Route(Constants.HTTP.API_VERSION + "/gms/attributes")]
-public class AttributesController : BaseController
+[Route(Constants.HTTP.API_VERSION + "/gms/attribute-groups")]
+public class AttributeGroupController : BaseController
 {
     private readonly IAttributeGroupServices _attributeServices;
     private readonly IGenericRepository<AttributeGroupEntity> _attributeRepo;
-    public AttributesController(IAttributeGroupServices attributeServices, IGenericRepository<AttributeGroupEntity> attributeRepo)
+    public AttributeGroupController(IAttributeGroupServices attributeServices, IGenericRepository<AttributeGroupEntity> attributeRepo)
     {
         _attributeServices = attributeServices;
         _attributeRepo = attributeRepo;
@@ -25,34 +25,34 @@ public class AttributesController : BaseController
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetAttributeGroup(string id)
+    public async Task<IActionResult> GetAttributeGroup(Guid id)
     {
-        var attribute = await _attributeServices.GetById(Guid.Parse(id));
+        var attribute = await _attributeServices.GetById(id);
         return Ok(attribute);
     }
 
     [HttpPost]
     public async Task<IActionResult> CreateAttributeGroup([FromBody] CreateAttributeGroupRequest attributeGroup)
     {
-        AttributeGroupEntity attGrpEnt = new AttributeGroupEntity();
+        var attGrpEnt = new AttributeGroupEntity();
         Mapper.Map(attributeGroup,attGrpEnt);
         await _attributeServices.Create(attGrpEnt);
         return CreatedAtAction(nameof(GetAttributeGroup), new { id = attGrpEnt.Id }, attGrpEnt);
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateAttributeGroup(string id, [FromBody] UpdateAttributeGroupRequest attributeGroup)
+    public async Task<IActionResult> UpdateAttributeGroup(Guid id, [FromBody] UpdateAttributeGroupRequest attributeGroup)
     {
-        AttributeGroupEntity attGrpEnt = new AttributeGroupEntity();
+        var attGrpEnt = await _attributeServices.GetById(id);
         Mapper.Map(attributeGroup, attGrpEnt);
-        await _attributeServices.Update(Guid.Parse(id), attGrpEnt);
-        return NoContent();
+        await _attributeServices.Update(id, attGrpEnt);
+        return AcceptedAtAction(nameof(GetAttributeGroup), new { id = id }, attGrpEnt);
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(string id)
+    public async Task<IActionResult> Delete(Guid id)
     {
-        await _attributeServices.Delete(Guid.Parse(id));
+        await _attributeServices.Delete(id);
         return NoContent();
     }
 }

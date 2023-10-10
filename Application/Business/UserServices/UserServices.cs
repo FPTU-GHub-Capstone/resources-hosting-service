@@ -42,16 +42,6 @@ public class UserServices : IUserServices
         var target = await GetById(UserId);
         if(target is not null)
         {
-            target.Username = user.Username;
-            target.Password = user.Password;
-            target.FirstName = user.FirstName;
-            target.LastName = user.LastName;
-            target.Avatar = user.Avatar;
-            target.Email = user.Email;
-            target.Phone = user.Phone;
-            target.Code = user.Code;
-            target.Status = user.Status;
-            target.Balance = user.Balance;
             await _userRepo.UpdateAsync(target);
         }
         else
