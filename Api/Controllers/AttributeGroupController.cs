@@ -46,7 +46,7 @@ public class AttributeGroupController : BaseController
         var attGrpEnt = await _attributeServices.GetById(id);
         Mapper.Map(attributeGroup, attGrpEnt);
         await _attributeServices.Update(id, attGrpEnt);
-        return AcceptedAtAction(nameof(GetAttributeGroup), new { id = id }, attGrpEnt);
+        return Ok(attGrpEnt);
     }
 
     [HttpDelete("{id}")]

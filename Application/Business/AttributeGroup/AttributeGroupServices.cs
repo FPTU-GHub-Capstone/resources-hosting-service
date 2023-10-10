@@ -33,14 +33,11 @@ public class AttributeGroupServices : IAttributeGroupServices
     public async Task Update(Guid attributeGroupid, AttributeGroupEntity attributeGroup)
     {
         var target = await GetById(attributeGroupid);
-        if(target is not null)
-        {
-            await _attributeRepo.UpdateAsync(target);
-        }
-        else
+        if(target is null)
         {
             throw new NotFoundException("Attribute group not exist");
         }
+        await _attributeRepo.UpdateAsync(target);
     }
     public async Task Delete(Guid attributeGroupid)
     {
@@ -50,9 +47,6 @@ public class AttributeGroupServices : IAttributeGroupServices
         {
             throw new NotFoundException("Attribute group not exist");
         }
-        else
-        {
-            await _attributeRepo.DeleteSoftAsync(attributeGroupid);
-        }
+        await _attributeRepo.DeleteSoftAsync(attributeGroupid);
     }
 }
