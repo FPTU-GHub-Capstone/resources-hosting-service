@@ -18,8 +18,10 @@ namespace WebApiLayer.UserFeatures.Requests
         [Required]
         public string Avatar { get; set; }
         [Required]
+        [EmailAddress(ErrorMessage = "Invalid email address")]
         public string Email { get; set; }
         [Required]
+        [RegularExpression(@"^(03|05|07|08|09)\d{8}$", ErrorMessage = "Invalid phone number")]
         public string Phone { get; set; }
     }
 }
