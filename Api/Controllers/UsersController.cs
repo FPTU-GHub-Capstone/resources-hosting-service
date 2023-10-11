@@ -43,10 +43,10 @@ public class UsersController : BaseController
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateUser(Guid id, [FromBody] UpdateUserRequest user)
     {
-        var currentUser = await _userServices.GetById(id);
-        Mapper.Map(user, currentUser);
-        await _userServices.Update(id, currentUser);
-        return Ok(currentUser);
+        var updateUser = await _userServices.GetById(id);
+        Mapper.Map(user, updateUser);
+        await _userServices.Update(id, updateUser);
+        return Ok(updateUser);
     }
 
     [HttpDelete("{id}")]
