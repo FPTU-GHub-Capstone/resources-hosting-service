@@ -29,32 +29,27 @@ public class UserServices : IUserServices
         return await _userRepo.CountAsync();
     }
     public async Task Create(UserEntity user) {
-        var userList = List();
-        foreach(var User in userList.Result)
-        {
-            if(User.Email == user.Email)
-            {
-                throw new BadRequestException("Email exists");
-            }
+        var userCheck = await _userRepo.FirstOrDefaultAsync(
+            u=>u.Email.Equals(user.Email) || u.Username.Equals(user.Username));
+        if(userCheck != null) {
+            throw new BadRequestException("Email/Username already exists");
         }
         await _userRepo.CreateAsync(user);
     }
     public async Task Update(Guid UserId, UserEntity user) {
         var target = await GetById(UserId);
-        if(target is not null)
-        {
-            await _userRepo.UpdateAsync(target);
-        }
-        else
-        {
-            throw new NotFoundException("User not exist");
-        }
-    }
-    public async Task Delete(Guid UserId) {
-        var target = await _userRepo.DeleteSoftAsync(UserId);
         if(target is null)
         {
             throw new NotFoundException("User not exist");
         }
+        await _userRepo.UpdateAsync(target);
+    }
+    public async Task Delete(Guid UserId) {
+        var target = await GetById(UserId);
+        if (target is null)
+        {
+            throw new NotFoundException("User not exist");
+        }
+        await _userRepo.DeleteSoftAsync(UserId);
     }
 }

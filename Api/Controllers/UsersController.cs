@@ -34,10 +34,6 @@ public class UsersController : BaseController
     [HttpPost]
     public async Task<IActionResult> CreateUser([FromBody] CreateUserRequest cUser)
     {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
-        }
         UserEntity user = new UserEntity();
         Mapper.Map(cUser, user);
         await _userServices.Create(user);
