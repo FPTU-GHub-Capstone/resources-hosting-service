@@ -1,4 +1,5 @@
 using System.Reflection;
+using Microsoft.AspNetCore.Mvc;
 using ServiceLayer.AppConfig;
 using WebApiLayer.Configurations;
 
@@ -13,6 +14,7 @@ var configuration = builder.Configuration;
 #region Add configurations to Services
 {
     services.Configure<AppSettings>(configuration.GetSection(nameof(AppSettings)));
+    services.AddValidationServices();
     services.AddDbServices();
     services.AddAppServices();
     services.AddAutoMapper(Assembly.GetExecutingAssembly());
@@ -25,6 +27,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    await app.Services.ApplyMigrations();
 }
 
 app.UseAutoWrapper();

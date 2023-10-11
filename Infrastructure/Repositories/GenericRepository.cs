@@ -17,6 +17,8 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
     }
     public virtual async Task CreateAsync(T entity)
     {
+        entity.CreatedAt = DateTime.UtcNow;
+        entity.ModifiedAt = DateTime.UtcNow;
         await dbSet.AddAsync(entity);
         await _context.SaveChangesAsync();
     }
@@ -53,6 +55,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
         {
             return null;
         }
+        _entity.DeletedAt = DateTime.UtcNow;
         await UpdateAsync(_entity);
         return _entity;
     }
@@ -60,6 +63,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
 
     public virtual async Task<T> DeleteSoftAsync(T _entity)
     {
+        _entity.DeletedAt = DateTime.UtcNow;
         await UpdateAsync(_entity);
         return _entity;
     }
@@ -98,6 +102,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
     public virtual async Task UpdateAsync(T updated)
     {
         //_context.Entry(updated).State = EntityState.Modified;
+        updated.ModifiedAt = DateTime.UtcNow;
         _context.Attach(updated).State = EntityState.Modified;
         await _context.SaveChangesAsync();
     }

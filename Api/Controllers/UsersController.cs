@@ -3,6 +3,7 @@ using DomainLayer.Entities;
 using Microsoft.AspNetCore.Mvc;
 using RepositoryLayer.Repositories;
 using ServiceLayer.Business;
+using WebApiLayer.UserFeatures.Requests;
 
 namespace WebApiLayer.Controllers;
 
@@ -24,23 +25,34 @@ public class UsersController : BaseController
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetUser(string id)
+    public async Task<IActionResult> GetUser(Guid id)
     {
-        var user = await _userServices.GetById(Guid.Parse(id));
+        var user = await _userServices.GetById(id);
         return Ok(user);
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateUser([FromBody] UserEntity user)
+    public async Task<IActionResult> CreateUser([FromBody] CreateUserRequest cUser)
     {
+        var user = new UserEntity();
+        Mapper.Map(cUser, user);
         await _userServices.Create(user);
-        return Ok();
+        return CreatedAtAction(nameof(GetUser), new { id = user.Id }, user);
     }
-    
+
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateUser(string id, [FromBody] UserEntity user)
+    public async Task<IActionResult> UpdateUser(Guid id, [FromBody] UpdateUserRequest user)
     {
-        await _userServices.Update(Guid.Parse(id), user);
-        return Ok();
+        var updateUser = await _userServices.GetById(id);
+        Mapper.Map(user, updateUser);
+        await _userServices.Update(id, updateUser);
+        return Ok(updateUser);
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteUser(Guid id)
+    {
+        await _userServices.Delete(id);
+        return NoContent();
     }
 }

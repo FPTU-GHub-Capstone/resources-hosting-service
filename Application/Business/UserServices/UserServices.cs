@@ -1,5 +1,10 @@
-﻿using DomainLayer.Entities;
+﻿using AutoMapper;
+using DomainLayer.Entities;
+using DomainLayer.Exceptions;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using RepositoryLayer.Repositories;
+using ServiceLayer.Extensions;
+using System.Data;
 
 namespace ServiceLayer.Business;
 
@@ -24,40 +29,27 @@ public class UserServices : IUserServices
         return await _userRepo.CountAsync();
     }
     public async Task Create(UserEntity user) {
-        var userList = List();
-        var check = false;
-        foreach(var User in userList.Result)
-        {
-            if(User.Email == user.Email)
-            {
-                check = true;
-                break;
-            }
+        var userCheck = await _userRepo.FirstOrDefaultAsync(
+            u=>u.Email.Equals(user.Email) || u.Username.Equals(user.Username));
+        if(userCheck != null) {
+            throw new BadRequestException("Email/Username already exists");
         }
-        if(!check)
-        {
-            var newUser = new UserEntity
-            {
-                Username = user.Username,
-                Password = user.Password,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Avatar = user.Avatar,
-                Email = user.Email,
-                Phone = user.Phone,
-                Code = user.Code,
-                Status = user.Status,
-                Balance = user.Balance
-            };
-            await _userRepo.CreateAsync(user);
-        }
+        await _userRepo.CreateAsync(user);
     }
     public async Task Update(Guid UserId, UserEntity user) {
         var target = await GetById(UserId);
-        if(target is not null)
+        if(target is null)
         {
-            await _userRepo.UpdateAsync(user);
+            throw new NotFoundException("User not exist");
         }
+        await _userRepo.UpdateAsync(target);
     }
-    public async Task Delete(Guid UserId) { }
+    public async Task Delete(Guid UserId) {
+        var target = await GetById(UserId);
+        if (target is null)
+        {
+            throw new NotFoundException("User not exist");
+        }
+        await _userRepo.DeleteSoftAsync(UserId);
+    }
 }

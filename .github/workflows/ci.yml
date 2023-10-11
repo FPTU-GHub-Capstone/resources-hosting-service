@@ -4,10 +4,7 @@ on:
   push:
     branches:
       - master
-  pull_request:
-    branches:
-      - master
-
+      
 env:
   REGISTRY: docker.io
   REPO_NAME: ${{ github.event.repository.name }} 

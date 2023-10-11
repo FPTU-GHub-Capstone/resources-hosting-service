@@ -19,10 +19,7 @@
   <ItemGroup>
     <Folder Include="Client\" />
     <Folder Include="Extensions\" />
-    <Folder Include="Filters\" />
-    <Folder Include="Mappings\" />
     <Folder Include="MockData\" />
-    <Folder Include="UserFeatures\" />
     <Folder Include="Services\" />
   </ItemGroup>
 
