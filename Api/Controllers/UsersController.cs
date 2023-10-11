@@ -34,7 +34,7 @@ public class UsersController : BaseController
     [HttpPost]
     public async Task<IActionResult> CreateUser([FromBody] CreateUserRequest cUser)
     {
-        UserEntity user = new UserEntity();
+        var user = new UserEntity();
         Mapper.Map(cUser, user);
         await _userServices.Create(user);
         return CreatedAtAction(nameof(GetUser), new { id = user.Id }, user);
@@ -46,13 +46,13 @@ public class UsersController : BaseController
         var currentUser = await _userServices.GetById(id);
         Mapper.Map(user, currentUser);
         await _userServices.Update(id, currentUser);
-        return Ok();
+        return Ok(currentUser);
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteUser(Guid id)
     {
         await _userServices.Delete(id);
-        return Ok();
+        return NoContent();
     }
 }
