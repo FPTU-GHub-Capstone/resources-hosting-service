@@ -1,4 +1,5 @@
 ﻿using DomainLayer.Entities;
+using DomainLayer.Exceptions;
 using RepositoryLayer.Repositories;
 
 namespace ServiceLayer.Business;
@@ -30,11 +31,24 @@ public class GameServerServices : IGameServerServices
     }
     public async Task Create(GameServerEntity gameServer)
     {
-
+        await _gameServerRepo.CreateAsync(gameServer);
     }
     public async Task Update(Guid gameServerId, GameServerEntity gameServer)
     {
-
+        var target = await GetById(gameServerId);
+        if (target is null)
+        {
+            throw new NotFoundException("Game server not exist");
+        }
+        await _gameServerRepo.UpdateAsync(target);
     }
-    public async Task Delete(Guid gameServerId) { }
+    public async Task Delete(Guid gameServerId)
+    {
+        var target = await GetById(gameServerId);
+        if (target is null)
+        {
+            throw new NotFoundException("Game server not exist");
+        }
+        await _gameServerRepo.DeleteSoftAsync(gameServerId);
+    }
 }
