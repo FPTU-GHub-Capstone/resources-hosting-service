@@ -33,7 +33,7 @@ public class LevelsController : BaseController
     }
 
     [HttpPost]
-    public async Task<IActionResult> PostLevel([FromBody] CreateLevelsController level)
+    public async Task<IActionResult> CreateLevel([FromBody] CreateLevelsController level)
     {
         var newLevel = new LevelEntity();
         Mapper.Map(level, newLevel);
@@ -42,7 +42,7 @@ public class LevelsController : BaseController
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Put(Guid id, [FromBody] UpdateLevelsController level)
+    public async Task<IActionResult> UpdateLevel(Guid id, [FromBody] UpdateLevelsController level)
     {
         var updateLevel = await _levelServices.GetById(id);
         Mapper.Map(level, updateLevel);
@@ -51,7 +51,7 @@ public class LevelsController : BaseController
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(Guid id)
+    public async Task<IActionResult> DeleteLevel(Guid id)
     {
         await _levelServices.Delete(id);
         return NoContent();

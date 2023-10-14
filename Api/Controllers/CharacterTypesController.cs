@@ -27,8 +27,8 @@ public class CharacterTypesController : BaseController
     [HttpGet("{id}")]
     public async Task<IActionResult> GetCharacterType(Guid id)
     {
-        var ctList = await _characterTypeServices.GetById(id);
-        return Ok(ctList);
+        var ct = await _characterTypeServices.GetById(id);
+        return Ok(ct);
     }
 
     [HttpPost]
