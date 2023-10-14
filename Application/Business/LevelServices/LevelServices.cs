@@ -36,9 +36,7 @@ public class LevelServices : ILevelServices
     public async Task Create(LevelEntity level)
     {
         //2 levels of a same game cannot have the same name:
-        var newLevel = await _levelRepo.FirstOrDefaultAsync(
-            l => l.GameId.Equals(level.GameId) && l.Name.Equals(level.Name));
-        if(newLevel is not null)
+        if(await checkExistLevel(level) is not null)
         {
             throw new BadRequestException("The game already has this level's name");
         }
@@ -50,8 +48,8 @@ public class LevelServices : ILevelServices
         {
             throw new BadRequestException("Level not exist");
         }
-        var lCheckName = await _levelRepo.FirstOrDefaultAsync(l => l.Name == level.Name && l.GameId == level.GameId);
-        if (lCheckName is not null && !lCheckName.Id.Equals(level.Id))
+        var lCheck = await checkExistLevel(level);
+        if (lCheck is not null && !lCheck.Id.Equals(level.Id))
         {
             throw new BadRequestException("The game already has this level's name");
         }
@@ -64,5 +62,15 @@ public class LevelServices : ILevelServices
             throw new BadRequestException("Level not exist");
         }
         await _levelRepo.DeleteSoftAsync(level);
+    }
+
+    public async Task<LevelEntity> checkExistLevel(LevelEntity level)
+    {
+        var levelCheck = await _levelRepo.FirstOrDefaultAsync(l => l.Name == level.Name && l.GameId == level.GameId);
+        if (levelCheck is not null)
+        {
+            return levelCheck;
+        }
+        return null;
     }
 }

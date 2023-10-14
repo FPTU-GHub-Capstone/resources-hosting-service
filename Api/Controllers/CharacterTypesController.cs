@@ -27,12 +27,12 @@ public class CharacterTypesController : BaseController
     [HttpGet("{id}")]
     public async Task<IActionResult> GetCharacterType(Guid id)
     {
-        var ctList = await _characterTypeServices.List();
+        var ctList = await _characterTypeServices.GetById(id);
         return Ok(ctList);
     }
 
     [HttpPost]
-    public async Task<IActionResult> Post([FromBody] CreateCharacterTypeRequest charType)
+    public async Task<IActionResult> CreateCharacterType([FromBody] CreateCharacterTypeRequest charType)
     {
         var newCT = new CharacterTypeEntity();
         Mapper.Map(charType, newCT);
@@ -41,7 +41,7 @@ public class CharacterTypesController : BaseController
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Put(Guid id, [FromBody] UpdateCharacterTypeRequest charType)
+    public async Task<IActionResult> UpdateCharacterType(Guid id, [FromBody] UpdateCharacterTypeRequest charType)
     {
         var ct = await _characterTypeRepo.FindByIdAsync(id);
         Mapper.Map(charType,ct);
@@ -50,7 +50,7 @@ public class CharacterTypesController : BaseController
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(Guid id)
+    public async Task<IActionResult> DeleteCharacterType(Guid id)
     {
         await _characterTypeServices.Delete(id);
         return NoContent();
