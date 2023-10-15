@@ -1,0 +1,12 @@
+﻿using DomainLayer.Entities;
+using System.ComponentModel.DataAnnotations;
+using WebApiLayer.Mappings;
+
+namespace WebApiLayer.UserFeatures.Requests
+{
+    public class UpdateLevelsController : IMapTo<LevelEntity>, IMapFrom<LevelEntity>
+    {
+        public string? Name { get; set; }
+        public int? LevelUpPoint { get; set; }
+    }
+}
