@@ -55,19 +55,12 @@ public class LevelServices : ILevelServices
         }
         await _levelRepo.DeleteSoftAsync(level);
     }
-
     public async Task CheckLevel(LevelEntity level)
     {
-        if (level.Id == Guid.Empty) // Create
+        var levelCheck = await _levelRepo.FirstOrDefaultAsync(l => l.Name == level.Name && l.GameId == level.GameId);
+        if (levelCheck is not null)
         {
-            if (await _levelRepo.FirstOrDefaultAsync(l => l.Name == level.Name && l.GameId == level.GameId) is not null)
-            {
-                throw new BadRequestException("The game already has this level's name");
-            }
-        }
-        else //Update
-        {
-            if(await _levelRepo.FirstOrDefaultAsync(l => l.Name == level.Name && l.Id != level.Id && l.GameId == level.GameId) is not null)
+            if(level.Id == Guid.Empty || levelCheck.Id != level.Id)
             {
                 throw new BadRequestException("The game already has this level's name");
             }
