@@ -44,22 +44,13 @@ public class CharacterAttributeServices : ICharacterAttributeServices
     }
     public async Task Update(Guid characterAttributeid, CharacterAttributeEntity characterAttribute)
     {
-        await CheckCharacterAttribute(characterAttributeid);
+        await _characterAttributeRepo.CheckExistAsync(characterAttributeid, "Character attribute not exist.");
         await _characterAttributeRepo.UpdateAsync(characterAttribute);
     }
     public async Task Delete(Guid characterAttributeid)
     {
-        await CheckCharacterAttribute(characterAttributeid);
+        await _characterAttributeRepo.CheckExistAsync(characterAttributeid, "Character attribute not exist.");
         await _characterAttributeRepo.DeleteSoftAsync(characterAttributeid);
-    }
-
-    public async Task CheckCharacterAttribute(Guid id)
-    {
-        var charAttCheck = await _characterAttributeRepo.FindByIdAsync(id);
-        if (charAttCheck is null)
-        {
-            throw new BadRequestException("Character attribute not exist.");
-        }
     }
 
 }

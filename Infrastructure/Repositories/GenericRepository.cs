@@ -1,5 +1,6 @@
 ﻿using System.Linq.Expressions;
 using DomainLayer.Entities;
+using DomainLayer.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using RepositoryLayer.Contexts;
 
@@ -47,7 +48,6 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
         await _context.SaveChangesAsync();
     }
 
-
     public virtual async Task<T> DeleteSoftAsync(Guid id)
     {
         T _entity = await FindByIdAsync(id);
@@ -59,7 +59,6 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
         await UpdateAsync(_entity);
         return _entity;
     }
-
 
     public virtual async Task<T> DeleteSoftAsync(T _entity)
     {
@@ -73,6 +72,15 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
         var query = ApplyNavigation(navigationProperties);
         T entity = await query.FirstOrDefaultAsync(e => e.Id.Equals(id));
         return entity;
+    }
+
+    public virtual async Task CheckExistAsync(Guid id, string message, params string[] navigationProperties)
+    {
+        T entity = await FindByIdAsync(id);
+        if(entity is null)
+        {
+            throw new NotFoundException(message);
+        }
     }
 
     private IQueryable<T> ApplyNavigation(params string[] navigationProperties)

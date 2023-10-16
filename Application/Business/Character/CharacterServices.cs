@@ -43,13 +43,13 @@ public class CharacterServices : ICharacterServices
     }
     public async Task Update(Guid characterId, CharacterEntity character)
     {
-        await CheckDuplicate(characterId);
+        await _characterRepo.CheckExistAsync(characterId, "Character not exist.");
         await CheckCharacter(character);
         await _characterRepo.UpdateAsync(character);
     }
     public async Task Delete(Guid characterId)
     {
-        await CheckDuplicate(characterId);
+        await _characterRepo.CheckExistAsync(characterId, "Character not exist.");
         await _characterRepo.DeleteSoftAsync(characterId);
     }
     public async Task CheckCharacter(CharacterEntity character)
@@ -62,14 +62,6 @@ public class CharacterServices : ICharacterServices
             {
                 throw new BadRequestException("The game already has this level's name");
             }
-        }
-    }
-    public async Task CheckDuplicate(Guid id)
-    {
-        var cCheckId = await _characterRepo.FindByIdAsync(id);
-        if (cCheckId is null)
-        {
-            throw new BadRequestException("Character not exist");
         }
     }
 }

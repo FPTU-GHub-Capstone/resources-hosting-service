@@ -36,13 +36,13 @@ public class AssetTypeServices : IAssetTypeServices
     }
     public async Task Update(Guid assetTypeId, AssetTypeEntity assetType)
     {
-        await CheckAssetType(assetTypeId);
+        await _assetTypeRepo.CheckExistAsync(assetTypeId, "Asset type is not exist.");
         await CheckAssetType(assetType);
         await _assetTypeRepo.UpdateAsync(assetType);
     }
     public async Task Delete(Guid assetTypeId)
     {
-        await CheckAssetType(assetTypeId);
+        await _assetTypeRepo.CheckExistAsync(assetTypeId, "Asset type is not exist.");
         await _assetTypeRepo.DeleteSoftAsync(assetTypeId);
     }
     public async Task CheckAssetType(AssetTypeEntity assetType)
@@ -55,14 +55,6 @@ public class AssetTypeServices : IAssetTypeServices
             {
                 throw new BadRequestException("The asset type's information has already exist.");
             }
-        }
-    }
-    public async Task CheckAssetType(Guid id)
-    {
-        var checkAssetType = await _assetTypeRepo.FindByIdAsync(id);
-        if (checkAssetType is null)
-        {
-            throw new BadRequestException("Asset type is not exist.");
         }
     }
 }

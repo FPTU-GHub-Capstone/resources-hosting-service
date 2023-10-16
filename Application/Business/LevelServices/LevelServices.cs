@@ -39,12 +39,12 @@ public class LevelServices : ILevelServices
         await _levelRepo.CreateAsync(level);
     }
     public async Task Update(Guid levelId, LevelEntity level) {
-        await CheckLevel(levelId);
+        await _levelRepo.CheckExistAsync(levelId, "Level not exist.");
         await CheckLevel(level);
         await _levelRepo.UpdateAsync(level);
     }
     public async Task Delete(Guid levelId) {
-        await CheckLevel(levelId);
+        await _levelRepo.CheckExistAsync(levelId, "Level not exist.");
         await _levelRepo.DeleteSoftAsync(levelId);
     }
     public async Task CheckLevel(LevelEntity level)
@@ -56,14 +56,6 @@ public class LevelServices : ILevelServices
             {
                 throw new BadRequestException("The user already have a character in this game server");
             }
-        }
-    }
-    public async Task CheckLevel(Guid id)
-    {
-        var level = await _levelRepo.FindByIdAsync(id);
-        if (level is null)
-        {
-            throw new BadRequestException("Level not exist");
         }
     }
 }

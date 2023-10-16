@@ -31,24 +31,16 @@ public class UserServices : IUserServices
         var userCheck = await _userRepo.FirstOrDefaultAsync(
             u=>u.Email.Equals(user.Email) || u.Username.Equals(user.Username));
         if(userCheck != null) {
-            throw new BadRequestException("Email/Username already exists");
+            throw new BadRequestException("Email/Username already exists.");
         }
         await _userRepo.CreateAsync(user);
     }
     public async Task Update(Guid UserId, UserEntity user) {
-        await CheckUser(UserId);
+        await _userRepo.CheckExistAsync(UserId, "User not exist.");
         await _userRepo.UpdateAsync(user);
     }
     public async Task Delete(Guid UserId) {
-        await CheckUser(UserId);
+        await _userRepo.CheckExistAsync(UserId, "User not exist.");
         await _userRepo.DeleteSoftAsync(UserId);
-    }
-    public async Task CheckUser(Guid id)
-    {
-        var target = await GetById(id);
-        if (target is null)
-        {
-            throw new NotFoundException("User not exist");
-        }
     }
 }
