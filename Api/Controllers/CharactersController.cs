@@ -1,35 +1,58 @@
 ﻿using DomainLayer.Constants;
+using DomainLayer.Entities;
 using Microsoft.AspNetCore.Mvc;
+using RepositoryLayer.Repositories;
+using ServiceLayer.Business;
+using WebApiLayer.UserFeatures.Requests;
 
 namespace WebApiLayer.Controllers;
 
 [Route(Constants.HTTP.API_VERSION + "/gms/characters")]
 public class CharactersController : BaseController
 {
-    [HttpGet]
-    public IEnumerable<string> Get()
+    private readonly ICharacterServices _characterServices;
+    private readonly IGenericRepository<CharacterEntity> _characterRepo;
+    public CharactersController(ICharacterServices characterServices, IGenericRepository<CharacterEntity> characterRepo)
     {
-        return new string[] { "value1", "value2" };
+        _characterServices = characterServices;
+        _characterRepo = characterRepo;
+    }
+    [HttpGet]
+    public async Task<IActionResult> GetCharacters()
+    {
+        var cList = await _characterServices.List();
+        return Ok(cList);
     }
 
     [HttpGet("{id}")]
-    public string Get(int id)
+    public async Task<IActionResult> GetCharacter(Guid id)
     {
-        return "value";
+        var character = await _characterServices.GetById(id);
+        return Ok(character);
     }
 
     [HttpPost]
-    public void Post([FromBody] string value)
+    public async Task<IActionResult> CreateCharacter([FromBody] CreateCharacterRequest character)
     {
+        var newC = new CharacterEntity();
+        Mapper.Map(character, newC);
+        await _characterServices.Create(newC);
+        return CreatedAtAction("GetCharacter", new { id = newC.Id }, newC);
     }
 
     [HttpPut("{id}")]
-    public void Put(int id, [FromBody] string value)
+    public async Task<IActionResult> UpdateCharacter(Guid id, [FromBody] UpdateCharacterRequest character)
     {
+        var newC = await _characterServices.GetById(id);
+        Mapper.Map(character, newC);
+        await _characterServices.Update(id, newC);
+        return Ok(newC);
     }
 
     [HttpDelete("{id}")]
-    public void Delete(int id)
+    public async Task<IActionResult> DeleteCharacter(Guid id)
     {
+        await _characterServices.Delete(id);
+        return NoContent();
     }
 }

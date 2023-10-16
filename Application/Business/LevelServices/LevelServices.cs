@@ -62,7 +62,7 @@ public class LevelServices : ILevelServices
         {
             if(level.Id == Guid.Empty || levelCheck.Id != level.Id)
             {
-                throw new BadRequestException("The game already has this level's name");
+                throw new BadRequestException("The user already have a character in this game server");
             }
         }
     }

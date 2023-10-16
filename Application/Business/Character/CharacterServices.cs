@@ -1,4 +1,5 @@
 ﻿using DomainLayer.Entities;
+using DomainLayer.Exceptions;
 using RepositoryLayer.Repositories;
 
 namespace ServiceLayer.Business;
@@ -37,13 +38,38 @@ public class CharacterServices : ICharacterServices
     }
     public async Task Create(CharacterEntity character)
     {
+        await CheckCharacter(character);
+        await _characterRepo.CreateAsync(character);
     }
     public async Task Update(Guid characterId, CharacterEntity character)
     {
-
+        await CheckDuplicate(characterId);
+        await CheckCharacter(character);
+        await _characterRepo.UpdateAsync(character);
     }
     public async Task Delete(Guid characterId)
     {
-
+        await CheckDuplicate(characterId);
+        await _characterRepo.DeleteSoftAsync(characterId);
+    }
+    public async Task CheckCharacter(CharacterEntity character)
+    {
+        var cCheck = await _characterRepo.FirstOrDefaultAsync(
+            c => c.UserId.Equals(character.UserId) && c.GameServerId.Equals(character.GameServerId));
+        if(cCheck is not null)
+        {
+            if(character.Id == Guid.Empty || character.Id != cCheck.Id)
+            {
+                throw new BadRequestException("The game already has this level's name");
+            }
+        }
+    }
+    public async Task CheckDuplicate(Guid id)
+    {
+        var cCheckId = await _characterRepo.FindByIdAsync(id);
+        if (cCheckId is null)
+        {
+            throw new BadRequestException("Character not exist");
+        }
     }
 }

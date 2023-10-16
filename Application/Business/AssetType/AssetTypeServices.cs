@@ -1,4 +1,5 @@
 ﻿using DomainLayer.Entities;
+using DomainLayer.Exceptions;
 using RepositoryLayer.Repositories;
 
 namespace ServiceLayer.Business;
@@ -9,7 +10,7 @@ public class AssetTypeServices : IAssetTypeServices
 
     public AssetTypeServices(IGenericRepository<AssetTypeEntity> assetTypeRepo)
     {
-        assetTypeRepo = _assetTypeRepo;
+        _assetTypeRepo = assetTypeRepo;
     }
     public async Task<ICollection<AssetTypeEntity>> List()
     {
@@ -30,14 +31,38 @@ public class AssetTypeServices : IAssetTypeServices
     }
     public async Task Create(AssetTypeEntity assetType)
     {
-
+        await CheckAssetType(assetType);
+        await _assetTypeRepo.CreateAsync(assetType);
     }
     public async Task Update(Guid assetTypeId, AssetTypeEntity assetType)
     {
-
+        await CheckAssetType(assetTypeId);
+        await CheckAssetType(assetType);
+        await _assetTypeRepo.UpdateAsync(assetType);
     }
     public async Task Delete(Guid assetTypeId)
     {
-
+        await CheckAssetType(assetTypeId);
+        await _assetTypeRepo.DeleteSoftAsync(assetTypeId);
+    }
+    public async Task CheckAssetType(AssetTypeEntity assetType)
+    {
+        var checkAssetType = await _assetTypeRepo.FirstOrDefaultAsync(
+            aT => aT.Name.Equals(assetType.Name) && aT.GameId.Equals(assetType.GameId));
+        if(checkAssetType is not null)
+        {
+            if(assetType.Id == Guid.Empty || checkAssetType.Id != assetType.Id)
+            {
+                throw new BadRequestException("The asset type's information has already exist.");
+            }
+        }
+    }
+    public async Task CheckAssetType(Guid id)
+    {
+        var checkAssetType = await _assetTypeRepo.FindByIdAsync(id);
+        if (checkAssetType is null)
+        {
+            throw new BadRequestException("Asset type is not exist.");
+        }
     }
 }

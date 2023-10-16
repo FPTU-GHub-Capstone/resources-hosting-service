@@ -21,7 +21,7 @@ namespace WebApiLayer.Configurations
             services.AddScoped<IActivityTypeServices, ActivityTypeServices>();
             services.AddScoped<IAssetAttributeServices, AssetAttributeServices>();
             services.AddScoped<IAssetServices, AssetServices>();
-            services.AddScoped<IAssetAttributeServices, AssetAttributeServices>();
+            services.AddScoped<IAssetTypeServices, AssetTypeServices>();
             services.AddScoped<IAttributeGroupServices, AttributeGroupServices>();
             services.AddScoped<ICharacterAssetServices, CharacterAssetServices>();
             services.AddScoped<ICharacterAttributeServices, CharacterAttributeServices>();
