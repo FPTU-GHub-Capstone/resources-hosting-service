@@ -11,11 +11,9 @@ namespace WebApiLayer.Controllers;
 public class ActivitiesController : BaseController
 {
     private readonly IActivityServices _activityServices;
-    private readonly IGenericRepository<ActivityEntity> _activityRepo;
-    public ActivitiesController(IActivityServices activityServices, IGenericRepository<ActivityEntity> activityRepo)
+    public ActivitiesController(IActivityServices activityServices)
     {
         _activityServices = activityServices;
-        _activityRepo = activityRepo;
     }
     [HttpGet]
     public async Task<IActionResult> GetActivitíes()

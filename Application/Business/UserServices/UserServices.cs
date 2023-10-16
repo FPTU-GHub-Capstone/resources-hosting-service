@@ -11,7 +11,6 @@ namespace ServiceLayer.Business;
 public class UserServices : IUserServices
 {
     public readonly IGenericRepository<UserEntity> _userRepo;
-
     public UserServices(IGenericRepository<UserEntity> userRepo)
     {
         _userRepo = userRepo;
@@ -37,19 +36,19 @@ public class UserServices : IUserServices
         await _userRepo.CreateAsync(user);
     }
     public async Task Update(Guid UserId, UserEntity user) {
-        var target = await GetById(UserId);
-        if(target is null)
-        {
-            throw new NotFoundException("User not exist");
-        }
-        await _userRepo.UpdateAsync(target);
+        await CheckUser(UserId);
+        await _userRepo.UpdateAsync(user);
     }
     public async Task Delete(Guid UserId) {
-        var target = await GetById(UserId);
+        await CheckUser(UserId);
+        await _userRepo.DeleteSoftAsync(UserId);
+    }
+    public async Task CheckUser(Guid id)
+    {
+        var target = await GetById(id);
         if (target is null)
         {
             throw new NotFoundException("User not exist");
         }
-        await _userRepo.DeleteSoftAsync(UserId);
     }
 }

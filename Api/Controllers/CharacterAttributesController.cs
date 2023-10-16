@@ -12,11 +12,9 @@ namespace WebApiLayer.Controllers;
 public class CharacterAtributesController : BaseController
 {
     private readonly ICharacterAttributeServices _charAttServices;
-    private readonly IGenericRepository<CharacterAttributeEntity> _charAttRepo;
-    public CharacterAtributesController(ICharacterAttributeServices charAttServices, IGenericRepository<CharacterAttributeEntity> charAttRepo)
+    public CharacterAtributesController(ICharacterAttributeServices charAttServices)
     {
         _charAttServices = charAttServices;
-        _charAttRepo = charAttRepo;
     }
 
     [HttpGet]

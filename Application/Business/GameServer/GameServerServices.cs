@@ -35,20 +35,21 @@ public class GameServerServices : IGameServerServices
     }
     public async Task Update(Guid gameServerId, GameServerEntity gameServer)
     {
-        var target = await GetById(gameServerId);
-        if (target is null)
-        {
-            throw new NotFoundException("Game server not exist");
-        }
-        await _gameServerRepo.UpdateAsync(target);
+        await CheckGameServer(gameServerId);
+        await _gameServerRepo.UpdateAsync(gameServer);
     }
     public async Task Delete(Guid gameServerId)
     {
-        var target = await GetById(gameServerId);
+        await CheckGameServer(gameServerId);
+        await _gameServerRepo.DeleteSoftAsync(gameServerId);
+    }
+
+    public async Task CheckGameServer(Guid id)
+    {
+        var target = await GetById(id);
         if (target is null)
         {
             throw new NotFoundException("Game server not exist");
         }
-        await _gameServerRepo.DeleteSoftAsync(gameServerId);
     }
 }

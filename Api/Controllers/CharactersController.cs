@@ -11,11 +11,9 @@ namespace WebApiLayer.Controllers;
 public class CharactersController : BaseController
 {
     private readonly ICharacterServices _characterServices;
-    private readonly IGenericRepository<CharacterEntity> _characterRepo;
-    public CharactersController(ICharacterServices characterServices, IGenericRepository<CharacterEntity> characterRepo)
+    public CharactersController(ICharacterServices characterServices)
     {
         _characterServices = characterServices;
-        _characterRepo = characterRepo;
     }
     [HttpGet]
     public async Task<IActionResult> GetCharacters()

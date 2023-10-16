@@ -11,11 +11,9 @@ namespace WebApiLayer.Controllers;
 public class GameServersController : BaseController
 {
     private readonly IGameServerServices _gameServerServices;
-    private readonly IGenericRepository<GameServerEntity> _gameServerRepo;
-    public GameServersController(IGameServerServices gameServerServices, IGenericRepository<GameServerEntity> gameServerRepo)
+    public GameServersController(IGameServerServices gameServerServices)
     {
         _gameServerServices = gameServerServices;
-        _gameServerRepo = gameServerRepo;
     }
 
     [HttpGet]

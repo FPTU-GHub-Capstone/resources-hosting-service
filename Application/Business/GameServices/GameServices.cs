@@ -42,21 +42,20 @@ public class GameServices : IGameServices
     }
     public async Task Update(Guid gameId, GameEntity game)
     {
-        var gameCheck = await _gameRepo.FirstOrDefaultAsync(
-            g => g.Id.Equals(gameId));
-        if (gameCheck == null)
-        {
-            throw new BadRequestException("Game not exist");
-        }
+        await CheckGame(gameId);
         await _gameRepo.UpdateAsync(game);
     }
     public async Task Delete(Guid gameId)
     {
-        var target = await GetById(gameId);
+        await CheckGame(gameId);
+        await _gameRepo.DeleteSoftAsync(gameId);
+    }
+    public async Task CheckGame(Guid id)
+    {
+        var target = await GetById(id);
         if (target is null)
         {
             throw new NotFoundException("Game not exist");
         }
-        await _gameRepo.DeleteSoftAsync(gameId);
     }
 }

@@ -11,11 +11,9 @@ namespace WebApiLayer.Controllers;
 public class AttributeGroupController : BaseController
 {
     private readonly IAttributeGroupServices _attributeServices;
-    private readonly IGenericRepository<AttributeGroupEntity> _attributeRepo;
-    public AttributeGroupController(IAttributeGroupServices attributeServices, IGenericRepository<AttributeGroupEntity> attributeRepo)
+    public AttributeGroupController(IAttributeGroupServices attributeServices)
     {
         _attributeServices = attributeServices;
-        _attributeRepo = attributeRepo;
     }
     [HttpGet]
     public async Task<IActionResult> GetAttributeGroups()

@@ -11,11 +11,9 @@ namespace WebApiLayer.Controllers;
 public class AssetTypesController : BaseController
 {
     private readonly IAssetTypeServices _assetTypeServices;
-    private readonly IGenericRepository<AssetTypeEntity> _assetTypeRepo;
-    public AssetTypesController(IAssetTypeServices assetTypeServices, IGenericRepository<AssetTypeEntity> assetTypeRepo)
+    public AssetTypesController(IAssetTypeServices assetTypeServices)
     {
         _assetTypeServices = assetTypeServices;
-        _assetTypeRepo = assetTypeRepo;
     }
 
     [HttpGet]

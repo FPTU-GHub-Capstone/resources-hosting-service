@@ -11,11 +11,9 @@ namespace WebApiLayer.Controllers;
 public class UsersController : BaseController
 {
     private readonly IUserServices _userServices;
-    private readonly IGenericRepository<UserEntity> _userRepo;
-    public UsersController(IUserServices userServices, IGenericRepository<UserEntity> userRepo)
+    public UsersController(IUserServices userServices)
     {
         _userServices = userServices;
-        _userRepo = userRepo;
     }
     [HttpGet]
     public async Task<IActionResult> GetUsers()

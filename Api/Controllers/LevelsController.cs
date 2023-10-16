@@ -11,11 +11,9 @@ namespace WebApiLayer.Controllers;
 public class LevelsController : BaseController
 {
     private readonly ILevelServices _levelServices;
-    private readonly IGenericRepository<LevelEntity> _levelRepo;
-    public LevelsController(ILevelServices levelServices, IGenericRepository<LevelEntity> levelRepo)
+    public LevelsController(ILevelServices levelServices)
     {
         _levelServices = levelServices;
-        _levelRepo = levelRepo;
     }
 
     [HttpGet]
