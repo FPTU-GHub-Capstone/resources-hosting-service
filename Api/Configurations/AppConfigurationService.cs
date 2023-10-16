@@ -4,11 +4,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using RepositoryLayer.Contexts;
 using RepositoryLayer.Repositories;
-using ServiceLayer.AppConfig;
+using Serilog;
+using Serilog.Events;
+using Serilog.Formatting.Compact;
+using Serilog.Settings.Configuration;
 using ServiceLayer.Business;
-using System.Text.Json.Serialization;
-using System.Text.Json;
-using WebApiLayer.Filters;
+using ServiceLayer.Core.AppConfig;
 
 namespace WebApiLayer.Configurations
 {
@@ -51,6 +52,7 @@ namespace WebApiLayer.Configurations
                 provider => provider.GetService<ApplicationDbContext>()
             );
         }
+
         public static WebApplication UseAutoWrapper(this WebApplication app)
         {
             app.UseApiResponseAndExceptionWrapper(
@@ -63,31 +65,31 @@ namespace WebApiLayer.Configurations
             );
             return app;
         }
-        public static void AddValidationServices(this IServiceCollection services)
-        {
-            services
-            .AddControllers(
-                options =>
-                {
-                    options.SuppressAsyncSuffixInActionNames = false;
-                    options.Filters.Add<ValidateModelStateFilter>();
-                }
-            )
-            .AddJsonOptions(
-                options =>
-                {
-                    options.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
-                    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-                }
-            );
+
+        public static WebApplicationBuilder UseSerilog(this WebApplicationBuilder builder) {
+            builder.Host.UseSerilog((cntxt, configuration) =>
+            {
+                var options = new ConfigurationReaderOptions { SectionName = nameof(AppSettings) };
+                configuration
+                    .ReadFrom.Configuration(cntxt.Configuration, options)
+                    .WriteTo.Console();
+            });
+            return builder;
         }
 
-        public static async Task ApplyMigrations(this IServiceProvider serviceProvider)
+        public static WebApplication UseLoggingInterceptor(this WebApplication app)
         {
-            using var scope = serviceProvider.CreateScope();
-            await using ApplicationDbContext dbContext =
-                scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-            await dbContext.Database.MigrateAsync();
+            app.UseSerilogRequestLogging(options =>
+            {
+                options.MessageTemplate = "Handled {RequestPath}";
+                options.GetLevel = (httpContext, elapsed, ex) => LogEventLevel.Debug;
+                options.EnrichDiagnosticContext = (diagnosticContext, httpContext) =>
+                {
+                    diagnosticContext.Set("RequestHost", httpContext.Request.Host.Value);
+                    diagnosticContext.Set("RequestScheme", httpContext.Request.Scheme);
+                };
+            });
+            return app;
         }
     }
 }

@@ -1,6 +1,6 @@
 using System.Reflection;
-using Microsoft.AspNetCore.Mvc;
-using ServiceLayer.AppConfig;
+using Serilog;
+using ServiceLayer.Core.AppConfig;
 using WebApiLayer.Configurations;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,7 +14,8 @@ var configuration = builder.Configuration;
 #region Add configurations to Services
 {
     services.Configure<AppSettings>(configuration.GetSection(nameof(AppSettings)));
-    services.AddValidationServices();
+    builder.UseSerilog();
+    builder.UseSerilog();
     services.AddDbServices();
     services.AddAppServices();
     services.AddAutoMapper(Assembly.GetExecutingAssembly());
@@ -27,9 +28,9 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-    await app.Services.ApplyMigrations();
 }
 
+app.UseLoggingInterceptor();
 app.UseAutoWrapper();
 app.UseHttpsRedirection();
 app.UseAuthorization();
