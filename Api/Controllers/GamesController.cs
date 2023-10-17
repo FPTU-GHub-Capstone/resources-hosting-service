@@ -43,7 +43,7 @@ public class GamesController : BaseController
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateGame(Guid id, [FromBody] UpdateGameRequest game)
     {
-        var updateGame = await _gameServices.GetById(id);
+        var updateGame = await _gameRepo.FoundOrThrowAsync(id, "Game not exist.");
         Mapper.Map(game, updateGame);
         await _gameServices.Update(id, updateGame);
         return Ok(updateGame);

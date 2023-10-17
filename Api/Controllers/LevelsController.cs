@@ -11,9 +11,11 @@ namespace WebApiLayer.Controllers;
 public class LevelsController : BaseController
 {
     private readonly ILevelServices _levelServices;
-    public LevelsController(ILevelServices levelServices)
+    private readonly IGenericRepository<LevelEntity> _levelRepo;
+    public LevelsController(ILevelServices levelServices, IGenericRepository<LevelEntity> levelRepo)
     {
         _levelServices = levelServices;
+        _levelRepo = levelRepo;
     }
 
     [HttpGet]
@@ -42,7 +44,7 @@ public class LevelsController : BaseController
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateLevel(Guid id, [FromBody] UpdateLevelsController level)
     {
-        var updateLevel = await _levelServices.GetById(id);
+        var updateLevel = await _levelRepo.FoundOrThrowAsync(id, "Level not exist.");
         Mapper.Map(level, updateLevel);
         await _levelServices.Update(id, updateLevel);
         return Ok(updateLevel);

@@ -12,9 +12,11 @@ namespace WebApiLayer.Controllers;
 public class CharacterAtributesController : BaseController
 {
     private readonly ICharacterAttributeServices _charAttServices;
-    public CharacterAtributesController(ICharacterAttributeServices charAttServices)
+    private readonly IGenericRepository<CharacterAttributeEntity> _charAttRepo;
+    public CharacterAtributesController(ICharacterAttributeServices charAttServices, IGenericRepository<CharacterAttributeEntity> charAttRepo)
     {
         _charAttServices = charAttServices;
+        _charAttRepo = charAttRepo;
     }
 
     [HttpGet]
@@ -43,7 +45,7 @@ public class CharacterAtributesController : BaseController
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateCharacterAttribute(Guid id, [FromBody] UpdateCharacterAttributeRequest charAtt)
     {
-        var newCharAtt = await _charAttServices.GetById(id);
+        var newCharAtt = await _charAttRepo.FoundOrThrowAsync(id, "Character Attribute not exist.");
         Mapper.Map(charAtt, newCharAtt);
         await _charAttServices.Update(id, newCharAtt);
         return Ok(newCharAtt);

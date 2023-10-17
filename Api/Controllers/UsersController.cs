@@ -11,9 +11,11 @@ namespace WebApiLayer.Controllers;
 public class UsersController : BaseController
 {
     private readonly IUserServices _userServices;
-    public UsersController(IUserServices userServices)
+    private readonly IGenericRepository<UserEntity> _userRepo;
+    public UsersController(IUserServices userServices, IGenericRepository<UserEntity> userRepo)
     {
         _userServices = userServices;
+        _userRepo = userRepo;
     }
     [HttpGet]
     public async Task<IActionResult> GetUsers()
@@ -41,7 +43,7 @@ public class UsersController : BaseController
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateUser(Guid id, [FromBody] UpdateUserRequest user)
     {
-        var updateUser = await _userServices.GetById(id);
+        var updateUser = await _userRepo.FoundOrThrowAsync(id, "User not exist.");
         Mapper.Map(user, updateUser);
         await _userServices.Update(id, updateUser);
         return Ok(updateUser);

@@ -11,9 +11,11 @@ namespace WebApiLayer.Controllers;
 public class GameServersController : BaseController
 {
     private readonly IGameServerServices _gameServerServices;
-    public GameServersController(IGameServerServices gameServerServices)
+    private readonly IGenericRepository<GameServerEntity> _gameServerRepo;
+    public GameServersController(IGameServerServices gameServerServices, IGenericRepository<GameServerEntity> gameServerRepo)
     {
         _gameServerServices = gameServerServices;
+        _gameServerRepo = gameServerRepo;
     }
 
     [HttpGet]
@@ -40,7 +42,7 @@ public class GameServersController : BaseController
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateGameServer(Guid id, [FromBody] UpdateGameServerRequest gameServer)
     {
-        var updateGameServer = await _gameServerServices.GetById(id);
+        var updateGameServer = await _gameServerRepo.FoundOrThrowAsync(id, "Game server not exist.");
         Mapper.Map(gameServer, updateGameServer);
         await _gameServerServices.Update(id, updateGameServer);
         return Ok(updateGameServer);

@@ -11,9 +11,11 @@ namespace WebApiLayer.Controllers;
 public class AssetTypesController : BaseController
 {
     private readonly IAssetTypeServices _assetTypeServices;
-    public AssetTypesController(IAssetTypeServices assetTypeServices)
+    private readonly IGenericRepository<AssetTypeEntity> _assetTypeRepo;
+    public AssetTypesController(IAssetTypeServices assetTypeServices, IGenericRepository<AssetTypeEntity> assetTypeRepo)
     {
         _assetTypeServices = assetTypeServices;
+        _assetTypeRepo = assetTypeRepo;
     }
 
     [HttpGet]
@@ -42,7 +44,7 @@ public class AssetTypesController : BaseController
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateAssetType(Guid id, [FromBody] UpdateAssetTypeRequest assetType)
     {
-        var uAssetType = await _assetTypeServices.GetById(id);
+        var uAssetType = await _assetTypeRepo.FoundOrThrowAsync(id, "Asset Type not exist.");
         Mapper.Map(assetType, uAssetType);
         await _assetTypeServices.Update(id, uAssetType);
         return Ok(uAssetType);

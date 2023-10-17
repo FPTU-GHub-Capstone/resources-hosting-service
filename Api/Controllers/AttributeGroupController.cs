@@ -11,9 +11,11 @@ namespace WebApiLayer.Controllers;
 public class AttributeGroupController : BaseController
 {
     private readonly IAttributeGroupServices _attributeServices;
-    public AttributeGroupController(IAttributeGroupServices attributeServices)
+    private readonly IGenericRepository<AttributeGroupEntity> _attributeRepo;
+    public AttributeGroupController(IAttributeGroupServices attributeServices, IGenericRepository<AttributeGroupEntity> attributeRepo)
     {
         _attributeServices = attributeServices;
+        _attributeRepo = attributeRepo;
     }
     [HttpGet]
     public async Task<IActionResult> GetAttributeGroups()
@@ -41,7 +43,7 @@ public class AttributeGroupController : BaseController
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateAttributeGroup(Guid id, [FromBody] UpdateAttributeGroupRequest attributeGroup)
     {
-        var attGrpEnt = await _attributeServices.GetById(id);
+        var attGrpEnt = await _attributeRepo.FoundOrThrowAsync(id, "Attribute Group not exist.");
         Mapper.Map(attributeGroup, attGrpEnt);
         await _attributeServices.Update(id, attGrpEnt);
         return Ok(attGrpEnt);
