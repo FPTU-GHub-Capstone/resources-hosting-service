@@ -35,12 +35,12 @@ public class GameServerServices : IGameServerServices
     }
     public async Task Update(Guid gameServerId, GameServerEntity gameServer)
     {
-        await _gameServerRepo.CheckExistAsync(gameServerId, "Game server not exist.");
+        await _gameServerRepo.FoundOrThrowAsync(gameServerId, "Game server not exist.");
         await _gameServerRepo.UpdateAsync(gameServer);
     }
     public async Task Delete(Guid gameServerId)
     {
-        await _gameServerRepo.CheckExistAsync(gameServerId, "Game server not exist.");
+        await _gameServerRepo.FoundOrThrowAsync(gameServerId, "Game server not exist.");
         await _gameServerRepo.DeleteSoftAsync(gameServerId);
     }
 

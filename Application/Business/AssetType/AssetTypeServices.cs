@@ -31,21 +31,21 @@ public class AssetTypeServices : IAssetTypeServices
     }
     public async Task Create(AssetTypeEntity assetType)
     {
-        await CheckAssetType(assetType);
+        await CheckForDuplicateAssetType(assetType);
         await _assetTypeRepo.CreateAsync(assetType);
     }
     public async Task Update(Guid assetTypeId, AssetTypeEntity assetType)
     {
-        await _assetTypeRepo.CheckExistAsync(assetTypeId, "Asset type is not exist.");
-        await CheckAssetType(assetType);
+        await _assetTypeRepo.FoundOrThrowAsync(assetTypeId, "Asset type is not exist.");
+        await CheckForDuplicateAssetType(assetType);
         await _assetTypeRepo.UpdateAsync(assetType);
     }
     public async Task Delete(Guid assetTypeId)
     {
-        await _assetTypeRepo.CheckExistAsync(assetTypeId, "Asset type is not exist.");
+        await _assetTypeRepo.FoundOrThrowAsync(assetTypeId, "Asset type is not exist.");
         await _assetTypeRepo.DeleteSoftAsync(assetTypeId);
     }
-    public async Task CheckAssetType(AssetTypeEntity assetType)
+    public async Task CheckForDuplicateAssetType(AssetTypeEntity assetType)
     {
         var checkAssetType = await _assetTypeRepo.FirstOrDefaultAsync(
             aT => aT.Name.Equals(assetType.Name) && aT.GameId.Equals(assetType.GameId));

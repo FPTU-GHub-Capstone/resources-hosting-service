@@ -36,11 +36,11 @@ public class UserServices : IUserServices
         await _userRepo.CreateAsync(user);
     }
     public async Task Update(Guid UserId, UserEntity user) {
-        await _userRepo.CheckExistAsync(UserId, "User not exist.");
+        await _userRepo.FoundOrThrowAsync(UserId, "User not exist.");
         await _userRepo.UpdateAsync(user);
     }
     public async Task Delete(Guid UserId) {
-        await _userRepo.CheckExistAsync(UserId, "User not exist.");
+        await _userRepo.FoundOrThrowAsync(UserId, "User not exist.");
         await _userRepo.DeleteSoftAsync(UserId);
     }
 }

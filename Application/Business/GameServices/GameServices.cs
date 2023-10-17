@@ -42,12 +42,12 @@ public class GameServices : IGameServices
     }
     public async Task Update(Guid gameId, GameEntity game)
     {
-        await _gameRepo.CheckExistAsync(gameId, "Game not exist.");
+        await _gameRepo.FoundOrThrowAsync(gameId, "Game not exist.");
         await _gameRepo.UpdateAsync(game);
     }
     public async Task Delete(Guid gameId)
     {
-        await _gameRepo.CheckExistAsync(gameId, "Game not exist.");
+        await _gameRepo.FoundOrThrowAsync(gameId, "Game not exist.");
         await _gameRepo.DeleteSoftAsync(gameId);
     }
 }

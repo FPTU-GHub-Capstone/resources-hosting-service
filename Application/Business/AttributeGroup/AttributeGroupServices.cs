@@ -32,12 +32,12 @@ public class AttributeGroupServices : IAttributeGroupServices
     }
     public async Task Update(Guid attributeGroupid, AttributeGroupEntity attributeGroup)
     {
-        await _attributeRepo.CheckExistAsync(attributeGroupid, "Attribute group not exist.");
+        await _attributeRepo.FoundOrThrowAsync(attributeGroupid, "Attribute group not exist.");
         await _attributeRepo.UpdateAsync(attributeGroup);
     }
     public async Task Delete(Guid attributeGroupid)
     {
-        await _attributeRepo.CheckExistAsync(attributeGroupid, "Attribute group not exist.");
+        await _attributeRepo.FoundOrThrowAsync(attributeGroupid, "Attribute group not exist.");
         await _attributeRepo.DeleteSoftAsync(attributeGroupid);
     }
 }

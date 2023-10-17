@@ -35,19 +35,19 @@ public class LevelServices : ILevelServices
     }
     public async Task Create(LevelEntity level)
     {
-        await CheckLevel(level);
+        await CheckForDuplicateLevel(level);
         await _levelRepo.CreateAsync(level);
     }
     public async Task Update(Guid levelId, LevelEntity level) {
-        await _levelRepo.CheckExistAsync(levelId, "Level not exist.");
-        await CheckLevel(level);
+        await _levelRepo.FoundOrThrowAsync(levelId, "Level not exist.");
+        await CheckForDuplicateLevel(level);
         await _levelRepo.UpdateAsync(level);
     }
     public async Task Delete(Guid levelId) {
-        await _levelRepo.CheckExistAsync(levelId, "Level not exist.");
+        await _levelRepo.FoundOrThrowAsync(levelId, "Level not exist.");
         await _levelRepo.DeleteSoftAsync(levelId);
     }
-    public async Task CheckLevel(LevelEntity level)
+    public async Task CheckForDuplicateLevel(LevelEntity level)
     {
         var levelCheck = await _levelRepo.FirstOrDefaultAsync(l => l.Name == level.Name && l.GameId == level.GameId);
         if (levelCheck is not null)
