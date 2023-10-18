@@ -12,8 +12,6 @@ public class GameServices : IGameServices
     {
         _gameRepo = gameRepo;
     }
-
-    //Game
     public async Task<ICollection<GameEntity>> List()
     {
         return await _gameRepo.ListAsync();
@@ -42,21 +40,10 @@ public class GameServices : IGameServices
     }
     public async Task Update(Guid gameId, GameEntity game)
     {
-        var gameCheck = await _gameRepo.FirstOrDefaultAsync(
-            g => g.Id.Equals(gameId));
-        if (gameCheck == null)
-        {
-            throw new BadRequestException("Game not exist");
-        }
         await _gameRepo.UpdateAsync(game);
     }
     public async Task Delete(Guid gameId)
     {
-        var target = await GetById(gameId);
-        if (target is null)
-        {
-            throw new NotFoundException("Game not exist");
-        }
         await _gameRepo.DeleteSoftAsync(gameId);
     }
 }

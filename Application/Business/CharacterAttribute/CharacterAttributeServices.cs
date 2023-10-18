@@ -1,4 +1,5 @@
 ﻿using DomainLayer.Entities;
+using DomainLayer.Exceptions;
 using RepositoryLayer.Repositories;
 
 namespace ServiceLayer.Business;
@@ -33,14 +34,21 @@ public class CharacterAttributeServices : ICharacterAttributeServices
     }
     public async Task Create(CharacterAttributeEntity characterAttribute)
     {
-
+        var charAttCheck = await _characterAttributeRepo.FirstOrDefaultAsync(
+            cA => cA.CharacterId.Equals(characterAttribute.CharacterId) && cA.AttributeGroupId.Equals(characterAttribute.AttributeGroupId));
+        if(charAttCheck is not null)
+        {
+            throw new BadRequestException("Character with this attribute group already exist.");
+        }
+        await _characterAttributeRepo.CreateAsync(characterAttribute);
     }
     public async Task Update(Guid characterAttributeid, CharacterAttributeEntity characterAttribute)
     {
-
+        await _characterAttributeRepo.UpdateAsync(characterAttribute);
     }
     public async Task Delete(Guid characterAttributeid)
     {
-
+        await _characterAttributeRepo.DeleteSoftAsync(characterAttributeid);
     }
+
 }

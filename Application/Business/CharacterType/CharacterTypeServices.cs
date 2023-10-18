@@ -42,22 +42,10 @@ public class CharacterTypeServices : ICharacterTypeServices
     }
     public async Task Update(Guid characterTypeId, CharacterTypeEntity characterType)
     {
-        var ctCheck = await _characterTypeRepo.FindByIdAsync(characterTypeId);
-        if (ctCheck is null)
-        {
-            throw new BadRequestException("Character type not exist");
-        }
         await _characterTypeRepo.UpdateAsync(characterType);
     }
     public async Task Delete(Guid characterTypeId)
     {
-        var ctCheck = await _characterTypeRepo.FindByIdAsync(characterTypeId);
-        if (ctCheck is null)
-        {
-            throw new BadRequestException("Character type not exist");
-        }
         await _characterTypeRepo.DeleteSoftAsync(characterTypeId);
     }
-
-
 }

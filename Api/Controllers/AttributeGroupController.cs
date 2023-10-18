@@ -43,7 +43,7 @@ public class AttributeGroupController : BaseController
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateAttributeGroup(Guid id, [FromBody] UpdateAttributeGroupRequest attributeGroup)
     {
-        var attGrpEnt = await _attributeServices.GetById(id);
+        var attGrpEnt = await _attributeRepo.FoundOrThrowAsync(id, "Attribute Group not exist.");
         Mapper.Map(attributeGroup, attGrpEnt);
         await _attributeServices.Update(id, attGrpEnt);
         return Ok(attGrpEnt);
@@ -52,6 +52,7 @@ public class AttributeGroupController : BaseController
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(Guid id)
     {
+        await _attributeRepo.FoundOrThrowAsync(id, "Attribute Group not exist.");
         await _attributeServices.Delete(id);
         return NoContent();
     }

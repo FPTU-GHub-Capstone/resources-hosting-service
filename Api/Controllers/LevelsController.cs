@@ -44,7 +44,7 @@ public class LevelsController : BaseController
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateLevel(Guid id, [FromBody] UpdateLevelsController level)
     {
-        var updateLevel = await _levelServices.GetById(id);
+        var updateLevel = await _levelRepo.FoundOrThrowAsync(id, "Level not exist.");
         Mapper.Map(level, updateLevel);
         await _levelServices.Update(id, updateLevel);
         return Ok(updateLevel);
@@ -53,6 +53,7 @@ public class LevelsController : BaseController
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteLevel(Guid id)
     {
+        await _levelRepo.FoundOrThrowAsync(id, "Level not exist.");
         await _levelServices.Delete(id);
         return NoContent();
     }

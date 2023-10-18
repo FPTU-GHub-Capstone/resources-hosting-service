@@ -11,7 +11,6 @@ namespace ServiceLayer.Business;
 public class UserServices : IUserServices
 {
     public readonly IGenericRepository<UserEntity> _userRepo;
-
     public UserServices(IGenericRepository<UserEntity> userRepo)
     {
         _userRepo = userRepo;
@@ -32,24 +31,14 @@ public class UserServices : IUserServices
         var userCheck = await _userRepo.FirstOrDefaultAsync(
             u=>u.Email.Equals(user.Email) || u.Username.Equals(user.Username));
         if(userCheck != null) {
-            throw new BadRequestException("Email/Username already exists");
+            throw new BadRequestException("Email/Username already exists.");
         }
         await _userRepo.CreateAsync(user);
     }
     public async Task Update(Guid UserId, UserEntity user) {
-        var target = await GetById(UserId);
-        if(target is null)
-        {
-            throw new NotFoundException("User not exist");
-        }
-        await _userRepo.UpdateAsync(target);
+        await _userRepo.UpdateAsync(user);
     }
     public async Task Delete(Guid UserId) {
-        var target = await GetById(UserId);
-        if (target is null)
-        {
-            throw new NotFoundException("User not exist");
-        }
         await _userRepo.DeleteSoftAsync(UserId);
     }
 }

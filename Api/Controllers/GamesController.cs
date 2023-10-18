@@ -43,7 +43,7 @@ public class GamesController : BaseController
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateGame(Guid id, [FromBody] UpdateGameRequest game)
     {
-        var updateGame = await _gameRepo.FindByIdAsync(id);
+        var updateGame = await _gameRepo.FoundOrThrowAsync(id, "Game not exist.");
         Mapper.Map(game, updateGame);
         await _gameServices.Update(id, updateGame);
         return Ok(updateGame);
@@ -52,6 +52,7 @@ public class GamesController : BaseController
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteGame(Guid id)
     {
+        await _gameRepo.FoundOrThrowAsync(id, "Game not exist.");
         await _gameServices.Delete(id);
         return NoContent();
     }

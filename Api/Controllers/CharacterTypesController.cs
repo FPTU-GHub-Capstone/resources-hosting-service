@@ -43,7 +43,7 @@ public class CharacterTypesController : BaseController
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateCharacterType(Guid id, [FromBody] UpdateCharacterTypeRequest charType)
     {
-        var ct = await _characterTypeRepo.FindByIdAsync(id);
+        var ct = await _characterTypeRepo.FoundOrThrowAsync(id, "Character type not exist.");
         Mapper.Map(charType,ct);
         await _characterTypeServices.Update(id, ct);
         return Ok(ct);
@@ -52,6 +52,7 @@ public class CharacterTypesController : BaseController
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteCharacterType(Guid id)
     {
+        await _characterTypeRepo.FoundOrThrowAsync(id, "Character type not exist.");
         await _characterTypeServices.Delete(id);
         return NoContent();
     }

@@ -35,34 +35,24 @@ public class LevelServices : ILevelServices
     }
     public async Task Create(LevelEntity level)
     {
-        await CheckLevel(level);
+        await CheckForDuplicateLevel(level);
         await _levelRepo.CreateAsync(level);
     }
     public async Task Update(Guid levelId, LevelEntity level) {
-        var lCheckId = await _levelRepo.FindByIdAsync(levelId);
-        if (lCheckId is null)
-        {
-            throw new BadRequestException("Level not exist");
-        }
-        await CheckLevel(level);
+        await CheckForDuplicateLevel(level);
         await _levelRepo.UpdateAsync(level);
     }
     public async Task Delete(Guid levelId) {
-        var level = await _levelRepo.FindByIdAsync(levelId);
-        if(level is null)
-        {
-            throw new BadRequestException("Level not exist");
-        }
-        await _levelRepo.DeleteSoftAsync(level);
+        await _levelRepo.DeleteSoftAsync(levelId);
     }
-    public async Task CheckLevel(LevelEntity level)
+    public async Task CheckForDuplicateLevel(LevelEntity level)
     {
         var levelCheck = await _levelRepo.FirstOrDefaultAsync(l => l.Name == level.Name && l.GameId == level.GameId);
         if (levelCheck is not null)
         {
             if(level.Id == Guid.Empty || levelCheck.Id != level.Id)
             {
-                throw new BadRequestException("The game already has this level's name");
+                throw new BadRequestException("The user already have a character in this game server");
             }
         }
     }
