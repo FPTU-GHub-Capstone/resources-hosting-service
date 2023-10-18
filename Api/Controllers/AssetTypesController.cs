@@ -53,6 +53,7 @@ public class AssetTypesController : BaseController
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteAssetType(Guid id)
     {
+        var uAssetType = await _assetTypeRepo.FoundOrThrowAsync(id, "Asset Type not exist.");
         await _assetTypeServices.Delete(id);
         return NoContent();
     }

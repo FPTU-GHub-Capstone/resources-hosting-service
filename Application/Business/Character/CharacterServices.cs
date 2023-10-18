@@ -43,13 +43,11 @@ public class CharacterServices : ICharacterServices
     }
     public async Task Update(Guid characterId, CharacterEntity character)
     {
-        await _characterRepo.FoundOrThrowAsync(characterId, "Character not exist.");
         await CheckForDuplicateCharacter(character);
         await _characterRepo.UpdateAsync(character);
     }
     public async Task Delete(Guid characterId)
     {
-        await _characterRepo.FoundOrThrowAsync(characterId, "Character not exist.");
         await _characterRepo.DeleteSoftAsync(characterId);
     }
     public async Task CheckForDuplicateCharacter(CharacterEntity character)

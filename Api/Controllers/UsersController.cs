@@ -52,6 +52,7 @@ public class UsersController : BaseController
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteUser(Guid id)
     {
+        var updateUser = await _userRepo.FoundOrThrowAsync(id, "User not exist.");
         await _userServices.Delete(id);
         return NoContent();
     }

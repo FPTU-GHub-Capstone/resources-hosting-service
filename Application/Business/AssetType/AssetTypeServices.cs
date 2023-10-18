@@ -36,13 +36,11 @@ public class AssetTypeServices : IAssetTypeServices
     }
     public async Task Update(Guid assetTypeId, AssetTypeEntity assetType)
     {
-        await _assetTypeRepo.FoundOrThrowAsync(assetTypeId, "Asset type is not exist.");
         await CheckForDuplicateAssetType(assetType);
         await _assetTypeRepo.UpdateAsync(assetType);
     }
     public async Task Delete(Guid assetTypeId)
     {
-        await _assetTypeRepo.FoundOrThrowAsync(assetTypeId, "Asset type is not exist.");
         await _assetTypeRepo.DeleteSoftAsync(assetTypeId);
     }
     public async Task CheckForDuplicateAssetType(AssetTypeEntity assetType)

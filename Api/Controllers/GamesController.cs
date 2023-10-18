@@ -52,6 +52,7 @@ public class GamesController : BaseController
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteGame(Guid id)
     {
+        var updateGame = await _gameRepo.FoundOrThrowAsync(id, "Game not exist.");
         await _gameServices.Delete(id);
         return NoContent();
     }

@@ -54,6 +54,7 @@ public class CharacterAtributesController : BaseController
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteCharacterAttribute(Guid id)
     {
+        var newCharAtt = await _charAttRepo.FoundOrThrowAsync(id, "Character Attribute not exist.");
         await _charAttServices.Delete(id);
         return NoContent();
     }

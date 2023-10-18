@@ -52,6 +52,7 @@ public class AttributeGroupController : BaseController
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(Guid id)
     {
+        var attGrpEnt = await _attributeRepo.FoundOrThrowAsync(id, "Attribute Group not exist.");
         await _attributeServices.Delete(id);
         return NoContent();
     }
