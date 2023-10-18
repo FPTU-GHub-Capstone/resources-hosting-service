@@ -53,7 +53,7 @@ public class LevelsController : BaseController
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteLevel(Guid id)
     {
-        var updateLevel = await _levelRepo.FoundOrThrowAsync(id, "Level not exist.");
+        await _levelRepo.FoundOrThrowAsync(id, "Level not exist.");
         await _levelServices.Delete(id);
         return NoContent();
     }

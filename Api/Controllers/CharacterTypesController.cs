@@ -52,7 +52,7 @@ public class CharacterTypesController : BaseController
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteCharacterType(Guid id)
     {
-        var ct = await _characterTypeRepo.FoundOrThrowAsync(id, "Character type not exist.");
+        await _characterTypeRepo.FoundOrThrowAsync(id, "Character type not exist.");
         await _characterTypeServices.Delete(id);
         return NoContent();
     }
