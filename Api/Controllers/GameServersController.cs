@@ -44,7 +44,7 @@ public class GameServersController : BaseController
     {
         var updateGameServer = await _gameServerRepo.FoundOrThrowAsync(id, "Game server not exist.");
         Mapper.Map(gameServer, updateGameServer);
-        await _gameServerServices.Update(id, updateGameServer);
+        await _gameServerServices.Update(updateGameServer);
         return Ok(updateGameServer);
     }
 

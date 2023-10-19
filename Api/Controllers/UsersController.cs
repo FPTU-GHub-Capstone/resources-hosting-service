@@ -45,7 +45,7 @@ public class UsersController : BaseController
     {
         var updateUser = await _userRepo.FoundOrThrowAsync(id, "User not exist.");
         Mapper.Map(user, updateUser);
-        await _userServices.Update(id, updateUser);
+        await _userServices.Update(updateUser);
         return Ok(updateUser);
     }
 

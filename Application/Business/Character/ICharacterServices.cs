@@ -11,6 +11,6 @@ public interface ICharacterServices
     Task<ICollection<CharacterEntity>> GetByGameServerId(Guid id);
     Task<int> Count();
     Task Create(CharacterEntity character);
-    Task Update(Guid characterId, CharacterEntity character);
+    Task Update(CharacterEntity character);
     Task Delete(Guid characterId);
 }

@@ -9,6 +9,6 @@ public interface IAssetTypeServices
     Task<ICollection<AssetTypeEntity>> GetByGameId(Guid gameId);
     Task<int> Count();
     Task Create(AssetTypeEntity assetType);
-    Task Update(Guid assetTypeId, AssetTypeEntity assetType);
+    Task Update(AssetTypeEntity assetType);
     Task Delete(Guid assetTypeId);
 }

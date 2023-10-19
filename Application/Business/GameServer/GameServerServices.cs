@@ -33,7 +33,7 @@ public class GameServerServices : IGameServerServices
     {
         await _gameServerRepo.CreateAsync(gameServer);
     }
-    public async Task Update(Guid gameServerId, GameServerEntity gameServer)
+    public async Task Update(GameServerEntity gameServer)
     {
         await _gameServerRepo.UpdateAsync(gameServer);
     }

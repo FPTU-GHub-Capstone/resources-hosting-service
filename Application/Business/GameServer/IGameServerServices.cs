@@ -8,6 +8,6 @@ public interface IGameServerServices
     Task<ICollection<GameServerEntity>> GetByGameId(Guid gameId);
     Task<int> Count();
     Task Create(GameServerEntity gameServer);
-    Task Update(Guid gameServerId, GameServerEntity gameServer);
+    Task Update(GameServerEntity gameServer);
     Task Delete(Guid gameServerId);
 }

@@ -42,7 +42,7 @@ public class CharacterAttributeServices : ICharacterAttributeServices
         }
         await _characterAttributeRepo.CreateAsync(characterAttribute);
     }
-    public async Task Update(Guid characterAttributeid, CharacterAttributeEntity characterAttribute)
+    public async Task Update(CharacterAttributeEntity characterAttribute)
     {
         await _characterAttributeRepo.UpdateAsync(characterAttribute);
     }

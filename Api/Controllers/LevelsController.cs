@@ -46,7 +46,7 @@ public class LevelsController : BaseController
     {
         var updateLevel = await _levelRepo.FoundOrThrowAsync(id, "Level not exist.");
         Mapper.Map(level, updateLevel);
-        await _levelServices.Update(id, updateLevel);
+        await _levelServices.Update(updateLevel);
         return Ok(updateLevel);
     }
 

@@ -40,7 +40,7 @@ public class CharacterTypeServices : ICharacterTypeServices
         }
         await _characterTypeRepo.CreateAsync(characterType);
     }
-    public async Task Update(Guid characterTypeId, CharacterTypeEntity characterType)
+    public async Task Update(CharacterTypeEntity characterType)
     {
         await _characterTypeRepo.UpdateAsync(characterType);
     }

@@ -41,7 +41,7 @@ public class CharacterServices : ICharacterServices
         await CheckForDuplicateCharacter(character);
         await _characterRepo.CreateAsync(character);
     }
-    public async Task Update(Guid characterId, CharacterEntity character)
+    public async Task Update(CharacterEntity character)
     {
         await CheckForDuplicateCharacter(character);
         await _characterRepo.UpdateAsync(character);

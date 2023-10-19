@@ -43,10 +43,10 @@ public class CharactersController : BaseController
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateCharacter(Guid id, [FromBody] UpdateCharacterRequest character)
     {
-        var newC = await _characterRepo.FoundOrThrowAsync(id, "Character not exist.");
-        Mapper.Map(character, newC);
-        await _characterServices.Update(id, newC);
-        return Ok(newC);
+        var updateC = await _characterRepo.FoundOrThrowAsync(id, "Character not exist.");
+        Mapper.Map(character, updateC);
+        await _characterServices.Update(updateC);
+        return Ok(updateC);
     }
 
     [HttpDelete("{id}")]
