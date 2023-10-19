@@ -33,14 +33,14 @@ public class ActivityTypeServices : IActivityTypeServices
     }
     public async Task Create(ActivityTypeEntity activityType)
     {
-
+        await _activityTypeRepo.CreateAsync(activityType);
     }
-    public async Task Update(Guid activityTypeId, ActivityTypeEntity activityType)
+    public async Task Update(ActivityTypeEntity activityType)
     {
-
+        await _activityTypeRepo.UpdateAsync(activityType);
     }
     public async Task Delete(Guid activityTypeId)
     {
-
+        await _activityTypeRepo.DeleteSoftAsync(activityTypeId);
     }
 }

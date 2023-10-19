@@ -10,6 +10,6 @@ public interface IActivityTypeServices
     Task<ICollection<ActivityTypeEntity>> GetByCharacterId(Guid id);
     Task<int> Count();
     Task Create(ActivityTypeEntity activityType);
-    Task Update(Guid activityTypeId, ActivityTypeEntity activityType);
+    Task Update(ActivityTypeEntity activityType);
     Task Delete(Guid activityTypeId);
 }

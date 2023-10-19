@@ -9,7 +9,7 @@ public class AssetServices : IAssetServices
 
     public AssetServices(IGenericRepository<AssetEntity> assetRepo)
     {
-        assetRepo = _assetRepo;
+        _assetRepo = assetRepo;
     }
     public async Task<ICollection<AssetEntity>> List()
     {
@@ -30,14 +30,14 @@ public class AssetServices : IAssetServices
     }
     public async Task Create(AssetEntity asset)
     {
-
+        await _assetRepo.CreateAsync(asset);
     }
-    public async Task Update(Guid assetId, AssetEntity asset)
+    public async Task Update(AssetEntity asset)
     {
-
+        await _assetRepo.UpdateAsync(asset);
     }
     public async Task Delete(Guid assetId)
     {
-
+        await _assetRepo.DeleteSoftAsync(assetId);
     }
 }
