@@ -10,6 +10,6 @@ public interface ICharacterAttributeServices
     Task<ICollection<CharacterAttributeEntity>> GetByAttributeGroupId(Guid id);
     Task<int> Count();
     Task Create(CharacterAttributeEntity characterAttribute);
-    Task Update(Guid characterAttributeid, CharacterAttributeEntity characterAttribute);
+    Task Update(CharacterAttributeEntity characterAttribute);
     Task Delete(Guid characterAttributeid);
 }

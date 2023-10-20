@@ -45,7 +45,7 @@ public class AttributeGroupController : BaseController
     {
         var attGrpEnt = await _attributeRepo.FoundOrThrowAsync(id, "Attribute Group not exist.");
         Mapper.Map(attributeGroup, attGrpEnt);
-        await _attributeServices.Update(id, attGrpEnt);
+        await _attributeServices.Update(attGrpEnt);
         return Ok(attGrpEnt);
     }
 

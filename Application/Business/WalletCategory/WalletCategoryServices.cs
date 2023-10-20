@@ -1,4 +1,5 @@
 ﻿using DomainLayer.Entities;
+using DomainLayer.Exceptions;
 using RepositoryLayer.Repositories;
 
 namespace ServiceLayer.Business;
@@ -26,7 +27,27 @@ public class WalletCategoryServices : IWalletCategoryServices
     {
         return await _walletCategoryRepo.CountAsync();
     }
-    public async Task Create(WalletCategoryEntity walletCategory) { }
-    public async Task Update(Guid categoryId, WalletCategoryEntity walletCategory) { }
-    public async Task Delete(Guid categoryId) { }
+    public async Task Create(WalletCategoryEntity walletCategory) {
+        await CheckForDuplicateWalletCategory(walletCategory);
+        await _walletCategoryRepo.CreateAsync(walletCategory);
+    }
+    public async Task Update(WalletCategoryEntity walletCategory) {
+        await CheckForDuplicateWalletCategory(walletCategory);
+        await _walletCategoryRepo.UpdateAsync(walletCategory);
+    }
+    public async Task Delete(Guid categoryId) {
+        await _walletCategoryRepo.DeleteSoftAsync(categoryId);
+    }
+
+    public async Task CheckForDuplicateWalletCategory(WalletCategoryEntity walletCategory)
+    {
+        var checkWalCat = await _walletCategoryRepo.FirstOrDefaultAsync(l => l.Name == walletCategory.Name && l.GameId == walletCategory.GameId);
+        if (checkWalCat is not null)
+        {
+            if (checkWalCat.Id == Guid.Empty || checkWalCat.Id != walletCategory.Id)
+            {
+                throw new BadRequestException("Wallet category is already exist.");
+            }
+        }
+    }
 }

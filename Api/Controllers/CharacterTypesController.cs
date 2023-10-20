@@ -45,7 +45,7 @@ public class CharacterTypesController : BaseController
     {
         var ct = await _characterTypeRepo.FoundOrThrowAsync(id, "Character type not exist.");
         Mapper.Map(charType,ct);
-        await _characterTypeServices.Update(id, ct);
+        await _characterTypeServices.Update(ct);
         return Ok(ct);
     }
 

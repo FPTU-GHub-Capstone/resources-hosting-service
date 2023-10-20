@@ -8,6 +8,6 @@ public interface IWalletCategoryServices
     Task<ICollection<WalletCategoryEntity>> GetByGameId(Guid gameId);
     Task<int> Count();
     Task Create(WalletCategoryEntity walletCategory);
-    Task Update(Guid categoryId, WalletCategoryEntity walletCategory);
+    Task Update(WalletCategoryEntity walletCategory);
     Task Delete(Guid categoryId);
 }

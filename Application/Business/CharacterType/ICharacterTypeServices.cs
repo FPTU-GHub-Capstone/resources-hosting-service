@@ -9,6 +9,6 @@ public interface ICharacterTypeServices
     Task<ICollection<CharacterTypeEntity>> GetByGameId(Guid gameId);
     Task<int> Count();
     Task Create(CharacterTypeEntity characterType);
-    Task Update(Guid characterTypeId, CharacterTypeEntity characterType);
+    Task Update(CharacterTypeEntity characterType);
     Task Delete(Guid characterTypeId);
 }

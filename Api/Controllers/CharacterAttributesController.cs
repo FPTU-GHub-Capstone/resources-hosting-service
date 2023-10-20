@@ -47,7 +47,7 @@ public class CharacterAtributesController : BaseController
     {
         var newCharAtt = await _charAttRepo.FoundOrThrowAsync(id, "Character Attribute not exist.");
         Mapper.Map(charAtt, newCharAtt);
-        await _charAttServices.Update(id, newCharAtt);
+        await _charAttServices.Update(newCharAtt);
         return Ok(newCharAtt);
     }
 

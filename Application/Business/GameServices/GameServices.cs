@@ -38,7 +38,7 @@ public class GameServices : IGameServices
         }
         await _gameRepo.CreateAsync(game);
     }
-    public async Task Update(Guid gameId, GameEntity game)
+    public async Task Update(GameEntity game)
     {
         await _gameRepo.UpdateAsync(game);
     }

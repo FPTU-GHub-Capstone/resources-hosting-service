@@ -30,7 +30,7 @@ public class AttributeGroupServices : IAttributeGroupServices
     public async Task Create(AttributeGroupEntity attributeGroup){
         await _attributeRepo.CreateAsync(attributeGroup);
     }
-    public async Task Update(Guid attributeGroupid, AttributeGroupEntity attributeGroup)
+    public async Task Update(AttributeGroupEntity attributeGroup)
     {
         await _attributeRepo.UpdateAsync(attributeGroup);
     }

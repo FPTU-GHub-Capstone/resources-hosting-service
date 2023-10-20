@@ -46,7 +46,7 @@ public class AssetTypesController : BaseController
     {
         var uAssetType = await _assetTypeRepo.FoundOrThrowAsync(id, "Asset Type not exist.");
         Mapper.Map(assetType, uAssetType);
-        await _assetTypeServices.Update(id, uAssetType);
+        await _assetTypeServices.Update(uAssetType);
         return Ok(uAssetType);
     }
 

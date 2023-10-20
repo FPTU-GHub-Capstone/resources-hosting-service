@@ -8,6 +8,6 @@ public interface IAttributeGroupServices
     Task<AttributeGroupEntity> GetById(Guid attributeGroupid);
     Task<int> Count();
     Task Create(AttributeGroupEntity attributeGroup);
-    Task Update(Guid attributeGroupid, AttributeGroupEntity attributeGroup);
+    Task Update(AttributeGroupEntity attributeGroup);
     Task Delete(Guid attributeGroupid);
 }

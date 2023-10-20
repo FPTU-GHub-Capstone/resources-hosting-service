@@ -34,7 +34,7 @@ public class AssetTypeServices : IAssetTypeServices
         await CheckForDuplicateAssetType(assetType);
         await _assetTypeRepo.CreateAsync(assetType);
     }
-    public async Task Update(Guid assetTypeId, AssetTypeEntity assetType)
+    public async Task Update(AssetTypeEntity assetType)
     {
         await CheckForDuplicateAssetType(assetType);
         await _assetTypeRepo.UpdateAsync(assetType);

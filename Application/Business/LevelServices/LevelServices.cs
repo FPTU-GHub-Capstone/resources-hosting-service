@@ -38,7 +38,7 @@ public class LevelServices : ILevelServices
         await CheckForDuplicateLevel(level);
         await _levelRepo.CreateAsync(level);
     }
-    public async Task Update(Guid levelId, LevelEntity level) {
+    public async Task Update(LevelEntity level) {
         await CheckForDuplicateLevel(level);
         await _levelRepo.UpdateAsync(level);
     }
