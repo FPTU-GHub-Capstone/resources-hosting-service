@@ -1,4 +1,5 @@
 ﻿using DomainLayer.Entities;
+using DomainLayer.Exceptions;
 using RepositoryLayer.Repositories;
 
 namespace ServiceLayer.Business;
@@ -26,15 +27,28 @@ public class WalletServices : IWalletServices
     {
         return await _walletRepo.WhereAsync(w => w.CharacterId.Equals(id));
     }
-    public async Task<ICollection<WalletEntity>> GetByPaymentId(Guid id)
-    {
-        return await _walletRepo.WhereAsync(w => w.PaymentId.Equals(id));
-    }
     public async Task<int> Count()
     {
         return await _walletRepo.CountAsync();
     }
-    public async Task Create(WalletEntity wallet) { }
-    public async Task Update(Guid walletId, WalletEntity wallet) { }
-    public async Task Delete(Guid walletId) { }
+    public async Task Create(WalletEntity wallet) {
+        await CheckDuplicateWallet(wallet);
+        await _walletRepo.CreateAsync(wallet);
+    }
+    public async Task Update(WalletEntity wallet) {
+        await CheckDuplicateWallet(wallet);
+        await _walletRepo.UpdateAsync(wallet);
+    }
+    public async Task Delete(Guid walletId) {
+        await _walletRepo.DeleteSoftAsync(walletId);
+    }
+    public async Task CheckDuplicateWallet(WalletEntity wallet)
+    {
+        var checkWallet = await _walletRepo.FirstOrDefaultAsync(
+            w => w.CharacterId.Equals(wallet.CharacterId) && w.WalletCategoryId.Equals(wallet.WalletCategoryId));
+        if (checkWallet is not null && (checkWallet.Id == Guid.Empty || checkWallet.Id != wallet.Id))
+        {
+            throw new NotFoundException("The wallet's information has already exist.");
+        }
+    }
 }

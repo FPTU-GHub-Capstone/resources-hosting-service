@@ -17,5 +17,6 @@ public class PaymentEntity : BaseEntity
     public Guid UserId { get; set; }
     public UserEntity User { get; set; }
     //1 Wallet - 1 Payment
+    public Guid WalletId { get; set; }
     public WalletEntity Wallet { get; set; }
 }

@@ -1,14 +1,17 @@
 ﻿using DomainLayer.Entities;
+using DomainLayer.Exceptions;
 using RepositoryLayer.Repositories;
 
 namespace ServiceLayer.Business;
 
 public class LevelProgressServices : ILevelProgressServices
 {
-    public readonly IGenericRepository<LevelProgressEntity> _levelProgressRepo;
-    public LevelProgressServices(IGenericRepository<LevelProgressEntity> levelProgressRepo)
+    private readonly IGenericRepository<LevelProgressEntity> _levelProgressRepo;
+    private readonly IGenericRepository<LevelEntity> _levelRepo;
+    public LevelProgressServices(IGenericRepository<LevelProgressEntity> levelProgressRepo, IGenericRepository<LevelEntity> levelRepo)
     {
         _levelProgressRepo = levelProgressRepo;
+        _levelRepo = levelRepo;
     }
     public async Task<ICollection<LevelProgressEntity>> List()
     {
@@ -30,7 +33,33 @@ public class LevelProgressServices : ILevelProgressServices
     {
         return await _levelProgressRepo.CountAsync();
     }
-    public async Task Create(LevelProgressEntity levelProgress) { }
-    public async Task Update(Guid levelProgressId, LevelProgressEntity levelProgress) { }
-    public async Task Delete(Guid levelProgressId) { }
+    public async Task Create(LevelProgressEntity levelProgress) {
+        await CheckDuplicateLevelProgress(levelProgress);
+        await CheckLevelProgressExpPoint(levelProgress);
+        await _levelProgressRepo.CreateAsync(levelProgress);
+    }
+    public async Task Update(LevelProgressEntity levelProgress) {
+        await CheckLevelProgressExpPoint(levelProgress);
+        await _levelProgressRepo.UpdateAsync(levelProgress);
+    }
+    public async Task Delete(Guid levelProgressId) {
+        await _levelProgressRepo.DeleteSoftAsync(levelProgressId);
+    }
+    public async Task CheckDuplicateLevelProgress(LevelProgressEntity levelProg)
+    {
+        var checkLevelProg = await _levelProgressRepo.FirstOrDefaultAsync(
+            lP => lP.CharacterId == levelProg.CharacterId && lP.LevelId == levelProg.LevelId);
+        if (checkLevelProg is not null && (checkLevelProg.Id == Guid.Empty || checkLevelProg.Id != levelProg.Id))
+        {
+            throw new NotFoundException("The level progress's information has already exist.");
+        }
+    }
+    public async Task CheckLevelProgressExpPoint(LevelProgressEntity levelProg)
+    {
+        var level = await _levelRepo.FoundOrThrowAsync(levelProg.LevelId);
+        if (levelProg.ExpPoint > level.LevelUpPoint)
+        {
+            throw new BadRequestException("Exp point in level progress cannot exceed level up point in level");
+        }
+    }
 }

@@ -9,6 +9,6 @@ public interface ILevelProgressServices
     Task<ICollection<LevelProgressEntity>> GetByLevelId(Guid id);
     Task<int> Count();
     Task Create(LevelProgressEntity levelProgress);
-    Task Update(Guid levelProgressId, LevelProgressEntity levelProgress);
+    Task Update(LevelProgressEntity levelProgress);
     Task Delete(Guid levelProgressId);
 }
