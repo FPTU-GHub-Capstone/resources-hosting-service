@@ -5,7 +5,7 @@ namespace DomainLayer.Entities;
 [Table("LevelProgress")]
 public class LevelProgressEntity : BaseEntity
 {
-    public DateTime LevelUpDate { get; set; }
+    public DateTime LevelUpDate { get; set; } = DateTime.Now;
     public int ExpPoint { get; set; }
     public string Name { get; set; }
     //1 Character - M Level Progress

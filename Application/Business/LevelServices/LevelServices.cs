@@ -11,7 +11,6 @@ public class LevelServices : ILevelServices
     {
         _levelRepo = levelRepo;
     }
-    //Level
     public async Task<ICollection<LevelEntity>> List()
     {
         return await _levelRepo.ListAsync();

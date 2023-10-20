@@ -1,4 +1,5 @@
 ﻿using DomainLayer.Entities;
+using DomainLayer.Exceptions;
 using RepositoryLayer.Repositories;
 
 namespace ServiceLayer.Business;
@@ -33,14 +34,25 @@ public class CharacterAssetServices : ICharacterAssetServices
     }
     public async Task Create(CharacterAssetEntity characterAsset)
     {
-
+        await CheckDuplicateCharacterAsset(characterAsset);
+        await _characterAssetRepo.CreateAsync(characterAsset);
     }
-    public async Task Update(Guid characterAssetId, CharacterAssetEntity characterAsset)
+    public async Task Update(CharacterAssetEntity characterAsset)
     {
-
+        await _characterAssetRepo.UpdateAsync(characterAsset);
     }
     public async Task Delete(Guid characterAssetId)
     {
+        await _characterAssetRepo.DeleteSoftAsync(characterAssetId);
+    }
 
+    public async Task CheckDuplicateCharacterAsset(CharacterAssetEntity charAss)
+    {
+        var checkCharAss = await _characterAssetRepo.FirstOrDefaultAsync(
+            cA => cA.AssetsId.Equals(charAss.AssetsId) && cA.CharacterId.Equals(charAss.CharacterId));
+        if(checkCharAss is not null && (charAss.Id == Guid.Empty || checkCharAss.Id != charAss.Id))
+        {
+                throw new NotFoundException("The character asset's information has already exist.");
+        }
     }
 }

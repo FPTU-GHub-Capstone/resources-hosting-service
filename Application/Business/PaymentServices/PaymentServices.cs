@@ -27,6 +27,10 @@ public class PaymentServices : IPaymentServices
     {
         return await _paymentRepo.WhereAsync(c => c.UserId == id);
     }
+    public async Task<ICollection<PaymentEntity>> GetByWalletId(Guid id)
+    {
+        return await _paymentRepo.WhereAsync(c => c.WalletId == id);
+    }
     public async Task<int> Count()
     {
         return await _paymentRepo.CountAsync();

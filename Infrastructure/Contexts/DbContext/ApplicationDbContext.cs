@@ -12,7 +12,6 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(EntityTypeConfiguration).Assembly);
         foreach (var entityType in modelBuilder.Model.GetEntityTypes())
         {
-            //other automated configurations left out
             if (typeof(BaseEntity).IsAssignableFrom(entityType.ClrType))
             {
                 entityType.AddSoftDeleteQueryFilter();

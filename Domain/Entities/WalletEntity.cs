@@ -14,7 +14,6 @@ public class WalletEntity : BaseEntity
     public Guid CharacterId { get; set; }
     public CharacterEntity Character { get; set; }
     // 1 Payment - 1 Wallet
-    public Guid PaymentId { get; set; }
     public PaymentEntity Payment { get; set; }
 
 }

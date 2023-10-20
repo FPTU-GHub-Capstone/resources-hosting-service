@@ -119,12 +119,6 @@ public class EntityTypeConfiguration :
     //Payment Entity
     public void Configure(EntityTypeBuilder<PaymentEntity> builder)
     {
-        //1 Payment - 1 Wallet
-        builder
-            .HasOne(l => l.Wallet)
-            .WithOne(pId => pId.Payment)
-            .HasForeignKey<WalletEntity>(id => id.PaymentId)
-            .OnDelete(DeleteBehavior.NoAction);
         //1 User - M Payment
         builder
             .HasOne(u => u.User)
@@ -150,6 +144,12 @@ public class EntityTypeConfiguration :
     //Wallet Entity
     public void Configure(EntityTypeBuilder<WalletEntity> builder)
     {
+        //1 Payment - 1 Wallet
+        builder
+            .HasOne(l => l.Payment)
+            .WithOne(pId => pId.Wallet)
+            .HasForeignKey<PaymentEntity>(id => id.WalletId)
+            .OnDelete(DeleteBehavior.NoAction);
         // 1 Wallet Category - M Wallet
         builder
             .HasOne(wc => wc.WalletCategory)

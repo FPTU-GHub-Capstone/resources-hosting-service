@@ -7,6 +7,7 @@ public interface IPaymentServices
     Task<PaymentEntity> GetById(Guid paymentId);
     Task<ICollection<PaymentEntity>> GetByCharacterId(Guid id);
     Task<ICollection<PaymentEntity>> GetByUserId(Guid id);
+    Task<ICollection<PaymentEntity>> GetByWalletId(Guid id);
     Task<int> Count();
     Task Create(PaymentEntity entity);
     Task Update(Guid paymentId, PaymentEntity entity);
