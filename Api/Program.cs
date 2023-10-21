@@ -15,7 +15,7 @@ var configurationManager = builder.Configuration;
 {
     var configuration = configurationManager.GetSection(nameof(AppSettings));
     services.Configure<AppSettings>(configuration);
-    builder.UseSerilog();
+    builder.UseSerilog(configuration);
     services.AddDbServices();
     services.AddAppServices();
     services.AddAutoMapper(Assembly.GetExecutingAssembly());

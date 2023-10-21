@@ -1,12 +1,12 @@
 ﻿using AutoWrapper;
 using DomainLayer.Constants;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyModel;
 using Microsoft.Extensions.Options;
 using RepositoryLayer.Contexts;
 using RepositoryLayer.Repositories;
 using Serilog;
 using Serilog.Events;
-using Serilog.Formatting.Compact;
 using Serilog.Settings.Configuration;
 using ServiceLayer.Business;
 using ServiceLayer.Core.AppConfig;
@@ -66,12 +66,10 @@ namespace WebApiLayer.Configurations
             return app;
         }
 
-        public static WebApplicationBuilder UseSerilog(this WebApplicationBuilder builder) {
-            builder.Host.UseSerilog((cntxt, configuration) =>
+        public static WebApplicationBuilder UseSerilog(this WebApplicationBuilder builder, IConfiguration configuration) {
+            builder.Host.UseSerilog((cntxt, loggerConfiguration) =>
             {
-                var options = new ConfigurationReaderOptions { SectionName = nameof(AppSettings) };
-                Console.WriteLine(cntxt.Configuration);
-                configuration.ReadFrom.Configuration(cntxt.Configuration, options);
+                loggerConfiguration.ReadFrom.Configuration(configuration);
             });
             return builder;
         }
@@ -80,8 +78,7 @@ namespace WebApiLayer.Configurations
         {
             app.UseSerilogRequestLogging(options =>
             {
-                options.MessageTemplate = "Handled {RequestPath}";
-                options.GetLevel = (httpContext, elapsed, ex) => LogEventLevel.Debug;
+                options.GetLevel = (httpContext, elapsed, ex) => LogEventLevel.Information;
                 options.EnrichDiagnosticContext = (diagnosticContext, httpContext) =>
                 {
                     diagnosticContext.Set("RequestHost", httpContext.Request.Host.Value);
