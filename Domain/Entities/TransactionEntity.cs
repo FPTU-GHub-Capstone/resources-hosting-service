@@ -6,7 +6,7 @@ namespace DomainLayer.Entities;
 public class TransactionEntity : BaseEntity
 {
     public string Name { get; set; }
-    public int Value { get; set; }
+    public float Value { get; set; }
     //1 Wallet - M Transaction
     public Guid WalletId { get; set; }
     public WalletEntity Wallet { get; set; }
