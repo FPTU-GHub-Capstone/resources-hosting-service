@@ -1,6 +1,6 @@
 using System.Reflection;
-using Microsoft.AspNetCore.Mvc;
-using ServiceLayer.AppConfig;
+using Serilog;
+using ServiceLayer.Core.AppConfig;
 using WebApiLayer.Configurations;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,11 +10,12 @@ services.AddControllers();
 services.AddEndpointsApiExplorer();
 services.AddSwaggerGen();
 
-var configuration = builder.Configuration;
+var configurationManager = builder.Configuration;
 #region Add configurations to Services
 {
-    services.Configure<AppSettings>(configuration.GetSection(nameof(AppSettings)));
-    services.AddValidationServices();
+    var configuration = configurationManager.GetSection(nameof(AppSettings));
+    services.Configure<AppSettings>(configuration);
+    builder.UseSerilog(configuration);
     services.AddDbServices();
     services.AddAppServices();
     services.AddAutoMapper(Assembly.GetExecutingAssembly());
@@ -27,9 +28,9 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-    await app.Services.ApplyMigrations();
 }
 
+app.UseLoggingInterceptor();
 app.UseAutoWrapper();
 app.UseHttpsRedirection();
 app.UseAuthorization();

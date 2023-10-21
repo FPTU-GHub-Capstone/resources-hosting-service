@@ -28,9 +28,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="Domain">
-      <HintPath>..\Domain\bin\Debug\net6.0\Domain.dll</HintPath>
-    </Reference>
+    <Content Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>
