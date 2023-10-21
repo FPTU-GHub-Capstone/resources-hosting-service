@@ -10,11 +10,11 @@ services.AddControllers();
 services.AddEndpointsApiExplorer();
 services.AddSwaggerGen();
 
-var configuration = builder.Configuration;
+var configurationManager = builder.Configuration;
 #region Add configurations to Services
 {
-    services.Configure<AppSettings>(configuration.GetSection(nameof(AppSettings)));
-    builder.UseSerilog();
+    var configuration = configurationManager.GetSection(nameof(AppSettings));
+    services.Configure<AppSettings>(configuration);
     builder.UseSerilog();
     services.AddDbServices();
     services.AddAppServices();

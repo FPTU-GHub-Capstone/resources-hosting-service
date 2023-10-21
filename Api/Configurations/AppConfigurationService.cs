@@ -70,9 +70,8 @@ namespace WebApiLayer.Configurations
             builder.Host.UseSerilog((cntxt, configuration) =>
             {
                 var options = new ConfigurationReaderOptions { SectionName = nameof(AppSettings) };
-                configuration
-                    .ReadFrom.Configuration(cntxt.Configuration, options)
-                    .WriteTo.Console();
+                Console.WriteLine(cntxt.Configuration);
+                configuration.ReadFrom.Configuration(cntxt.Configuration, options);
             });
             return builder;
         }
