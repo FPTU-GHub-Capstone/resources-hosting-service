@@ -10,7 +10,7 @@ public interface IAssetAttributeServices
     Task<ICollection<AssetAttributeEntity>> GetByAttGroupId(Guid attributeGroupId);
     Task<int> Count();
     Task Create(AssetAttributeEntity assetAttribute);
-    Task Update(Guid assetAttributeId, AssetAttributeEntity assetAttribute);
+    Task Update(AssetAttributeEntity assetAttribute);
     Task Delete(Guid assetAttributeId);
 
 }

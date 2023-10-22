@@ -1,4 +1,5 @@
 ﻿using DomainLayer.Entities;
+using DomainLayer.Exceptions;
 using RepositoryLayer.Repositories;
 
 namespace ServiceLayer.Business;
@@ -9,7 +10,7 @@ public class AssetAttributeServices : IAssetAttributeServices
 
     public AssetAttributeServices(IGenericRepository<AssetAttributeEntity> assetAttributeRepo)
     {
-        assetAttributeRepo = _assetAttributeRepo;
+        _assetAttributeRepo = assetAttributeRepo;
     }
 
     public async Task<ICollection<AssetAttributeEntity>> List()
@@ -34,14 +35,24 @@ public class AssetAttributeServices : IAssetAttributeServices
     }
     public async Task Create(AssetAttributeEntity assetAttribute)
     {
-
+        await CheckForDuplicateAssetAttribute(assetAttribute);
+        await _assetAttributeRepo.CreateAsync(assetAttribute);
     }
-    public async Task Update(Guid assetAttributeId, AssetAttributeEntity assetAttribute)
+    public async Task Update(AssetAttributeEntity assetAttribute)
     {
-
+        await _assetAttributeRepo.UpdateAsync(assetAttribute);
     }
     public async Task Delete(Guid assetAttributeId)
     {
-
+        await _assetAttributeRepo.DeleteSoftAsync(assetAttributeId);
+    }
+    public async Task CheckForDuplicateAssetAttribute(AssetAttributeEntity assAtt)
+    {
+        var checkAssAtt = await _assetAttributeRepo.FirstOrDefaultAsync(
+            l => l.AssetId == assAtt.AssetId && l.AttributeGroupId == assAtt.AttributeGroupId);
+        if (checkAssAtt is not null && (assAtt.Id == Guid.Empty || checkAssAtt.Id != assAtt.Id))
+        {
+            throw new BadRequestException("The asset attribute already exist");
+        }
     }
 }
