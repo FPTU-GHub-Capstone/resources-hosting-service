@@ -26,7 +26,13 @@ public class TransactionServices : ITransactionServices
     {
         return await _transactionRepo.CountAsync();
     }
-    public async Task Create(TransactionEntity transaction) { }
-    public async Task Update(Guid transactionId, TransactionEntity transaction) { }
-    public async Task Delete(Guid transactionId) { }
+    public async Task Create(TransactionEntity transaction) {
+        await _transactionRepo.CreateAsync(transaction);
+    }
+    public async Task Update(TransactionEntity transaction) {
+        await _transactionRepo.UpdateAsync(transaction);
+    }
+    public async Task Delete(Guid transactionId) {
+        await _transactionRepo.DeleteSoftAsync(transactionId);
+    }
 }

@@ -35,7 +35,13 @@ public class PaymentServices : IPaymentServices
     {
         return await _paymentRepo.CountAsync();
     }
-    public async Task Create(PaymentEntity entity) { }
-    public async Task Update(Guid paymentId, PaymentEntity entity) { }
-    public async Task Delete(Guid paymentId) { }
+    public async Task Create(PaymentEntity entity) {
+        await _paymentRepo.CreateAsync(entity);
+    }
+    public async Task Update(PaymentEntity entity) {
+        await _paymentRepo.UpdateAsync(entity);
+    }
+    public async Task Delete(Guid paymentId) {
+        await _paymentRepo.DeleteSoftAsync(paymentId);
+    }
 }

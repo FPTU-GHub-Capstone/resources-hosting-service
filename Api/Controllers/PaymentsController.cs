@@ -1,35 +1,57 @@
 ﻿using DomainLayer.Constants;
+using DomainLayer.Entities;
 using Microsoft.AspNetCore.Mvc;
+using RepositoryLayer.Repositories;
+using ServiceLayer.Business;
+using WebApiLayer.UserFeatures.Requests;
 
 namespace WebApiLayer.Controllers;
 
 [Route(Constants.HTTP.API_VERSION + "/gms/payments")]
 public class PaymentsController : BaseController
 {
-    [HttpGet]
-    public IEnumerable<string> Get()
+    private readonly IPaymentServices _paymentServices;
+    private readonly IGenericRepository<PaymentEntity> _paymentRepo;
+    public PaymentsController(IPaymentServices paymentServices, IGenericRepository<PaymentEntity> paymentRepo)
     {
-        return new string[] { "value1", "value2" };
+        _paymentServices = paymentServices;
+        _paymentRepo = paymentRepo;
+    }
+    [HttpGet]
+    public async Task<IActionResult> GetPayments()
+    {
+        return Ok(await _paymentServices.List());
     }
 
     [HttpGet("{id}")]
-    public string Get(int id)
+    public async Task<IActionResult> GetPayment(Guid id)
     {
-        return "value";
+        return Ok(await _paymentServices.List());
     }
 
     [HttpPost]
-    public void Post([FromBody] string value)
+    public async Task<IActionResult> CreatePayment([FromBody] CreatePaymentRequest payment)
     {
+        var newPayment = new PaymentEntity();
+        Mapper.Map(payment, newPayment);
+        await _paymentServices.Create(newPayment);
+        return CreatedAtAction(nameof(GetPayment),new {id = newPayment.Id}, newPayment);
     }
 
     [HttpPut("{id}")]
-    public void Put(int id, [FromBody] string value)
+    public async Task<IActionResult> UpdatePayment(Guid id, [FromBody] UpdatePaymentRequest payment)
     {
+        var updatePayment = await _paymentRepo.FoundOrThrowAsync(id,"Payment not exist");
+        Mapper.Map(payment, updatePayment);
+        await _paymentServices.Update(updatePayment);
+        return Ok(updatePayment);
     }
 
     [HttpDelete("{id}")]
-    public void Delete(int id)
+    public async Task<IActionResult> DeletePayment(Guid id)
     {
+        await _paymentRepo.FoundOrThrowAsync(id, "Payment not exist");
+        await _paymentServices.Delete(id);
+        return NoContent();
     }
 }

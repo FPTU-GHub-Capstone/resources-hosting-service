@@ -8,6 +8,6 @@ public interface ITransactionServices
     Task<ICollection<TransactionEntity>> GetByWalletId(Guid walletId);
     Task<int> Count();
     Task Create(TransactionEntity transaction);
-    Task Update(Guid transactionId, TransactionEntity transaction);
+    Task Update(TransactionEntity transaction);
     Task Delete(Guid transactionId);
 }

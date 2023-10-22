@@ -10,6 +10,6 @@ public interface IActivityServices
     Task<ICollection<ActivityEntity>> SearchByTypeId(Guid activityTypeId);
     Task<int> Count();
     Task Create(ActivityEntity activity);
-    Task Update(Guid activityId, ActivityEntity activity);
+    Task Update(ActivityEntity activity);
     Task Delete(Guid activityId);
 }
