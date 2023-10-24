@@ -10,9 +10,9 @@ services.AddControllers();
 services.AddEndpointsApiExplorer();
 services.AddSwaggerGen();
 
-var configurationManager = builder.Configuration;
 #region Add configurations to Services
 {
+    var configurationManager = builder.Configuration;
     var configuration = configurationManager.GetSection(nameof(AppSettings));
     services.Configure<AppSettings>(configuration);
     builder.UseSerilog(configuration);
@@ -28,6 +28,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    await app.Services.ApplyMigrations();
 }
 
 app.UseLoggingInterceptor();
