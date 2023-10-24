@@ -1,4 +1,5 @@
-﻿using DomainLayer.Entities;
+﻿using DomainLayer.Constants;
+using DomainLayer.Entities;
 using DomainLayer.Exceptions;
 using RepositoryLayer.Repositories;
 
@@ -51,7 +52,7 @@ public class AssetTypeServices : IAssetTypeServices
         {
             if(assetType.Id == Guid.Empty || checkAssetType.Id != assetType.Id)
             {
-                throw new BadRequestException("The asset type's information has already exist.");
+                throw new BadRequestException(Constants.ENTITY.ASSET_TYPE + Constants.ERROR.ALREADY_EXIST_ERROR);
             }
         }
     }

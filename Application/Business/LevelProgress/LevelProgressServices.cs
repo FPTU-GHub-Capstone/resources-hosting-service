@@ -1,4 +1,5 @@
-﻿using DomainLayer.Entities;
+﻿using DomainLayer.Constants;
+using DomainLayer.Entities;
 using DomainLayer.Exceptions;
 using RepositoryLayer.Repositories;
 
@@ -51,7 +52,7 @@ public class LevelProgressServices : ILevelProgressServices
             lP => lP.CharacterId == levelProg.CharacterId && lP.LevelId == levelProg.LevelId);
         if (checkLevelProg is not null && (checkLevelProg.Id == Guid.Empty || checkLevelProg.Id != levelProg.Id))
         {
-            throw new NotFoundException("The level progress's information has already exist.");
+            throw new BadRequestException(Constants.ENTITY.LEVEL_PROGRESS + Constants.ERROR.ALREADY_EXIST_ERROR);
         }
     }
     public async Task CheckLevelProgressExpPoint(LevelProgressEntity levelProg)

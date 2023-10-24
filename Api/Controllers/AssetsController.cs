@@ -12,10 +12,12 @@ public class AssetsController : BaseController
 {
     private readonly IAssetServices _assetServices;
     private readonly IGenericRepository<AssetEntity> _assetRepo;
-    public AssetsController(IAssetServices assetServices, IGenericRepository<AssetEntity> assetRepo)
+    private readonly IGenericRepository<AssetTypeEntity> _assetTypeRepo;
+    public AssetsController(IAssetServices assetServices, IGenericRepository<AssetEntity> assetRepo, IGenericRepository<AssetTypeEntity> assetTypeRepo)
     {
         _assetServices = assetServices;
         _assetRepo = assetRepo;
+        _assetTypeRepo = assetTypeRepo;
     }
 
     [HttpGet]
@@ -33,16 +35,17 @@ public class AssetsController : BaseController
     [HttpPost]
     public async Task<IActionResult> CreateAsset([FromBody] CreateAssetRequest asset)
     {
+        await _assetTypeRepo.FoundOrThrowAsync(asset.AssetTypeId, Constants.ENTITY.ASSET_TYPE + Constants.ERROR.NOT_EXIST_ERROR);
         var newAsset = new AssetEntity();
         Mapper.Map(asset, newAsset);
         await _assetServices.Create(newAsset);
-        return CreatedAtAction("GetAsset", new { id = newAsset.Id }, newAsset);
+        return CreatedAtAction(nameof(GetAsset), new { id = newAsset.Id }, newAsset);
     }
 
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateAsset(Guid id, [FromBody] UpdateAssetRequest asset)
     {
-        var updateAsset = await _assetRepo.FoundOrThrowAsync(id, "Asset not exist.");
+        var updateAsset = await _assetRepo.FoundOrThrowAsync(id, Constants.ENTITY.ASSET + Constants.ERROR.NOT_EXIST_ERROR);
         Mapper.Map(asset, updateAsset);
         await _assetServices.Update(updateAsset);
         return Ok(updateAsset);
@@ -51,7 +54,7 @@ public class AssetsController : BaseController
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteAsset(Guid id)
     {
-        await _assetRepo.FoundOrThrowAsync(id, "Asset not exist.");
+        await _assetRepo.FoundOrThrowAsync(id, Constants.ENTITY.ASSET + Constants.ERROR.NOT_EXIST_ERROR);
         await _assetServices.Delete(id);
         return NoContent();
     }

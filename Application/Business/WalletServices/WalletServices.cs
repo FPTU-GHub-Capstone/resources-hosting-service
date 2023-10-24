@@ -1,4 +1,5 @@
-﻿using DomainLayer.Entities;
+﻿using DomainLayer.Constants;
+using DomainLayer.Entities;
 using DomainLayer.Exceptions;
 using RepositoryLayer.Repositories;
 
@@ -48,7 +49,7 @@ public class WalletServices : IWalletServices
             w => w.CharacterId.Equals(wallet.CharacterId) && w.WalletCategoryId.Equals(wallet.WalletCategoryId));
         if (checkWallet is not null && (checkWallet.Id == Guid.Empty || checkWallet.Id != wallet.Id))
         {
-            throw new NotFoundException("The wallet's information has already exist.");
+            throw new NotFoundException(Constants.ENTITY.WALLET + Constants.ERROR.ALREADY_EXIST_ERROR);
         }
     }
 }

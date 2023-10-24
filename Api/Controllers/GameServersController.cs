@@ -12,10 +12,12 @@ public class GameServersController : BaseController
 {
     private readonly IGameServerServices _gameServerServices;
     private readonly IGenericRepository<GameServerEntity> _gameServerRepo;
-    public GameServersController(IGameServerServices gameServerServices, IGenericRepository<GameServerEntity> gameServerRepo)
+    private readonly IGenericRepository<GameEntity> _gameRepo;
+    public GameServersController(IGameServerServices gameServerServices, IGenericRepository<GameServerEntity> gameServerRepo, IGenericRepository<GameEntity> gameRepo)
     {
         _gameServerServices = gameServerServices;
         _gameServerRepo = gameServerRepo;
+        _gameRepo = gameRepo;
     }
 
     [HttpGet]
@@ -33,16 +35,17 @@ public class GameServersController : BaseController
     [HttpPost]
     public async Task<IActionResult> CreateGameServer([FromBody] CreateGameServerRequest gameServer)
     {
+        await _gameRepo.FoundOrThrowAsync(gameServer.GameId, Constants.ENTITY.GAME + Constants.ERROR.NOT_EXIST_ERROR);
         var newGameServer = new GameServerEntity();
         Mapper.Map(gameServer, newGameServer);
         await _gameServerServices.Create(newGameServer);
-        return CreatedAtAction("GetGameServer", new { id = newGameServer.Id }, newGameServer);
+        return CreatedAtAction(nameof(GetGameServer), new { id = newGameServer.Id }, newGameServer);
     }
 
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateGameServer(Guid id, [FromBody] UpdateGameServerRequest gameServer)
     {
-        var updateGameServer = await _gameServerRepo.FoundOrThrowAsync(id, "Game server not exist.");
+        var updateGameServer = await _gameServerRepo.FoundOrThrowAsync(id, Constants.ENTITY.GAME_SERVER + Constants.ERROR.NOT_EXIST_ERROR);
         Mapper.Map(gameServer, updateGameServer);
         await _gameServerServices.Update(updateGameServer);
         return Ok(updateGameServer);
@@ -51,7 +54,7 @@ public class GameServersController : BaseController
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteGameServer(Guid id)
     {
-        await _gameServerRepo.FoundOrThrowAsync(id, "Game server not exist.");
+        await _gameServerRepo.FoundOrThrowAsync(id, Constants.ENTITY.GAME_SERVER + Constants.ERROR.NOT_EXIST_ERROR);
         await _gameServerServices.Delete(id);
         return NoContent();
     }

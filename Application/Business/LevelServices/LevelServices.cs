@@ -1,4 +1,5 @@
-﻿using DomainLayer.Entities;
+﻿using DomainLayer.Constants;
+using DomainLayer.Entities;
 using DomainLayer.Exceptions;
 using RepositoryLayer.Repositories;
 
@@ -51,7 +52,7 @@ public class LevelServices : ILevelServices
         {
             if(level.Id == Guid.Empty || levelCheck.Id != level.Id)
             {
-                throw new BadRequestException("The user already have a character in this game server");
+                throw new BadRequestException(Constants.ENTITY.LEVEL + Constants.ERROR.ALREADY_EXIST_ERROR);
             }
         }
     }

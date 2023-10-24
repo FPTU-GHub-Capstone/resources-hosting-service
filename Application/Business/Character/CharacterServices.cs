@@ -1,4 +1,5 @@
-﻿using DomainLayer.Entities;
+﻿using DomainLayer.Constants;
+using DomainLayer.Entities;
 using DomainLayer.Exceptions;
 using RepositoryLayer.Repositories;
 
@@ -58,7 +59,7 @@ public class CharacterServices : ICharacterServices
         {
             if(character.Id == Guid.Empty || character.Id != cCheck.Id)
             {
-                throw new BadRequestException("The game already has this level's name");
+                throw new BadRequestException(Constants.ENTITY.CHARACTER + Constants.ERROR.ALREADY_EXIST_ERROR);
             }
         }
     }

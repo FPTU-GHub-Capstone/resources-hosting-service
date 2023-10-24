@@ -13,10 +13,15 @@ public class CharacterAtributesController : BaseController
 {
     private readonly ICharacterAttributeServices _charAttServices;
     private readonly IGenericRepository<CharacterAttributeEntity> _charAttRepo;
-    public CharacterAtributesController(ICharacterAttributeServices charAttServices, IGenericRepository<CharacterAttributeEntity> charAttRepo)
+    private readonly IGenericRepository<CharacterEntity> _charRepo;
+    private readonly IGenericRepository<AttributeGroupEntity> _attGrpRepo;
+    public CharacterAtributesController(ICharacterAttributeServices charAttServices, IGenericRepository<CharacterAttributeEntity> charAttRepo
+        , IGenericRepository<CharacterEntity> charRepo, IGenericRepository<AttributeGroupEntity> attGrpRepo)
     {
         _charAttServices = charAttServices;
         _charAttRepo = charAttRepo;
+        _charRepo = charRepo;
+        _attGrpRepo = attGrpRepo;
     }
 
     [HttpGet]
@@ -36,16 +41,18 @@ public class CharacterAtributesController : BaseController
     [HttpPost]
     public async Task<IActionResult> CreateCharacterAttribute([FromBody] CreateCharacterAttributeRequest charAtt)
     {
+        await _charRepo.FoundOrThrowAsync(charAtt.CharacterId, Constants.ENTITY.CHARACTER + Constants.ERROR.NOT_EXIST_ERROR);
+        await _attGrpRepo.FoundOrThrowAsync(charAtt.AttributeGroupId, Constants.ENTITY.ATTRIBUTE_GROUP + Constants.ERROR.NOT_EXIST_ERROR);
         var newCharAtt = new CharacterAttributeEntity();
         Mapper.Map(charAtt, newCharAtt);
         await _charAttServices.Create(newCharAtt);
-        return CreatedAtAction("GetCharacterAttribute", new { id = newCharAtt.Id }, newCharAtt);
+        return CreatedAtAction(nameof(GetCharacterAttribute), new { id = newCharAtt.Id }, newCharAtt);
     }
 
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateCharacterAttribute(Guid id, [FromBody] UpdateCharacterAttributeRequest charAtt)
     {
-        var newCharAtt = await _charAttRepo.FoundOrThrowAsync(id, "Character Attribute not exist.");
+        var newCharAtt = await _charAttRepo.FoundOrThrowAsync(id, Constants.ENTITY.CHARACTER_ATTRIBUTE + Constants.ERROR.NOT_EXIST_ERROR);
         Mapper.Map(charAtt, newCharAtt);
         await _charAttServices.Update(newCharAtt);
         return Ok(newCharAtt);
@@ -54,7 +61,7 @@ public class CharacterAtributesController : BaseController
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteCharacterAttribute(Guid id)
     {
-        var newCharAtt = await _charAttRepo.FoundOrThrowAsync(id, "Character Attribute not exist.");
+        await _charAttRepo.FoundOrThrowAsync(id, Constants.ENTITY.CHARACTER_ATTRIBUTE + Constants.ERROR.NOT_EXIST_ERROR);
         await _charAttServices.Delete(id);
         return NoContent();
     }

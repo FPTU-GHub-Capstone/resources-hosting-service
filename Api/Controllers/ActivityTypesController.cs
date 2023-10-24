@@ -1,4 +1,5 @@
-﻿using DomainLayer.Constants;
+﻿using AutoWrapper.Filters;
+using DomainLayer.Constants;
 using DomainLayer.Entities;
 using DomainLayer.Exceptions;
 using Microsoft.AspNetCore.Mvc;
@@ -13,10 +14,15 @@ public class ActivityTypesController : BaseController
 {
     private readonly IActivityTypeServices _activityTypeServices;
     private readonly IGenericRepository<ActivityTypeEntity> _activityTypeRepo;
-    public ActivityTypesController(IActivityTypeServices activityTypeServices, IGenericRepository<ActivityTypeEntity> activityTypeRepo)
+    private readonly IGenericRepository<GameEntity> _gameRepo;
+    private readonly IGenericRepository<CharacterEntity> _characterRepo;
+    public ActivityTypesController(IActivityTypeServices activityTypeServices, IGenericRepository<ActivityTypeEntity> activityTypeRepo
+        , IGenericRepository<GameEntity> gameRepo, IGenericRepository<CharacterEntity> characterRepo)
     {
         _activityTypeServices = activityTypeServices;
         _activityTypeRepo = activityTypeRepo;
+        _gameRepo = gameRepo;
+        _characterRepo = characterRepo;
     }
     [HttpGet]
     public async Task<IActionResult> GetActivityTypes()
@@ -33,16 +39,18 @@ public class ActivityTypesController : BaseController
     [HttpPost]
     public async Task<IActionResult> CreateActivityType([FromBody] CreateActivityTypeRequest activityType)
     {
+        await _gameRepo.FoundOrThrowAsync(activityType.GameId, Constants.ENTITY.GAME + Constants.ERROR.NOT_EXIST_ERROR);
+        await _characterRepo.FoundOrThrowAsync(activityType.CharacterId, Constants.ENTITY.CHARACTER + Constants.ERROR.NOT_EXIST_ERROR);
         var newActivityType = new ActivityTypeEntity();
         Mapper.Map(activityType, newActivityType);
         await _activityTypeServices.Create(newActivityType);
-        return CreatedAtAction("GetActivityType", new { id = newActivityType.Id }, newActivityType);
+        return CreatedAtAction(nameof(GetActivityType), new { id = newActivityType.Id }, newActivityType);
     }
 
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateActivityType(Guid id, [FromBody] UpdateActivityTypeRequest activityType)
     {
-        var updateActivityType = await _activityTypeRepo.FoundOrThrowAsync(id, "Activity type not exist.");
+        var updateActivityType = await _activityTypeRepo.FoundOrThrowAsync(id, Constants.ENTITY.ACTIVITY_TYPE + Constants.ERROR.NOT_EXIST_ERROR);
         Mapper.Map(activityType, updateActivityType);
         await _activityTypeServices.Update(updateActivityType);
         return Ok(updateActivityType);
@@ -51,7 +59,7 @@ public class ActivityTypesController : BaseController
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteActivityType(Guid id)
     {
-        await _activityTypeRepo.FoundOrThrowAsync(id, "Activity type not exist.");
+        await _activityTypeRepo.FoundOrThrowAsync(id, Constants.ENTITY.ACTIVITY_TYPE + Constants.ERROR.NOT_EXIST_ERROR);
         await _activityTypeServices.Delete(id);
         return NoContent();
     }
