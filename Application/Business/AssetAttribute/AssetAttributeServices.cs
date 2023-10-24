@@ -1,4 +1,5 @@
-﻿using DomainLayer.Entities;
+﻿using DomainLayer.Constants;
+using DomainLayer.Entities;
 using DomainLayer.Exceptions;
 using RepositoryLayer.Repositories;
 
@@ -52,7 +53,7 @@ public class AssetAttributeServices : IAssetAttributeServices
             l => l.AssetId == assAtt.AssetId && l.AttributeGroupId == assAtt.AttributeGroupId);
         if (checkAssAtt is not null && (assAtt.Id == Guid.Empty || checkAssAtt.Id != assAtt.Id))
         {
-            throw new BadRequestException("The asset attribute already exist");
+            throw new BadRequestException(Constants.ENTITY.ATTRIBUTE_GROUP + Constants.ERROR.ALREADY_EXIST_ERROR);
         }
     }
 }

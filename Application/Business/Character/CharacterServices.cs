@@ -1,4 +1,5 @@
-﻿using DomainLayer.Entities;
+﻿using DomainLayer.Constants;
+using DomainLayer.Entities;
 using DomainLayer.Exceptions;
 using RepositoryLayer.Repositories;
 
@@ -21,8 +22,8 @@ public class CharacterServices : ICharacterServices
         return await _characterRepo.FindByIdAsync(characterId);
     }
     public async Task<ICollection<CharacterEntity>> GetByUserId(Guid id)
-    { 
-        return await _characterRepo.WhereAsync(c=>c.UserId == id);
+    {
+        return await _characterRepo.WhereAsync(c => c.UserId == id);
     }
     public async Task<ICollection<CharacterEntity>> GetByCharacterTypeId(Guid id)
     {
@@ -54,11 +55,11 @@ public class CharacterServices : ICharacterServices
     {
         var cCheck = await _characterRepo.FirstOrDefaultAsync(
             c => c.UserId.Equals(character.UserId) && c.GameServerId.Equals(character.GameServerId));
-        if(cCheck is not null)
+        if (cCheck is not null)
         {
-            if(character.Id == Guid.Empty || character.Id != cCheck.Id)
+            if (character.Id == Guid.Empty || character.Id != cCheck.Id)
             {
-                throw new BadRequestException("The game already has this level's name");
+                throw new BadRequestException(Constants.ENTITY.CHARACTER + Constants.ERROR.ALREADY_EXIST_ERROR);
             }
         }
     }

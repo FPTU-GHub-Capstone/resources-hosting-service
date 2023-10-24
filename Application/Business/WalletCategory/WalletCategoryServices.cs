@@ -1,4 +1,5 @@
-﻿using DomainLayer.Entities;
+﻿using DomainLayer.Constants;
+using DomainLayer.Entities;
 using DomainLayer.Exceptions;
 using RepositoryLayer.Repositories;
 
@@ -27,15 +28,18 @@ public class WalletCategoryServices : IWalletCategoryServices
     {
         return await _walletCategoryRepo.CountAsync();
     }
-    public async Task Create(WalletCategoryEntity walletCategory) {
+    public async Task Create(WalletCategoryEntity walletCategory)
+    {
         await CheckForDuplicateWalletCategory(walletCategory);
         await _walletCategoryRepo.CreateAsync(walletCategory);
     }
-    public async Task Update(WalletCategoryEntity walletCategory) {
+    public async Task Update(WalletCategoryEntity walletCategory)
+    {
         await CheckForDuplicateWalletCategory(walletCategory);
         await _walletCategoryRepo.UpdateAsync(walletCategory);
     }
-    public async Task Delete(Guid categoryId) {
+    public async Task Delete(Guid categoryId)
+    {
         await _walletCategoryRepo.DeleteSoftAsync(categoryId);
     }
 
@@ -46,7 +50,7 @@ public class WalletCategoryServices : IWalletCategoryServices
         {
             if (checkWalCat.Id == Guid.Empty || checkWalCat.Id != walletCategory.Id)
             {
-                throw new BadRequestException("Wallet category is already exist.");
+                throw new BadRequestException(Constants.ENTITY.WALLET_CATEGORY + Constants.ERROR.ALREADY_EXIST_ERROR);
             }
         }
     }

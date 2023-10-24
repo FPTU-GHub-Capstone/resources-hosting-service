@@ -1,4 +1,5 @@
-﻿using DomainLayer.Entities;
+﻿using DomainLayer.Constants;
+using DomainLayer.Entities;
 using DomainLayer.Exceptions;
 using RepositoryLayer.Repositories;
 
@@ -33,16 +34,19 @@ public class LevelProgressServices : ILevelProgressServices
     {
         return await _levelProgressRepo.CountAsync();
     }
-    public async Task Create(LevelProgressEntity levelProgress) {
+    public async Task Create(LevelProgressEntity levelProgress)
+    {
         await CheckDuplicateLevelProgress(levelProgress);
         await CheckLevelProgressExpPoint(levelProgress);
         await _levelProgressRepo.CreateAsync(levelProgress);
     }
-    public async Task Update(LevelProgressEntity levelProgress) {
+    public async Task Update(LevelProgressEntity levelProgress)
+    {
         await CheckLevelProgressExpPoint(levelProgress);
         await _levelProgressRepo.UpdateAsync(levelProgress);
     }
-    public async Task Delete(Guid levelProgressId) {
+    public async Task Delete(Guid levelProgressId)
+    {
         await _levelProgressRepo.DeleteSoftAsync(levelProgressId);
     }
     public async Task CheckDuplicateLevelProgress(LevelProgressEntity levelProg)
@@ -51,7 +55,7 @@ public class LevelProgressServices : ILevelProgressServices
             lP => lP.CharacterId == levelProg.CharacterId && lP.LevelId == levelProg.LevelId);
         if (checkLevelProg is not null && (checkLevelProg.Id == Guid.Empty || checkLevelProg.Id != levelProg.Id))
         {
-            throw new NotFoundException("The level progress's information has already exist.");
+            throw new BadRequestException(Constants.ENTITY.LEVEL_PROGRESS + Constants.ERROR.ALREADY_EXIST_ERROR);
         }
     }
     public async Task CheckLevelProgressExpPoint(LevelProgressEntity levelProg)

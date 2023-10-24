@@ -1,4 +1,5 @@
-﻿using DomainLayer.Entities;
+﻿using DomainLayer.Constants;
+using DomainLayer.Entities;
 using DomainLayer.Exceptions;
 using RepositoryLayer.Repositories;
 
@@ -37,11 +38,13 @@ public class LevelServices : ILevelServices
         await CheckForDuplicateLevel(level);
         await _levelRepo.CreateAsync(level);
     }
-    public async Task Update(LevelEntity level) {
+    public async Task Update(LevelEntity level)
+    {
         await CheckForDuplicateLevel(level);
         await _levelRepo.UpdateAsync(level);
     }
-    public async Task Delete(Guid levelId) {
+    public async Task Delete(Guid levelId)
+    {
         await _levelRepo.DeleteSoftAsync(levelId);
     }
     public async Task CheckForDuplicateLevel(LevelEntity level)
@@ -49,9 +52,9 @@ public class LevelServices : ILevelServices
         var levelCheck = await _levelRepo.FirstOrDefaultAsync(l => l.Name == level.Name && l.GameId == level.GameId);
         if (levelCheck is not null)
         {
-            if(level.Id == Guid.Empty || levelCheck.Id != level.Id)
+            if (level.Id == Guid.Empty || levelCheck.Id != level.Id)
             {
-                throw new BadRequestException("The user already have a character in this game server");
+                throw new BadRequestException(Constants.ENTITY.LEVEL + Constants.ERROR.ALREADY_EXIST_ERROR);
             }
         }
     }

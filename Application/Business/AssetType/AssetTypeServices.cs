@@ -1,4 +1,5 @@
-﻿using DomainLayer.Entities;
+﻿using DomainLayer.Constants;
+using DomainLayer.Entities;
 using DomainLayer.Exceptions;
 using RepositoryLayer.Repositories;
 
@@ -47,11 +48,11 @@ public class AssetTypeServices : IAssetTypeServices
     {
         var checkAssetType = await _assetTypeRepo.FirstOrDefaultAsync(
             aT => aT.Name.Equals(assetType.Name) && aT.GameId.Equals(assetType.GameId));
-        if(checkAssetType is not null)
+        if (checkAssetType is not null)
         {
-            if(assetType.Id == Guid.Empty || checkAssetType.Id != assetType.Id)
+            if (assetType.Id == Guid.Empty || checkAssetType.Id != assetType.Id)
             {
-                throw new BadRequestException("The asset type's information has already exist.");
+                throw new BadRequestException(Constants.ENTITY.ASSET_TYPE + Constants.ERROR.ALREADY_EXIST_ERROR);
             }
         }
     }

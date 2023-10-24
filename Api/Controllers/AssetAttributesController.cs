@@ -12,10 +12,15 @@ public class AssetAttributesController : BaseController
 {
     private readonly IAssetAttributeServices _assetAttServices;
     private readonly IGenericRepository<AssetAttributeEntity> _assetAttRepo;
-    public AssetAttributesController(IAssetAttributeServices assetAttServices, IGenericRepository<AssetAttributeEntity> assetAttRepo)
+    private readonly IGenericRepository<AssetEntity> _assetRepo;
+    private readonly IGenericRepository<AttributeGroupEntity> _attGrpRepo;
+    public AssetAttributesController(IAssetAttributeServices assetAttServices, IGenericRepository<AssetAttributeEntity> assetAttRepo
+        , IGenericRepository<AssetEntity> assetRepo, IGenericRepository<AttributeGroupEntity> attGrpRepo)
     {
         _assetAttServices = assetAttServices;
         _assetAttRepo = assetAttRepo;
+        _assetRepo = assetRepo;
+        _attGrpRepo = attGrpRepo;
     }
 
     [HttpGet]
@@ -33,6 +38,8 @@ public class AssetAttributesController : BaseController
     [HttpPost]
     public async Task<IActionResult> CreateAssetAttribute([FromBody] CreateAssetAttributeRequest assetAtt)
     {
+        await _assetRepo.FoundOrThrowAsync(assetAtt.AssetId, Constants.ENTITY.ASSET + Constants.ERROR.NOT_EXIST_ERROR);
+        await _attGrpRepo.FoundOrThrowAsync(assetAtt.AttributeGroupId, Constants.ENTITY.ATTRIBUTE_GROUP + Constants.ERROR.NOT_EXIST_ERROR);
         var newAssAtt = new AssetAttributeEntity();
         Mapper.Map(assetAtt, newAssAtt);
         await _assetAttServices.Create(newAssAtt);
@@ -42,7 +49,7 @@ public class AssetAttributesController : BaseController
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateAssetAttribute(Guid id, [FromBody] UpdateAssetAttributeRequest assetAtt)
     {
-        var updateAssAtt = await _assetAttRepo.FoundOrThrowAsync(id, "Asset attribute not exist.");
+        var updateAssAtt = await _assetAttRepo.FoundOrThrowAsync(id, Constants.ENTITY.ASSET_ATTRIBUTE + Constants.ERROR.NOT_EXIST_ERROR);
         Mapper.Map(assetAtt, updateAssAtt);
         await _assetAttServices.Update(updateAssAtt);
         return Ok(updateAssAtt);
@@ -51,7 +58,7 @@ public class AssetAttributesController : BaseController
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteAssetAttribute(Guid id)
     {
-        await _assetAttRepo.FoundOrThrowAsync(id, "Asset attribute not exist.");
+        await _assetAttRepo.FoundOrThrowAsync(id, Constants.ENTITY.ASSET_ATTRIBUTE + Constants.ERROR.NOT_EXIST_ERROR);
         await _assetAttServices.Delete(id);
         return NoContent();
     }
