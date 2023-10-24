@@ -73,7 +73,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
         return entity;
     }
 
-    public virtual async Task<T> FoundOrThrowAsync(Guid id, string message = Constants.ERROR.NOT_FOUND_ERROR, params string[] navigationProperties)
+    public virtual async Task<T> FoundOrThrowAsync(Guid id, string message = Constants.ERROR.NOT_EXIST_ERROR, params string[] navigationProperties)
     {
         var query = ApplyNavigation(navigationProperties);
         T entity = await query.FirstOrDefaultAsync(e => e.Id.Equals(id));

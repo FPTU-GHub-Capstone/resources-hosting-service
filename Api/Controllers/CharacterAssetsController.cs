@@ -12,10 +12,15 @@ public class CharacterAssetsController : BaseController
 {
     private readonly ICharacterAssetServices _characterAssetServices;
     private readonly IGenericRepository<CharacterAssetEntity> _characterAssetRepo;
-    public CharacterAssetsController(ICharacterAssetServices characterAssetServices, IGenericRepository<CharacterAssetEntity> characterAssetRepo)
+    private readonly IGenericRepository<AssetEntity> _assetRepo;
+    private readonly IGenericRepository<CharacterEntity> _characterRepo;
+    public CharacterAssetsController(ICharacterAssetServices characterAssetServices, IGenericRepository<CharacterAssetEntity> characterAssetRepo
+        , IGenericRepository<AssetEntity> assetRepo, IGenericRepository<CharacterEntity> characterRepo)
     {
         _characterAssetServices = characterAssetServices;
         _characterAssetRepo = characterAssetRepo;
+        _assetRepo = assetRepo;
+        _characterRepo = characterRepo;
     }
     [HttpGet]
     public async Task<IActionResult> GetCharacterAssets()
@@ -34,16 +39,18 @@ public class CharacterAssetsController : BaseController
     [HttpPost]
     public async Task<IActionResult> CreateCharacterAsset([FromBody] CreateCharacterAssetRequest charAss)
     {
+        await _assetRepo.FoundOrThrowAsync(charAss.AssetsId, Constants.ENTITY.ASSET + Constants.ERROR.NOT_EXIST_ERROR);
+        await _characterRepo.FoundOrThrowAsync(charAss.CharacterId, Constants.ENTITY.CHARACTER + Constants.ERROR.NOT_EXIST_ERROR);
         var newCharAss = new CharacterAssetEntity();
         Mapper.Map(charAss, newCharAss);
         await _characterAssetServices.Create(newCharAss);
-        return CreatedAtAction("GetCharacterAsset", new {id = newCharAss.Id}, newCharAss);
+        return CreatedAtAction(nameof(GetCharacterAsset), new { id = newCharAss.Id }, newCharAss);
     }
 
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateCharacterAsset(Guid id, [FromBody] UpdateCharacterAssetRequest charAss)
     {
-        var updateCharAss = await _characterAssetRepo.FoundOrThrowAsync(id,"Character Asset not exist");
+        var updateCharAss = await _characterAssetRepo.FoundOrThrowAsync(id, Constants.ENTITY.CHARACTER_ASSET + Constants.ERROR.NOT_EXIST_ERROR);
         Mapper.Map(charAss, updateCharAss);
         await _characterAssetServices.Update(updateCharAss);
         return Ok(updateCharAss);
@@ -52,7 +59,7 @@ public class CharacterAssetsController : BaseController
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteCharacterAsset(Guid id)
     {
-        await _characterAssetRepo.FoundOrThrowAsync(id, "Character Asset not exist");
+        await _characterAssetRepo.FoundOrThrowAsync(id, Constants.ENTITY.CHARACTER_ASSET + Constants.ERROR.NOT_EXIST_ERROR);
         await _characterAssetServices.Delete(id);
         return NoContent();
     }

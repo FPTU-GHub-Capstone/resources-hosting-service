@@ -43,7 +43,7 @@ public class UsersController : BaseController
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateUser(Guid id, [FromBody] UpdateUserRequest user)
     {
-        var updateUser = await _userRepo.FoundOrThrowAsync(id, "User not exist.");
+        var updateUser = await _userRepo.FoundOrThrowAsync(id, Constants.ENTITY.USER + Constants.ERROR.NOT_EXIST_ERROR);
         Mapper.Map(user, updateUser);
         await _userServices.Update(updateUser);
         return Ok(updateUser);
@@ -52,7 +52,7 @@ public class UsersController : BaseController
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteUser(Guid id)
     {
-        await _userRepo.FoundOrThrowAsync(id, "User not exist.");
+        await _userRepo.FoundOrThrowAsync(id, Constants.ENTITY.USER + Constants.ERROR.NOT_EXIST_ERROR);
         await _userServices.Delete(id);
         return NoContent();
     }

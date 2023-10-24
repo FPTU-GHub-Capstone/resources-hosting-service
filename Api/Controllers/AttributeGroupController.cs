@@ -35,7 +35,7 @@ public class AttributeGroupController : BaseController
     public async Task<IActionResult> CreateAttributeGroup([FromBody] CreateAttributeGroupRequest attributeGroup)
     {
         var attGrpEnt = new AttributeGroupEntity();
-        Mapper.Map(attributeGroup,attGrpEnt);
+        Mapper.Map(attributeGroup, attGrpEnt);
         await _attributeServices.Create(attGrpEnt);
         return CreatedAtAction(nameof(GetAttributeGroup), new { id = attGrpEnt.Id }, attGrpEnt);
     }
@@ -43,16 +43,16 @@ public class AttributeGroupController : BaseController
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateAttributeGroup(Guid id, [FromBody] UpdateAttributeGroupRequest attributeGroup)
     {
-        var attGrpEnt = await _attributeRepo.FoundOrThrowAsync(id, "Attribute Group not exist.");
+        var attGrpEnt = await _attributeRepo.FoundOrThrowAsync(id, Constants.ENTITY.ATTRIBUTE_GROUP + Constants.ERROR.NOT_EXIST_ERROR);
         Mapper.Map(attributeGroup, attGrpEnt);
         await _attributeServices.Update(attGrpEnt);
         return Ok(attGrpEnt);
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(Guid id)
+    public async Task<IActionResult> DeleteAttributeGroup(Guid id)
     {
-        await _attributeRepo.FoundOrThrowAsync(id, "Attribute Group not exist.");
+        await _attributeRepo.FoundOrThrowAsync(id, Constants.ENTITY.ATTRIBUTE_GROUP + Constants.ERROR.NOT_EXIST_ERROR);
         await _attributeServices.Delete(id);
         return NoContent();
     }

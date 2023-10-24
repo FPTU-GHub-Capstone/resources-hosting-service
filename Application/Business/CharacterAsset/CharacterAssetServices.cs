@@ -1,4 +1,5 @@
-﻿using DomainLayer.Entities;
+﻿using DomainLayer.Constants;
+using DomainLayer.Entities;
 using DomainLayer.Exceptions;
 using RepositoryLayer.Repositories;
 
@@ -50,9 +51,9 @@ public class CharacterAssetServices : ICharacterAssetServices
     {
         var checkCharAss = await _characterAssetRepo.FirstOrDefaultAsync(
             cA => cA.AssetsId.Equals(charAss.AssetsId) && cA.CharacterId.Equals(charAss.CharacterId));
-        if(checkCharAss is not null && (charAss.Id == Guid.Empty || checkCharAss.Id != charAss.Id))
+        if (checkCharAss is not null && (charAss.Id == Guid.Empty || checkCharAss.Id != charAss.Id))
         {
-                throw new NotFoundException("The character asset's information has already exist.");
+            throw new BadRequestException(Constants.ENTITY.CHARACTER_ASSET + Constants.ERROR.ALREADY_EXIST_ERROR);
         }
     }
 }
