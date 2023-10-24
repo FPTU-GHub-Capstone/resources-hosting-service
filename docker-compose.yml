@@ -3,7 +3,7 @@ services:
   ghub-api:    
     container_name: ghub-api
     environment:
-      - AppSettings__ConnectionStrings__DefaultConnection=Server=mssql,1433;Database=GHub;User Id=sa;Password=d@nielng;
+      - AppSettings__ConnectionStrings__DefaultConnection=Server=mssql,1433;Database=GHub;User Id=sa;Password=d@nielng;TrustServerCertificate=true;
     build:      
       context: .
       dockerfile: ./Dockerfile
