@@ -3,7 +3,7 @@ services:
   ghub-api:    
     container_name: ghub-api
     environment:
-      - AppSettings__ConnectionStrings__DefaultConnection=Server=mssql,1433;Database=GHub;User Id=sa;Password=eAx2Prn9mj4zU3ap8WV7ckNK;TrustServerCertificate=true;
+      - AppSettings__ConnectionStrings__DefaultConnection=Server=mssql,1433;Database=GHub;User Id=sa;Password=e@x2Prn9mj4zU3ap8WV7ckNK;
     build:      
       context: .
       dockerfile: ./Dockerfile
@@ -16,7 +16,7 @@ services:
     container_name: mssql
     hostname: mssql 
     environment:
-      SA_PASSWORD: "eAx2Prn9mj4zU3ap8WV7ckNK"
+      SA_PASSWORD: "e@x2Prn9mj4zU3ap8WV7ckNK"
       ACCEPT_EULA: "Y"
     restart: unless-stopped
     volumes:
@@ -25,4 +25,3 @@ services:
 volumes:
   mssql_volume:
     driver: local
-  
