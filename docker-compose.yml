@@ -7,7 +7,7 @@ services:
       dockerfile: ./Dockerfile
     depends_on: [ mssql ]    
     environment:
-      - AppSettings__ConnectionStrings__DefaultConnection=Server=mssql,1433;Database=GHub;User Id=sa;Password=e@zx2Prn9mj4zU3ap8WV7ckNK;
+      - AppSettings__ConnectionStrings__DefaultConnection=Server=mssql,1433;Database=GHub;User Id=sa;Password=e@x2Prn9mj4zU3ap8WV7ckNK;
     ports:
       - "8080:80"
     restart: unless-stopped
