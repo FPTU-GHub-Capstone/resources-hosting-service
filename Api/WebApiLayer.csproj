@@ -19,8 +19,6 @@
   <ItemGroup>
     <Folder Include="Client\" />
     <Folder Include="Extensions\" />
-    <Folder Include="MockData\" />
-    <Folder Include="Services\" />
   </ItemGroup>
 
   <ItemGroup>

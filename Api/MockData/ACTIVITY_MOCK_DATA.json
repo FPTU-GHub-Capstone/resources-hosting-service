@@ -1,0 +1,102 @@
+[
+  {
+    "Status": 3,
+    "Name": "Developer",
+    "id": "1"
+  },
+  {
+    "Status": 97,
+    "Name": "Engineer",
+    "id": "2"
+  },
+  {
+    "Status": 45,
+    "Name": "Designer",
+    "id": "3"
+  },
+  {
+    "Status": 75,
+    "Name": "Agent",
+    "id": "4"
+  },
+  {
+    "Status": 71,
+    "Name": "Designer",
+    "id": "5"
+  },
+  {
+    "Status": 27,
+    "Name": "Manager",
+    "id": "6"
+  },
+  {
+    "Status": 16,
+    "Name": "Manager",
+    "id": "7"
+  },
+  {
+    "Status": 40,
+    "Name": "Liaison",
+    "id": "8"
+  },
+  {
+    "Status": 23,
+    "Name": "Supervisor",
+    "id": "9"
+  },
+  {
+    "Status": 46,
+    "Name": "Supervisor",
+    "id": "10"
+  },
+  {
+    "Status": 70,
+    "Name": "Representative",
+    "id": "11"
+  },
+  {
+    "Status": 38,
+    "Name": "Consultant",
+    "id": "12"
+  },
+  {
+    "Status": 24,
+    "Name": "Supervisor",
+    "id": "13"
+  },
+  {
+    "Status": 35,
+    "Name": "Orchestrator",
+    "id": "14"
+  },
+  {
+    "Status": 63,
+    "Name": "Analyst",
+    "id": "15"
+  },
+  {
+    "Status": 48,
+    "Name": "Orchestrator",
+    "id": "16"
+  },
+  {
+    "Status": 11,
+    "Name": "Assistant",
+    "id": "17"
+  },
+  {
+    "Status": 38,
+    "Name": "Specialist",
+    "id": "18"
+  },
+  {
+    "Status": 51,
+    "Name": "Analyst",
+    "id": "19"
+  },
+  {
+    "Status": 12,
+    "Name": "Technician",
+    "id": "20"
+  }
+]

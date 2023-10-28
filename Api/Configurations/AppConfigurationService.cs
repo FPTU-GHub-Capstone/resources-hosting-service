@@ -95,5 +95,12 @@ namespace WebApiLayer.Configurations
                 scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             await dbContext.Database.MigrateAsync();
         }
+        public static async Task DbInitializer(this IServiceProvider serviceProvider)
+        {
+            using var scope = serviceProvider.CreateScope();
+            await using ApplicationDbContext dbContext =
+                scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            await DatabaseInitializer.InitializeAsync(dbContext);
+        }
     }
 }

@@ -1,0 +1,122 @@
+[
+  {
+    "Name": "dog",
+    "Description": "client-driven",
+    "BaseProperties": "{\"foo\":51014,\"bar\":41773,\"bike\":14337,\"a\":12920,\"b\":64352,\"name\":\"qIa\\\\_CA=g4\",\"prop\":\"P7_0zp[<J.\"}",
+    "id": "1"
+  },
+  {
+    "Name": "snake",
+    "Description": "upward-trending",
+    "BaseProperties": "{\"foo\":\"Z|22.9i$qV\",\"bar\":\"zedONh@2:=\",\"bike\":\"&h^FR)7Cx\\\\\",\"a\":85668,\"b\":37592,\"name\":57677,\"prop\":\"+0+Sclsn+7\"}",
+    "id": "2"
+  },
+  {
+    "Name": "cetacean",
+    "Description": "full-range",
+    "BaseProperties": "{\"foo\":\"sjtnH`f@&d\",\"bar\":97745,\"bike\":\"QLND`gKIg@\",\"a\":50208,\"b\":\"\\\"NA^qUE]e\\\\\",\"name\":29337,\"prop\":76813}",
+    "id": "3"
+  },
+  {
+    "Name": "crocodilia",
+    "Description": "motivating",
+    "BaseProperties": "{\"foo\":59555,\"bar\":\"]Tf-8jlueX\",\"bike\":90458,\"a\":\"B<O(Iq6IHI\",\"b\":\"(8Dt7:ft!f\",\"name\":26917,\"prop\":\"DcT9xUH\\\"PF\"}",
+    "id": "4"
+  },
+  {
+    "Name": "dog",
+    "Description": "multimedia",
+    "BaseProperties": "{\"foo\":\"X^5'b(5_EN\",\"bar\":\"4*62'?Y7T>\",\"bike\":\"-)\\\"|Nl4.f2\",\"a\":\"utK$%|=|/X\",\"b\":56538,\"name\":\"C|v}kiTP$\\\"\",\"prop\":\"gpS:koyo!u\"}",
+    "id": "5"
+  },
+  {
+    "Name": "crocodilia",
+    "Description": "maximized",
+    "BaseProperties": "{\"foo\":15516,\"bar\":\"I*QqKtFA][\",\"bike\":\"On=;bDjuS/\",\"a\":44441,\"b\":\"HPl@W1;lL5\",\"name\":\"'*!#'d`\\\"o\\\"\",\"prop\":16041}",
+    "id": "6"
+  },
+  {
+    "Name": "bird",
+    "Description": "multimedia",
+    "BaseProperties": "{\"foo\":92759,\"bar\":67313,\"bike\":8513,\"a\":\"1v=\\\"!8Fo.A\",\"b\":\"YcD`0Rg+S3\",\"name\":\"[`VI/:I)Tk\",\"prop\":23662}",
+    "id": "7"
+  },
+  {
+    "Name": "horse",
+    "Description": "high-level",
+    "BaseProperties": "{\"foo\":\"hTAV9bVy'v\",\"bar\":86179,\"bike\":50895,\"a\":52870,\"b\":18977,\"name\":97790,\"prop\":68840}",
+    "id": "8"
+  },
+  {
+    "Name": "crocodilia",
+    "Description": "non-volatile",
+    "BaseProperties": "{\"foo\":37611,\"bar\":\"&kqlpr?Q}%\",\"bike\":97034,\"a\":\"\\\\/ZC7;i}6r\",\"b\":\"{c]dfV5w%4\",\"name\":\"qu+G}m!+!G\",\"prop\":35336}",
+    "id": "9"
+  },
+  {
+    "Name": "snake",
+    "Description": "well-modulated",
+    "BaseProperties": "{\"foo\":\"rbP`+6wm@.\",\"bar\":\"abb}we!Q-)\",\"bike\":14492,\"a\":\"s^fY$mJWph\",\"b\":75701,\"name\":\"=*d9|UxZkG\",\"prop\":\"&.#ei2DUA'\"}",
+    "id": "10"
+  },
+  {
+    "Name": "bear",
+    "Description": "optimal",
+    "BaseProperties": "{\"foo\":\"c`Q1?|6Oxr\",\"bar\":\"0++{R\\\"F>RM\",\"bike\":\"f{]4<$BLM5\",\"a\":55345,\"b\":75880,\"name\":\"\\\"Y&jte%8.E\",\"prop\":\"G@>8IV@abR\"}",
+    "id": "11"
+  },
+  {
+    "Name": "dog",
+    "Description": "fault-tolerant",
+    "BaseProperties": "{\"foo\":30136,\"bar\":80088,\"bike\":\"4BzjX4^He-\",\"a\":\"p>6jPBai9f\",\"b\":59221,\"name\":89974,\"prop\":\"\\\\yy8bX>#bs\"}",
+    "id": "12"
+  },
+  {
+    "Name": "lion",
+    "Description": "next generation",
+    "BaseProperties": "{\"foo\":\"FfHr;`/]I%\",\"bar\":9209,\"bike\":97561,\"a\":92816,\"b\":\"/Jk;S1'D,{\",\"name\":\"P;Y-NbIJ:E\",\"prop\":\"|y|Jdii'lJ\"}",
+    "id": "13"
+  },
+  {
+    "Name": "cat",
+    "Description": "maximized",
+    "BaseProperties": "{\"foo\":46159,\"bar\":\"0OeV[lwo0E\",\"bike\":84259,\"a\":62880,\"b\":4041,\"name\":46070,\"prop\":60973}",
+    "id": "14"
+  },
+  {
+    "Name": "cetacean",
+    "Description": "full-range",
+    "BaseProperties": "{\"foo\":\"/jO{.W)z\\\\x\",\"bar\":55214,\"bike\":\"-CDn6TT^P/\",\"a\":59279,\"b\":63839,\"name\":\"b?(\\\"HB-%<#\",\"prop\":\"\\\"-NUz@&B0c\"}",
+    "id": "15"
+  },
+  {
+    "Name": "snake",
+    "Description": "real-time",
+    "BaseProperties": "{\"foo\":28284,\"bar\":\"p]O%\\\\Qi;dC\",\"bike\":30004,\"a\":\"_C(W`pf;5z\",\"b\":\"D%'Q-k\\\".=u\",\"name\":33708,\"prop\":75942}",
+    "id": "16"
+  },
+  {
+    "Name": "rabbit",
+    "Description": "object-oriented",
+    "BaseProperties": "{\"foo\":79611,\"bar\":56437,\"bike\":\"4a:_.;L.BP\",\"a\":13153,\"b\":88853,\"name\":\"&i;gOPm#79\",\"prop\":\"=`l'zc.L%5\"}",
+    "id": "17"
+  },
+  {
+    "Name": "rabbit",
+    "Description": "client-server",
+    "BaseProperties": "{\"foo\":\"YSFj58iR4$\",\"bar\":87992,\"bike\":7659,\"a\":14845,\"b\":28342,\"name\":\"j_q=`4&:xX\",\"prop\":\"E\\\\#(z1I`eY\"}",
+    "id": "18"
+  },
+  {
+    "Name": "horse",
+    "Description": "reciprocal",
+    "BaseProperties": "{\"foo\":\"F;=LN>.:'v\",\"bar\":3822,\"bike\":71071,\"a\":\"RxS-.]Khkw\",\"b\":38283,\"name\":\"#&TbUl^SY3\",\"prop\":90994}",
+    "id": "19"
+  },
+  {
+    "Name": "cow",
+    "Description": "stable",
+    "BaseProperties": "{\"foo\":23204,\"bar\":\"8n1?2ty0Ux\",\"bike\":\"aKQ:.Tx#Li\",\"a\":\"?Z/vH/1:vQ\",\"b\":\"hO9:;vy>SM\",\"name\":2356,\"prop\":\"{\\\\<#bu12j;\"}",
+    "id": "20"
+  }
+]
