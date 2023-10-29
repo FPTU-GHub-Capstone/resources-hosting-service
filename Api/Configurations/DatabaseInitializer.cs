@@ -1,19 +1,7 @@
-﻿using WebApiLayer.Services;
-using DomainLayer.Entities;
-//using DomainLayer.Entities.Commitment;
-//using DomainLayer.Entities.Hostel;
-//using DomainLayer.Entities.Room;
-//using DomainLayer.Entities.User;
-//using DomainLayer.Enums;
-//using Infrastructure.Contexts;
-using RepositoryLayer.Contexts;
-using WebApiLayer.UserFeatures.Requests;
-using WebApiLayer.Controllers;
-using AutoMapper;
-using System.Security.Cryptography.X509Certificates;
-using RepositoryLayer.Repositories;
+﻿using DomainLayer.Entities;
 using Microsoft.EntityFrameworkCore;
-using static System.Net.Mime.MediaTypeNames;
+using RepositoryLayer.Contexts;
+using WebApiLayer.Services;
 
 namespace WebApiLayer.Configurations;
 

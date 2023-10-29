@@ -1,7 +1,7 @@
-using System.Reflection;
 using Serilog;
-using ServiceLayer.Core.AppConfig;
+using System.Reflection;
 using WebApiLayer.Configurations;
+using WebApiLayer.Configurations.AppConfig;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;

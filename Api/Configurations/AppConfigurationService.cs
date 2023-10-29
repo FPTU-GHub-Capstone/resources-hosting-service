@@ -8,7 +8,8 @@ using RepositoryLayer.Repositories;
 using Serilog;
 using Serilog.Events;
 using ServiceLayer.Business;
-using ServiceLayer.Core.AppConfig;
+using WebApiLayer.Configurations.AppConfig;
+
 
 namespace WebApiLayer.Configurations
 {
