@@ -1,4 +1,5 @@
 ﻿using DomainLayer.Entities;
+using DomainLayer.Exceptions;
 using RepositoryLayer.Repositories;
 
 namespace ServiceLayer.Business;
@@ -36,6 +37,12 @@ public class PaymentServices : IPaymentServices
         return await _paymentRepo.CountAsync();
     }
     public async Task Create(PaymentEntity entity) {
+        var gameCheck = await _paymentRepo.FirstOrDefaultAsync(
+            g => g.WalletId.Equals(entity.WalletId));
+        if (gameCheck != null)
+        {
+            throw new BadRequestException("Wallet already exist in another payment");
+        }
         await _paymentRepo.CreateAsync(entity);
     }
     public async Task Update(PaymentEntity entity) {

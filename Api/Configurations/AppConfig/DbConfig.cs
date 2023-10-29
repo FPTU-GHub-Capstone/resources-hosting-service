@@ -1,4 +1,4 @@
-﻿namespace ServiceLayer.Core.AppConfig;
+﻿namespace WebApiLayer.Configurations.AppConfig;
 
 public class DbConfig
 {

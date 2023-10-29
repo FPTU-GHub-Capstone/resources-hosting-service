@@ -1,10 +1,8 @@
 ﻿using DomainLayer.Constants;
 using DomainLayer.Entities;
-using DomainLayer.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using RepositoryLayer.Repositories;
 using ServiceLayer.Business;
-using System.ComponentModel.DataAnnotations.Schema;
 using WebApiLayer.UserFeatures.Requests;
 
 namespace WebApiLayer.Controllers;

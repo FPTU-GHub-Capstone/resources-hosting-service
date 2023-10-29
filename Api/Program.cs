@@ -1,7 +1,7 @@
-using System.Reflection;
 using Serilog;
-using ServiceLayer.Core.AppConfig;
+using System.Reflection;
 using WebApiLayer.Configurations;
+using WebApiLayer.Configurations.AppConfig;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
@@ -29,6 +29,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
     await app.Services.ApplyMigrations();
+    await app.Services.DbInitializer();
 }
 
 app.UseLoggingInterceptor();
