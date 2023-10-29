@@ -93,10 +93,7 @@ public static class DatabaseInitializer
         for (int i = 0; i < 20; i++)
         {
             var mockGame = game[_rand.Next(gameLength)];
-            GameEntity newGame;
-            do
-            {
-                newGame = new GameEntity()
+            GameEntity newGame = new GameEntity()
                 {
                     Name = mockGame.Name,
                     Logo = mockGame.Logo,
@@ -105,7 +102,6 @@ public static class DatabaseInitializer
                     CreatedAt = DateTime.Now,
                     ModifiedAt = DateTime.Now
                 };
-            } while (await dbContext.Games.FirstOrDefaultAsync(g => g.Name.Equals(newGame.Name)) is not null);
             await dbContext.Games.AddAsync(newGame);
             await dbContext.SaveChangesAsync();
         }
