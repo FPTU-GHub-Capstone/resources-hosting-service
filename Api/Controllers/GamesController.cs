@@ -26,11 +26,17 @@ public class GamesController : BaseController
         return Ok(await _gameServices.List());
     }
 
+    [HttpGet]
+    [Route("idList")]
+    public async Task<IActionResult> GetGames([FromQuery] Guid[] idList)
+    {
+        return Ok(await _gameServices.List(idList));
+    }
+
     [HttpGet("{id}")]
     public async Task<IActionResult> GetGame(Guid id)
     {
-        var user = await _gameServices.GetById(id);
-        return Ok(user);
+        return Ok(await _gameServices.GetById(id));
     }
 
     [HttpPost]
