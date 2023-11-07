@@ -1,6 +1,8 @@
-﻿using DomainLayer.Entities;
+﻿using DomainLayer.Constants;
+using DomainLayer.Entities;
 using DomainLayer.Exceptions;
 using RepositoryLayer.Repositories;
+using System.Reflection.Metadata;
 
 namespace ServiceLayer.Business;
 
@@ -19,6 +21,23 @@ public class GameServices : IGameServices
     public async Task<GameEntity> GetById(Guid gameId)
     {
         return await _gameRepo.FindByIdAsync(gameId);
+    }
+    public async Task<ICollection<GameEntity>> List(Guid[] gameIds)
+    {
+        List<GameEntity> result = new List<GameEntity>();
+        foreach(var gameId in gameIds.Distinct())
+        {
+            var game = await _gameRepo.FindByIdAsync(gameId);
+            if (game is not null)
+            {
+                result.Add(game);
+            }
+            else
+            {
+                throw new NotFoundException("Game with ID " + gameId + " " + Constants.ERROR.NOT_EXIST_ERROR);
+            }
+        }
+        return result;
     }
     public async Task<ICollection<GameEntity>> GetByUserId(Guid userId)
     {
