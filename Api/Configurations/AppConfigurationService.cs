@@ -3,6 +3,7 @@ using DomainLayer.Constants;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Options;
+using DomainLayer.Constants;
 using RepositoryLayer.Contexts;
 using RepositoryLayer.Repositories;
 using Serilog;
@@ -38,6 +39,7 @@ namespace WebApiLayer.Configurations
             services.AddScoped<IWalletCategoryServices, WalletCategoryServices>();
             services.AddScoped<IWalletServices, WalletServices>();
         }
+
         public static void AddDbServices(this IServiceCollection services)
         {
             var settings = services.BuildServiceProvider().GetService<IOptions<AppSettings>>();
@@ -55,15 +57,17 @@ namespace WebApiLayer.Configurations
                 provider => provider.GetService<ApplicationDbContext>()
             );
         }
-        public static void AddCORS(this IServiceCollection services)
+
+        public static void AddCORSMechanism(this IServiceCollection services)
         {
-            services.AddCors(p => p.AddPolicy("Cors", build =>
+            services.AddCors(p => p.AddPolicy(Constants.HTTP.CORS, build =>
             {
                 build.WithOrigins("*")
                      .AllowAnyMethod()
                      .AllowAnyHeader();
             }));
         }
+
         public static WebApplication UseAutoWrapper(this WebApplication app)
         {
             app.UseApiResponseAndExceptionWrapper(
@@ -76,6 +80,7 @@ namespace WebApiLayer.Configurations
             );
             return app;
         }
+
         public static WebApplicationBuilder UseSerilog(this WebApplicationBuilder builder, IConfiguration configuration) {
             builder.Host.UseSerilog((cntxt, loggerConfiguration) =>
             {
@@ -83,6 +88,7 @@ namespace WebApiLayer.Configurations
             });
             return builder;
         }
+        
         public static WebApplication UseLoggingInterceptor(this WebApplication app)
         {
             app.UseSerilogRequestLogging(options =>
@@ -96,6 +102,7 @@ namespace WebApiLayer.Configurations
             });
             return app;
         }
+        
         public static async Task ApplyMigrations(this IServiceProvider serviceProvider)
         {
             using var scope = serviceProvider.CreateScope();
@@ -103,6 +110,7 @@ namespace WebApiLayer.Configurations
                 scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             await dbContext.Database.MigrateAsync();
         }
+        
         public static async Task DbInitializer(this IServiceProvider serviceProvider)
         {
             using var scope = serviceProvider.CreateScope();

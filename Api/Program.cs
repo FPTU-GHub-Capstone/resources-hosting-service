@@ -1,5 +1,6 @@
 using Serilog;
 using System.Reflection;
+using DomainLayer.Constants;
 using WebApiLayer.Configurations;
 using WebApiLayer.Configurations.AppConfig;
 
@@ -18,12 +19,7 @@ services.AddSwaggerGen();
     builder.UseSerilog(configuration);
     services.AddDbServices();
     services.AddAppServices();
-    services.AddCors(p => p.AddPolicy("Cors", build =>
-    {
-        build.WithOrigins("*")
-             .AllowAnyMethod()
-             .AllowAnyHeader();
-    }));
+    services.AddCORSMechanism();
     services.AddAutoMapper(Assembly.GetExecutingAssembly());
 }
 #endregion
@@ -39,7 +35,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseLoggingInterceptor();
-app.UseCors("Cors");
+app.UseCors(Constants.HTTP.CORS);
 app.UseAutoWrapper();
 app.UseHttpsRedirection();
 app.UseAuthorization();
