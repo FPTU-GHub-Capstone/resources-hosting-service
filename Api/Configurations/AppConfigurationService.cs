@@ -59,7 +59,7 @@ namespace WebApiLayer.Configurations
         {
             services.AddCors(p => p.AddPolicy("Cors", build =>
             {
-                build.AllowAnyOrigin()
+                build.WithOrigins("*")
                      .AllowAnyMethod()
                      .AllowAnyHeader();
             }));
