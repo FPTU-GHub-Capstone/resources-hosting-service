@@ -19,7 +19,7 @@ services.AddSwaggerGen();
     builder.UseSerilog(configuration);
     services.AddDbServices();
     services.AddAppServices();
-    services.AddCORSMechanism();
+    services.AddCorsMechanism();
     services.AddAutoMapper(Assembly.GetExecutingAssembly());
 }
 #endregion

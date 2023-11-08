@@ -58,7 +58,7 @@ namespace WebApiLayer.Configurations
             );
         }
 
-        public static void AddCORSMechanism(this IServiceCollection services)
+        public static void AddCorsMechanism(this IServiceCollection services)
         {
             services.AddCors(p => p.AddPolicy(Constants.HTTP.CORS, build =>
             {
