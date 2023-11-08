@@ -8,9 +8,8 @@ public class GameEntity : BaseEntity
     public string Name { get; set; }
     public string Logo { get; set; }
     public string Link { get; set; }
-    // 1 User - M Games
-    public Guid UserId { get; set; }
-    public UserEntity User { get; set; }
+    // M Game - M User
+    public virtual ICollection<UserEntity>? Users { get; set; }
     // 1 Game - M Activity Type
     public virtual ICollection<ActivityTypeEntity>? ActivityTypes { get; set; }
     // M Game - M Attribute Group
