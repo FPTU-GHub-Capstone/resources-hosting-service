@@ -18,7 +18,12 @@ services.AddSwaggerGen();
     builder.UseSerilog(configuration);
     services.AddDbServices();
     services.AddAppServices();
-    services.AddCORS();
+    services.AddCors(p => p.AddPolicy("Cors", build =>
+    {
+        build.WithOrigins("*")
+             .AllowAnyMethod()
+             .AllowAnyHeader();
+    }));
     services.AddAutoMapper(Assembly.GetExecutingAssembly());
 }
 #endregion
