@@ -18,6 +18,7 @@ services.AddSwaggerGen();
     builder.UseSerilog(configuration);
     services.AddDbServices();
     services.AddAppServices();
+    services.AddCORS();
     services.AddAutoMapper(Assembly.GetExecutingAssembly());
 }
 #endregion
@@ -33,6 +34,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseLoggingInterceptor();
+app.UseCors("Cors");
 app.UseAutoWrapper();
 app.UseHttpsRedirection();
 app.UseAuthorization();

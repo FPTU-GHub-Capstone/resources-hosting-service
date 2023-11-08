@@ -55,7 +55,15 @@ namespace WebApiLayer.Configurations
                 provider => provider.GetService<ApplicationDbContext>()
             );
         }
-
+        public static void AddCORS(this IServiceCollection services)
+        {
+            services.AddCors(p => p.AddPolicy("Cors", build =>
+            {
+                build.AllowAnyOrigin()
+                     .AllowAnyMethod()
+                     .AllowAnyHeader();
+            }));
+        }
         public static WebApplication UseAutoWrapper(this WebApplication app)
         {
             app.UseApiResponseAndExceptionWrapper(
@@ -68,7 +76,6 @@ namespace WebApiLayer.Configurations
             );
             return app;
         }
-
         public static WebApplicationBuilder UseSerilog(this WebApplicationBuilder builder, IConfiguration configuration) {
             builder.Host.UseSerilog((cntxt, loggerConfiguration) =>
             {
@@ -76,7 +83,6 @@ namespace WebApiLayer.Configurations
             });
             return builder;
         }
-
         public static WebApplication UseLoggingInterceptor(this WebApplication app)
         {
             app.UseSerilogRequestLogging(options =>
@@ -90,7 +96,6 @@ namespace WebApiLayer.Configurations
             });
             return app;
         }
-
         public static async Task ApplyMigrations(this IServiceProvider serviceProvider)
         {
             using var scope = serviceProvider.CreateScope();
