@@ -39,10 +39,6 @@ public class GameServices : IGameServices
         }
         return result;
     }
-    public async Task<ICollection<GameEntity>> GetByUserId(Guid userId)
-    {
-        return await _gameRepo.WhereAsync(g => g.UserId.Equals(userId));
-    }
     public async Task<int> Count()
     {
         return await _gameRepo.CountAsync();

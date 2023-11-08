@@ -13,4 +13,7 @@ public class ActivityEntity : BaseEntity
     // 1 Transaction - 1 or M Activity
     public Guid TransactionId { get; set; }
     public TransactionEntity Transaction { get; set; }
+    // 1 Character - M Activity
+    public Guid CharacterId { get; set; }
+    public CharacterEntity Character { get; set; }
 }
