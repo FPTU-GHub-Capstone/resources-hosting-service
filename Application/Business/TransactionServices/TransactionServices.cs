@@ -1,4 +1,5 @@
-﻿using DomainLayer.Entities;
+﻿using DomainLayer.Constants;
+using DomainLayer.Entities;
 using RepositoryLayer.Repositories;
 
 namespace ServiceLayer.Business;
@@ -16,7 +17,8 @@ public class TransactionServices : ITransactionServices
     }
     public async Task<TransactionEntity> GetById(Guid transactionId)
     {
-        return await _transactionRepo.FindByIdAsync(transactionId);
+        return await _transactionRepo.FoundOrThrowAsync(transactionId,
+           Constants.ENTITY.TRANSACTION + Constants.ERROR.NOT_EXIST_ERROR);
     }
     public async Task<ICollection<TransactionEntity>> GetByWalletId(Guid walletId)
     {

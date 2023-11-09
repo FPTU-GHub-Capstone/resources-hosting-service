@@ -20,7 +20,8 @@ public class GameServices : IGameServices
     }
     public async Task<GameEntity> GetById(Guid gameId)
     {
-        return await _gameRepo.FindByIdAsync(gameId);
+        return await _gameRepo.FoundOrThrowAsync(gameId,
+            Constants.ENTITY.GAME + Constants.ERROR.NOT_EXIST_ERROR);
     }
     public async Task<ICollection<GameEntity>> List(Guid[] gameIds)
     {

@@ -1,4 +1,5 @@
-﻿using DomainLayer.Entities;
+﻿using DomainLayer.Constants;
+using DomainLayer.Entities;
 using DomainLayer.Exceptions;
 using RepositoryLayer.Repositories;
 
@@ -19,7 +20,8 @@ public class GameServerServices : IGameServerServices
     }
     public async Task<GameServerEntity> GetById(Guid gameServerId)
     {
-        return await _gameServerRepo.FindByIdAsync(gameServerId);
+        return await _gameServerRepo.FoundOrThrowAsync(gameServerId,
+            Constants.ENTITY.GAME_SERVER + Constants.ERROR.NOT_EXIST_ERROR);
     }
     public async Task<ICollection<GameServerEntity>> GetByGameId(Guid gameId)
     {

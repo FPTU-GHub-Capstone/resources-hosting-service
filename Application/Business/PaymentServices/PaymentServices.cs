@@ -1,4 +1,5 @@
-﻿using DomainLayer.Entities;
+﻿using DomainLayer.Constants;
+using DomainLayer.Entities;
 using DomainLayer.Exceptions;
 using RepositoryLayer.Repositories;
 
@@ -18,7 +19,8 @@ public class PaymentServices : IPaymentServices
     }
     public async Task<PaymentEntity> GetById(Guid paymentId)
     {
-        return await _paymentRepo.FindByIdAsync(paymentId);
+        return await _paymentRepo.FoundOrThrowAsync(paymentId,
+            Constants.ENTITY.PAYMENT + Constants.ERROR.NOT_EXIST_ERROR);
     }
     public async Task<ICollection<PaymentEntity>> GetByCharacterId(Guid id)
     {

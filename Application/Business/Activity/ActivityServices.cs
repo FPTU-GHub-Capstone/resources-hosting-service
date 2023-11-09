@@ -1,4 +1,5 @@
-﻿using DomainLayer.Entities;
+﻿using DomainLayer.Constants;
+using DomainLayer.Entities;
 using RepositoryLayer.Repositories;
 
 namespace ServiceLayer.Business;
@@ -16,7 +17,7 @@ public class ActivityServices : IActivityServices
     }
     public async Task<ActivityEntity> Search(Guid activityId)
     {
-        return await _activityRepo.FindByIdAsync(activityId);
+        return await _activityRepo.FoundOrThrowAsync(activityId, Constants.ENTITY.ACTIVITY + Constants.ERROR.NOT_EXIST_ERROR);
     }
     public async Task<ActivityEntity> Search(string Name) {
         return await _activityRepo.FirstOrDefaultAsync( a => a.Name.Equals(Name));

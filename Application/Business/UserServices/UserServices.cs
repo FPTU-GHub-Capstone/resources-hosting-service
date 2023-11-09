@@ -1,10 +1,7 @@
-﻿using AutoMapper;
+﻿using DomainLayer.Constants;
 using DomainLayer.Entities;
 using DomainLayer.Exceptions;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using RepositoryLayer.Repositories;
-using ServiceLayer.Extensions;
-using System.Data;
 
 namespace ServiceLayer.Business;
 
@@ -21,7 +18,8 @@ public class UserServices : IUserServices
     }
     public async Task<UserEntity> GetById(Guid UserId)
     {
-        return await _userRepo.FindByIdAsync(UserId);
+        return await _userRepo.FoundOrThrowAsync(UserId,
+           Constants.ENTITY.USER + Constants.ERROR.NOT_EXIST_ERROR);
     }
     public async Task<int> Count()
     {
