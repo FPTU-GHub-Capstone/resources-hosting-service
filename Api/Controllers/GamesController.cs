@@ -11,11 +11,27 @@ namespace WebApiLayer.Controllers;
 public class GamesController : BaseController
 {
     private readonly IGameServices _gameServices;
+    private readonly IActivityTypeServices _activityTypeServices;
+    private readonly IAssetTypeServices _assetTypeServices;
+    private readonly ICharacterTypeServices _characterTypeServices;
+    private readonly IGameServerServices _gameServerServices;
+    private readonly ILevelServices _levelServices;
+    private readonly IWalletCategoryServices _walletCategoryServices;
     private readonly IGenericRepository<GameEntity> _gameRepo;
     private readonly IGenericRepository<UserEntity> _userRepo;
-    public GamesController(IGameServices gameServices, IGenericRepository<GameEntity> gameRepo, IGenericRepository<UserEntity> userRepo)
+    public GamesController(IGameServices gameServices, IActivityTypeServices activityTypeServices
+        , IAssetTypeServices assetTypeServices
+        , ICharacterTypeServices characterTypeServices , IGameServerServices gameServerServices
+        , ILevelServices levelServices, IWalletCategoryServices walletCategoryServices
+        , IGenericRepository<GameEntity> gameRepo, IGenericRepository<UserEntity> userRepo)
     {
         _gameServices = gameServices;
+        _activityTypeServices = activityTypeServices;
+        _assetTypeServices = assetTypeServices;
+        _characterTypeServices = characterTypeServices;
+        _gameServerServices = gameServerServices;
+        _levelServices = levelServices;
+        _walletCategoryServices = walletCategoryServices;
         _gameRepo = gameRepo;
         _userRepo = userRepo;
     }
@@ -34,6 +50,42 @@ public class GamesController : BaseController
     public async Task<IActionResult> GetGame(Guid id)
     {
         return Ok(await _gameServices.GetById(id));
+    }
+
+    [HttpGet("{id}/activity-type")]
+    public async Task<IActionResult> GetActTypeByGameID(Guid id)
+    {
+        return Ok(await _activityTypeServices.GetByGameId(id));
+    }
+
+    [HttpGet("{id}/asset-type")]
+    public async Task<IActionResult> GetAssTypeByGameID(Guid id)
+    {
+        return Ok(await _assetTypeServices.GetByGameId(id));
+    }
+
+    [HttpGet("{id}/character-type")]
+    public async Task<IActionResult> GetCharTypeByGameID(Guid id)
+    {
+        return Ok(await _characterTypeServices.GetByGameId(id));
+    }
+
+    [HttpGet("{id}/game-server")]
+    public async Task<IActionResult> GetGameServerByGameID(Guid id)
+    {
+        return Ok(await _gameServerServices.GetByGameId(id));
+    }
+
+    [HttpGet("{id}/level")]
+    public async Task<IActionResult> GetLevelByGameID(Guid id)
+    {
+        return Ok(await _levelServices.GetByGameId(id));
+    }
+
+    [HttpGet("{id}/wallet-category")]
+    public async Task<IActionResult> GetWalCatByGameID(Guid id)
+    {
+        return Ok(await _walletCategoryServices.GetByGameId(id));
     }
 
     [HttpPost]

@@ -98,7 +98,6 @@ public static class DatabaseInitializer
                     Name = mockGame.Name,
                     Logo = mockGame.Logo,
                     Link = mockGame.Link,
-                    UserId = users[_rand.Next(users.Count)].Id,
                     CreatedAt = DateTime.Now,
                     ModifiedAt = DateTime.Now
                 };
