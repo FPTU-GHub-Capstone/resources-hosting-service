@@ -12,8 +12,6 @@ namespace WebApiLayer.UserFeatures.Requests
         public string Logo { get; set; }
         [Required]
         public string Link { get; set; }
-        [Required]
-        public Guid UserId { get; set; }
 
     }
 }

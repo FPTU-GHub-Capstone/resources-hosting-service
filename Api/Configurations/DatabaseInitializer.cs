@@ -478,6 +478,7 @@ public static class DatabaseInitializer
         dynamic activity = SeedingServices.LoadJson("ACTIVITY_MOCK_DATA.json");
         var activityType = dbContext.ActivityTypes.ToList();
         var transaction = dbContext.Transactions.ToList();
+        var character = dbContext.Characters.ToList();
         int activityCount = activity.Count;
         for (int i = 0; i < 20; i++)
         {
@@ -489,6 +490,7 @@ public static class DatabaseInitializer
                     Status = mockActivity.Status,
                     ActivityTypeId = activityType[_rand.Next(activityType.Count)].Id,
                     TransactionId = transaction[_rand.Next(transaction.Count)].Id,
+                    CharacterId = character[_rand.Next(transaction.Count)].Id,
                     CreatedAt = DateTime.Now,
                     ModifiedAt = DateTime.Now
                 });
