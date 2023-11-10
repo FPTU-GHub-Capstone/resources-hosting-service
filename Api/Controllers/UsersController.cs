@@ -31,6 +31,13 @@ public class UsersController : BaseController
         return Ok(user);
     }
 
+    [HttpGet("email/{email}")]
+    public async Task<IActionResult> GetUserByEmail(string email)
+    {
+        var user = await _userServices.GetByEmail(email);
+        return Ok(user);
+    }
+
     [HttpPost]
     public async Task<IActionResult> CreateUser([FromBody] CreateUserRequest cUser)
     {

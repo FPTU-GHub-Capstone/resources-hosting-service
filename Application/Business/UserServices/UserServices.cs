@@ -21,6 +21,15 @@ public class UserServices : IUserServices
         return await _userRepo.FoundOrThrowAsync(UserId,
            Constants.ENTITY.USER + Constants.ERROR.NOT_EXIST_ERROR);
     }
+    public async Task<UserEntity> GetByEmail(string email)
+    {
+        var user = await _userRepo.FirstOrDefaultAsync(u => u.Email.Equals(email));
+        if (user == null)
+        {
+            throw new NotFoundException(Constants.ENTITY.USER + Constants.ERROR.NOT_EXIST_ERROR);
+        }
+        return user;
+    }
     public async Task<int> Count()
     {
         return await _userRepo.CountAsync();
