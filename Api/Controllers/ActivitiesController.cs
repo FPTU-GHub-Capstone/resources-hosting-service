@@ -14,13 +14,16 @@ public class ActivitiesController : BaseController
     private readonly IGenericRepository<ActivityEntity> _activityRepo;
     private readonly IGenericRepository<ActivityTypeEntity> _activityTypeRepo;
     private readonly IGenericRepository<TransactionEntity> _transactionRepo;
+    private readonly IGenericRepository<CharacterEntity> _characterRepo;
     public ActivitiesController(IActivityServices activityServices, IGenericRepository<ActivityEntity> activityRepo
-        , IGenericRepository<ActivityTypeEntity> activityTypeRepo, IGenericRepository<TransactionEntity> transactionRepo)
+        , IGenericRepository<ActivityTypeEntity> activityTypeRepo, IGenericRepository<TransactionEntity> transactionRepo,
+        IGenericRepository<CharacterEntity> characterRepo)
     {
         _activityServices = activityServices;
         _activityRepo = activityRepo;
         _activityTypeRepo = activityTypeRepo;
         _transactionRepo = transactionRepo;
+        _characterRepo = characterRepo;
     }
     [HttpGet]
     public async Task<IActionResult> GetActivitíes()
@@ -39,6 +42,7 @@ public class ActivitiesController : BaseController
     {
         await _activityTypeRepo.FoundOrThrowAsync(act.ActivityTypeId, Constants.ENTITY.ACTIVITY_TYPE + Constants.ERROR.NOT_EXIST_ERROR);
         await _transactionRepo.FoundOrThrowAsync(act.TransactionId, Constants.ENTITY.TRANSACTION + Constants.ERROR.NOT_EXIST_ERROR);
+        await _characterRepo.FoundOrThrowAsync(act.CharacterId, Constants.ENTITY.CHARACTER + Constants.ERROR.NOT_EXIST_ERROR);
         var newAct = new ActivityEntity();
         Mapper.Map(act, newAct);
         await _activityServices.Create(newAct);

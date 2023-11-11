@@ -5,6 +5,7 @@ public static class Constants
     public static class HTTP
     {
         public const string API_VERSION = "v1";
+        public const string CORS = "CORS";
     }
 
     public static class ERROR
@@ -35,4 +36,6 @@ public static class Constants
         public const string WALLET_CATEGORY = "Wallet category ";
         public const string WALLET = "Wallet ";
     }
+
+
 }

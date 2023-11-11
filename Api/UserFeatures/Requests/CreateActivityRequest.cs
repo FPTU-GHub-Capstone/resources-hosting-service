@@ -14,5 +14,7 @@ namespace WebApiLayer.UserFeatures.Requests
         public Guid ActivityTypeId { get; set; }
         [Required]
         public Guid TransactionId { get; set; }
+        [Required]
+        public Guid CharacterId { get; set; }
     }
 }

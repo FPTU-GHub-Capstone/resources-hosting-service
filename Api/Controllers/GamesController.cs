@@ -91,7 +91,6 @@ public class GamesController : BaseController
     [HttpPost]
     public async Task<IActionResult> CreateGame([FromBody] CreateGameRequest newGame)
     {
-        await _userRepo.FoundOrThrowAsync(newGame.UserId, Constants.ENTITY.USER + Constants.ERROR.NOT_EXIST_ERROR);
         var gameEntity = new GameEntity();
         Mapper.Map(newGame, gameEntity);
         await _gameServices.Create(gameEntity);
