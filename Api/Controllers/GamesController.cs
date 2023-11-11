@@ -52,31 +52,31 @@ public class GamesController : BaseController
         return Ok(await _gameServices.GetById(id));
     }
 
-    [HttpGet("{id}/activity-type")]
+    [HttpGet("{id}/activity-types")]
     public async Task<IActionResult> GetActTypeByGameID(Guid id)
     {
         return Ok(await _activityTypeServices.GetByGameId(id));
     }
 
-    [HttpGet("{id}/asset-type")]
+    [HttpGet("{id}/asset-types")]
     public async Task<IActionResult> GetAssTypeByGameID(Guid id)
     {
         return Ok(await _assetTypeServices.GetByGameId(id));
     }
 
-    [HttpGet("{id}/character-type")]
+    [HttpGet("{id}/character-types")]
     public async Task<IActionResult> GetCharTypeByGameID(Guid id)
     {
         return Ok(await _characterTypeServices.GetByGameId(id));
     }
 
-    [HttpGet("{id}/game-server")]
+    [HttpGet("{id}/game-servers")]
     public async Task<IActionResult> GetGameServerByGameID(Guid id)
     {
         return Ok(await _gameServerServices.GetByGameId(id));
     }
 
-    [HttpGet("{id}/level")]
+    [HttpGet("{id}/levels")]
     public async Task<IActionResult> GetLevelByGameID(Guid id)
     {
         return Ok(await _levelServices.GetByGameId(id));
