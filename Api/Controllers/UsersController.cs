@@ -18,9 +18,9 @@ public class UsersController : BaseController
         _userRepo = userRepo;
     }
     [HttpGet]
-    public async Task<IActionResult> GetUsers()
+    public async Task<IActionResult> GetUsers([FromQuery] string? email)
     {
-        var users = await _userServices.List();
+        var users = await _userServices.List(email);
         return Ok(users);
     }
 
@@ -28,13 +28,6 @@ public class UsersController : BaseController
     public async Task<IActionResult> GetUser(Guid id)
     {
         var user = await _userServices.GetById(id);
-        return Ok(user);
-    }
-
-    [HttpGet("email/{email}")]
-    public async Task<IActionResult> GetUserByEmail(string email)
-    {
-        var user = await _userServices.GetByEmail(email);
         return Ok(user);
     }
 

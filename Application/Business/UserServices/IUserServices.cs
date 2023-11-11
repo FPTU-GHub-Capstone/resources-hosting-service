@@ -3,9 +3,8 @@
 namespace ServiceLayer.Business;
 public interface IUserServices
 {
-    Task<ICollection<UserEntity>> List();
+    Task<ICollection<UserEntity>> List(string? email);
     Task<UserEntity> GetById(Guid UserId);
-    Task<UserEntity> GetByEmail(string email);
     Task<int> Count();
     Task Create(UserEntity user);
     Task Update(UserEntity user);

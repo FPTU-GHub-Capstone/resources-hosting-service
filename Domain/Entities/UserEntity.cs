@@ -22,7 +22,5 @@ public class UserEntity : BaseEntity
     public virtual ICollection<CharacterEntity>? Characters { get; set; }
     //1 User - M Payment
     public virtual ICollection<PaymentEntity>? Payments { get; set; }
-    // M User - M Games
-    public virtual ICollection<GameEntity>? Games { get; set; }
 
 }
