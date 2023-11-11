@@ -1,6 +1,7 @@
 ﻿using DomainLayer.Constants;
 using DomainLayer.Entities;
 using DomainLayer.Exceptions;
+using Microsoft.AspNetCore.Mvc;
 using RepositoryLayer.Repositories;
 
 namespace ServiceLayer.Business;
@@ -17,10 +18,6 @@ public class UserServices : IUserServices
         if (!string.IsNullOrEmpty(email))
         {
             var user = await _userRepo.WhereAsync(u => u.Email.Equals(email));
-            if (user == null)
-            {
-                throw new NotFoundException(Constants.ENTITY.USER + Constants.ERROR.NOT_EXIST_ERROR);
-            }
             return user;
         }
         return await _userRepo.ListAsync();
