@@ -19,7 +19,8 @@ public class CharacterServices : ICharacterServices
     }
     public async Task<CharacterEntity> GetById(Guid characterId)
     {
-        return await _characterRepo.FindByIdAsync(characterId);
+        return await _characterRepo.FoundOrThrowAsync(characterId, Constants.ENTITY.CHARACTER + Constants.ERROR.NOT_EXIST_ERROR);
+
     }
     public async Task<ICollection<CharacterEntity>> GetByUserId(Guid id)
     {

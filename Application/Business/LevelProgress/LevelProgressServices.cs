@@ -20,7 +20,8 @@ public class LevelProgressServices : ILevelProgressServices
     }
     public async Task<LevelProgressEntity> GetById(Guid levelProgressId)
     {
-        return await _levelProgressRepo.FindByIdAsync(levelProgressId);
+        return await _levelProgressRepo.FoundOrThrowAsync(levelProgressId,
+            Constants.ENTITY.LEVEL_PROGRESS + Constants.ERROR.NOT_EXIST_ERROR);
     }
     public async Task<ICollection<LevelProgressEntity>> GetByCharacterId(Guid id)
     {

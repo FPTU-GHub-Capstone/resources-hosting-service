@@ -1,10 +1,6 @@
-﻿using DomainLayer.Entities;
-using DomainLayer.Exceptions;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.ValueGeneration;
+﻿using DomainLayer.Constants;
+using DomainLayer.Entities;
 using RepositoryLayer.Repositories;
-using System.Reflection;
-using System.Security.Cryptography.X509Certificates;
 
 namespace ServiceLayer.Business;
 
@@ -21,7 +17,7 @@ public class AttributeGroupServices : IAttributeGroupServices
     }
     public async Task<AttributeGroupEntity> GetById(Guid attributeGroupid)
     {
-        return await _attributeRepo.FindByIdAsync(attributeGroupid);
+        return await _attributeRepo.FoundOrThrowAsync(attributeGroupid, Constants.ENTITY.ATTRIBUTE_GROUP + Constants.ERROR.NOT_EXIST_ERROR);
     }
     public async Task<int> Count()
     {

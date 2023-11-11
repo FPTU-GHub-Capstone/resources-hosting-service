@@ -18,7 +18,8 @@ public class WalletServices : IWalletServices
     }
     public async Task<WalletEntity> GetById(Guid walletId)
     {
-        return await _walletRepo.FindByIdAsync(walletId);
+        return await _walletRepo.FoundOrThrowAsync(walletId,
+           Constants.ENTITY.WALLET + Constants.ERROR.NOT_EXIST_ERROR);
     }
     public async Task<ICollection<WalletEntity>> GetByWalletCategoryId(Guid id)
     {

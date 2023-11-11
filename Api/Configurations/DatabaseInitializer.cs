@@ -61,9 +61,9 @@ public static class DatabaseInitializer
 
         dynamic user = SeedingServices.LoadJson("USER_MOCK_DATA.json");
         int userLength = user.Count;
-        for (int i = 0; i < 20; i++)
+        for (int i = 0; i < user.Count; i++)
         {
-            var mockUser = user[_rand.Next(userLength)];
+            var mockUser = user[i];
             await dbContext.Users.AddAsync(
                 new UserEntity()
                 {

@@ -19,7 +19,7 @@ public class AssetTypeServices : IAssetTypeServices
     }
     public async Task<AssetTypeEntity> GetById(Guid assetTypeId)
     {
-        return await _assetTypeRepo.FindByIdAsync(assetTypeId);
+        return await _assetTypeRepo.FoundOrThrowAsync(assetTypeId, Constants.ENTITY.ASSET_ATTRIBUTE + Constants.ERROR.NOT_EXIST_ERROR);
     }
     public async Task<ICollection<AssetTypeEntity>> GetByGameId(Guid gameId)
     {

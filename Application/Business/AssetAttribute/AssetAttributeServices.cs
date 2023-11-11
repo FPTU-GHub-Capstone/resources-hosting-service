@@ -20,7 +20,7 @@ public class AssetAttributeServices : IAssetAttributeServices
     }
     public async Task<AssetAttributeEntity> GetById(Guid assetAttributeId)
     {
-        return await _assetAttributeRepo.FindByIdAsync(assetAttributeId);
+        return await _assetAttributeRepo.FoundOrThrowAsync(assetAttributeId, Constants.ENTITY.ASSET_ATTRIBUTE + Constants.ERROR.NOT_EXIST_ERROR);
     }
     public async Task<ICollection<AssetAttributeEntity>> GetByAssetId(Guid assetId)
     {

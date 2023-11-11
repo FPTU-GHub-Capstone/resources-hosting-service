@@ -1,4 +1,5 @@
-﻿using DomainLayer.Entities;
+﻿using DomainLayer.Constants;
+using DomainLayer.Entities;
 using DomainLayer.Exceptions;
 using RepositoryLayer.Repositories;
 
@@ -20,7 +21,8 @@ public class CharacterTypeServices : ICharacterTypeServices
     }
     public async Task<CharacterTypeEntity> GetById(Guid characterTypeId)
     {
-        return await _characterTypeRepo.FindByIdAsync(characterTypeId);
+        return await _characterTypeRepo.FoundOrThrowAsync(characterTypeId,
+            Constants.ENTITY.CHARACTER_TYPE + Constants.ERROR.NOT_EXIST_ERROR);
     }
     public async Task<ICollection<CharacterTypeEntity>> GetByGameId(Guid gameId)
     {

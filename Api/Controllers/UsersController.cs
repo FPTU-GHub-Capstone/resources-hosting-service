@@ -18,9 +18,9 @@ public class UsersController : BaseController
         _userRepo = userRepo;
     }
     [HttpGet]
-    public async Task<IActionResult> GetUsers()
+    public async Task<IActionResult> GetUsers([FromQuery] string? email)
     {
-        var users = await _userServices.List();
+        var users = await _userServices.List(email);
         return Ok(users);
     }
 

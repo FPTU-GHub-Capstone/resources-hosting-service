@@ -19,7 +19,8 @@ public class CharacterAssetServices : ICharacterAssetServices
     }
     public async Task<CharacterAssetEntity> GetById(Guid characterAssetId)
     {
-        return await _characterAssetRepo.FindByIdAsync(characterAssetId);
+        return await _characterAssetRepo.FoundOrThrowAsync(characterAssetId, Constants.ENTITY.CHARACTER_ASSET + Constants.ERROR.NOT_EXIST_ERROR);
+
     }
     public async Task<ICollection<CharacterAssetEntity>> GetByAssetId(Guid id)
     {

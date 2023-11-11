@@ -1,10 +1,8 @@
-﻿using AutoMapper;
+﻿using DomainLayer.Constants;
 using DomainLayer.Entities;
 using DomainLayer.Exceptions;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc;
 using RepositoryLayer.Repositories;
-using ServiceLayer.Extensions;
-using System.Data;
 
 namespace ServiceLayer.Business;
 
@@ -15,13 +13,19 @@ public class UserServices : IUserServices
     {
         _userRepo = userRepo;
     }
-    public async Task<ICollection<UserEntity>> List()
+    public async Task<ICollection<UserEntity>> List(string? email)
     {
+        if (!string.IsNullOrEmpty(email))
+        {
+            var user = await _userRepo.WhereAsync(u => u.Email.Equals(email));
+            return user;
+        }
         return await _userRepo.ListAsync();
     }
     public async Task<UserEntity> GetById(Guid UserId)
     {
-        return await _userRepo.FindByIdAsync(UserId);
+        return await _userRepo.FoundOrThrowAsync(UserId,
+           Constants.ENTITY.USER + Constants.ERROR.NOT_EXIST_ERROR);
     }
     public async Task<int> Count()
     {

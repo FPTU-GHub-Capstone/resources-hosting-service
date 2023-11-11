@@ -8,7 +8,7 @@ public class GameEntity : BaseEntity
     public string Name { get; set; }
     public string Logo { get; set; }
     public string Link { get; set; }
-    // M Game - M User
+    // M Users - M Games
     public virtual ICollection<UserEntity>? Users { get; set; }
     // 1 Game - M Activity Type
     public virtual ICollection<ActivityTypeEntity>? ActivityTypes { get; set; }

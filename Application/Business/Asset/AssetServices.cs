@@ -1,4 +1,5 @@
-﻿using DomainLayer.Entities;
+﻿using DomainLayer.Constants;
+using DomainLayer.Entities;
 using RepositoryLayer.Repositories;
 
 namespace ServiceLayer.Business;
@@ -17,7 +18,7 @@ public class AssetServices : IAssetServices
     }
     public async Task<AssetEntity> GetById(Guid assetId)
     {
-        return await _assetRepo.FindByIdAsync(assetId);
+        return await _assetRepo.FoundOrThrowAsync(assetId, Constants.ENTITY.ASSET + Constants.ERROR.NOT_EXIST_ERROR);
     }
     public async Task<ICollection<AssetEntity>> GetByAssetTypeId(Guid assetTypeid)
     {
