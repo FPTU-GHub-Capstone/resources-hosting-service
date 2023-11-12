@@ -1,8 +1,10 @@
 ﻿using DomainLayer.Constants;
+using DomainLayer.Entities;
 using DomainLayer.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using ServiceLayer.Business;
 using System.Text;
 using WebApiLayer.Configurations.AppConfig;
 using WebApiLayer.UserFeatures.Requests;
@@ -14,12 +16,14 @@ namespace WebApiLayer.Controllers;
 public class AuthController : BaseController
 {
     private readonly HttpClient _client;
-    public AuthController(IOptions<AppSettings> appSettings)
+    private readonly IUserServices _userServices;
+    public AuthController(IOptions<AppSettings> appSettings, IUserServices userServices)
     {
         _client = new HttpClient
         {
             BaseAddress = new Uri(appSettings.Value.IdpUrl),
         };
+        _userServices = userServices;
     }
 
     [HttpPost("login")]
@@ -59,7 +63,12 @@ public class AuthController : BaseController
             throw new BadRequestException(await BuildJsonResponse<object>(response));
         }
         var result = await BuildJsonResponse<IdpRegisterResponse>(response);
-        return CreatedAtAction(nameof(Login), result);
+        await _userServices.Create(new UserEntity
+        {
+            Username = result.username,
+            Uid = result.uid,
+        });
+        return CreatedAtAction(nameof(Register), result);
     }
 
     private string BuildJsonRegisterReqBody(RegisterRequest registerRequest)
