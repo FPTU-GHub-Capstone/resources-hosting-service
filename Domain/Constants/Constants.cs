@@ -6,6 +6,7 @@ public static class Constants
     {
         public const string API_VERSION = "v1";
         public const string CORS = "CORS";
+        public const string JSON_CONTENT_TYPE = "application/json";
     }
 
     public static class ERROR
