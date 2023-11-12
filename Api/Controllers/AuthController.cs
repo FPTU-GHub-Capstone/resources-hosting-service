@@ -1,4 +1,5 @@
 ﻿using DomainLayer.Constants;
+using DomainLayer.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -32,8 +33,7 @@ public class AuthController : BaseController
         {
             throw new UnauthorizedAccessException();
         }
-        var stringData = await response.Content.ReadAsStringAsync();
-        var result = JsonConvert.DeserializeObject<IdpLoginResponse>(stringData);
+        var result = await BuildJsonResponse<IdpLoginResponse>(response);
         return CreatedAtAction(nameof(Login), result);
     }
 
@@ -45,5 +45,37 @@ public class AuthController : BaseController
             { "password", loginRequest.Password }
         };
        return JsonConvert.SerializeObject(reqData);
+    }
+
+    [HttpPost("register")]
+    public async Task<IActionResult> Register(RegisterRequest registerRequest)
+    {
+        string registerEndpoint = $"{_client.BaseAddress}/register";
+        var jsonData = BuildJsonRegisterReqBody(registerRequest);
+        var contentData = new StringContent(jsonData, Encoding.UTF8, Constants.HTTP.JSON_CONTENT_TYPE);
+        var response = await _client.PostAsync(registerEndpoint, contentData);
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new BadRequestException(await BuildJsonResponse<object>(response));
+        }
+        var result = await BuildJsonResponse<IdpRegisterResponse>(response);
+        return CreatedAtAction(nameof(Login), result);
+    }
+
+    private string BuildJsonRegisterReqBody(RegisterRequest registerRequest)
+    {
+        var reqData = new Dictionary<string, string>
+        {
+            { "username", registerRequest.Username },
+            { "password", registerRequest.Password },
+            { "reenterPassword", registerRequest.ReenterPassword },
+        };
+        return JsonConvert.SerializeObject(reqData);
+    }
+
+    private async Task<T> BuildJsonResponse<T>(HttpResponseMessage response)
+    {
+        var stringData = await response.Content.ReadAsStringAsync();
+        return JsonConvert.DeserializeObject<T>(stringData); ;
     }
 }
