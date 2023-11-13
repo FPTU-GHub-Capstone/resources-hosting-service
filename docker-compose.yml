@@ -1,13 +1,14 @@
 version: "3.3"
 services:
-  ghub-api:    
-    container_name: ghub-api
+  gms:    
+    container_name: gms
     build:      
       context: .
       dockerfile: ./Dockerfile
     depends_on: [ mssql ]    
     environment:
       - AppSettings__ConnectionStrings__DefaultConnection=Server=mssql,1433;Database=GHub;User Id=sa;Password=e@x2Prn9mj4zU3ap8WV7ckNK;
+      - AppSettings__IdpUrl=http://gis:8080/v1/idp
     ports:
       - "8080:80"
     restart: unless-stopped
