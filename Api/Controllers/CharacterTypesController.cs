@@ -3,7 +3,9 @@ using DomainLayer.Entities;
 using Microsoft.AspNetCore.Mvc;
 using RepositoryLayer.Repositories;
 using ServiceLayer.Business;
+using System.Text.Json.Nodes;
 using WebApiLayer.UserFeatures.Requests;
+using WebApiLayer.UserFeatures.Response;
 
 namespace WebApiLayer.Controllers;
 
@@ -24,7 +26,15 @@ public class CharacterTypesController : BaseController
     public async Task<IActionResult> GetCharacterTypes()
     {
         var ctList = await _characterTypeServices.List();
-        return Ok(ctList);
+        List<CharacterTypeResponse> ctListResponse = new();
+        foreach (var ct in ctList)
+        {
+            var ctResponse = new CharacterTypeResponse();
+            Mapper.Map(ct, ctResponse);
+            ctResponse.BaseProperties = JsonObject.Parse(ct.BaseProperties);
+            ctListResponse.Add(ctResponse);
+        }
+        return Ok(ctListResponse);
     }
 
     [HttpGet("{id}")]
@@ -40,6 +50,7 @@ public class CharacterTypesController : BaseController
         await _gameRepo.FoundOrThrowAsync(charType.GameId, Constants.ENTITY.GAME + Constants.ERROR.NOT_EXIST_ERROR);
         var newCT = new CharacterTypeEntity();
         Mapper.Map(charType, newCT);
+        newCT.BaseProperties = charType.BaseProperties.ToString();
         await _characterTypeServices.Create(newCT);
         return CreatedAtAction(nameof(GetCharacterType), new { id = newCT.Id }, newCT);
     }

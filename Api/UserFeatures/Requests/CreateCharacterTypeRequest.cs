@@ -2,6 +2,7 @@
 using DomainLayer.Entities;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Nodes;
 using WebApiLayer.Mappings;
 
 namespace WebApiLayer.UserFeatures.Requests
@@ -13,7 +14,7 @@ namespace WebApiLayer.UserFeatures.Requests
         [Required]
         public string Description { get; set; }
         [Required]
-        public string BaseProperties { get; set; } //JSON
+        public JsonObject BaseProperties { get; set; } //JSON
         [Required]
         public Guid GameId { get; set; }
     }

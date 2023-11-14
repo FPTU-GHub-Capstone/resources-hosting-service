@@ -23,9 +23,9 @@ public class CharacterAssetsController : BaseController
         _characterRepo = characterRepo;
     }
     [HttpGet]
-    public async Task<IActionResult> GetCharacterAssets()
+    public async Task<IActionResult> GetCharacterAssets([FromQuery] Guid? characterId)
     {
-        var cList = await _characterAssetServices.List();
+        var cList = await _characterAssetServices.List(characterId);
         return Ok(cList);
     }
 
