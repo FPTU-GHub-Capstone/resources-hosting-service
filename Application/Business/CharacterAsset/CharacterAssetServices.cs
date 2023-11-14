@@ -13,8 +13,13 @@ public class CharacterAssetServices : ICharacterAssetServices
     {
         _characterAssetRepo = characterAssetRepo;
     }
-    public async Task<ICollection<CharacterAssetEntity>> List()
+    public async Task<ICollection<CharacterAssetEntity>> List(Guid? characterId)
     {
+        if (characterId.HasValue)
+        {
+            var cA = await _characterAssetRepo.WhereAsync(u => u.CharacterId.Equals(characterId));
+            return cA;
+        }
         return await _characterAssetRepo.ListAsync();
     }
     public async Task<CharacterAssetEntity> GetById(Guid characterAssetId)

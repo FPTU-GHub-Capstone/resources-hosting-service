@@ -3,7 +3,9 @@ using DomainLayer.Entities;
 using Microsoft.AspNetCore.Mvc;
 using RepositoryLayer.Repositories;
 using ServiceLayer.Business;
+using System.Text.Json.Nodes;
 using WebApiLayer.UserFeatures.Requests;
+using WebApiLayer.UserFeatures.Response;
 
 namespace WebApiLayer.Controllers;
 
@@ -20,8 +22,16 @@ public class AttributeGroupController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetAttributeGroups()
     {
-        var attribute = await _attributeServices.List();
-        return Ok(attribute);
+        var attributes = await _attributeServices.List();
+        List<AttributeGroupResponse> attGrpList = new();
+        foreach(var attribute in attributes)
+        {
+            var attGrp = new AttributeGroupResponse();
+            Mapper.Map(attribute, attGrp);
+            attGrp.Effect = JsonObject.Parse(attribute.Effect);
+            attGrpList.Add(attGrp);
+        }
+        return Ok(attGrpList);
     }
 
     [HttpGet("{id}")]
@@ -36,6 +46,7 @@ public class AttributeGroupController : BaseController
     {
         var attGrpEnt = new AttributeGroupEntity();
         Mapper.Map(attributeGroup, attGrpEnt);
+        attGrpEnt.Effect = attributeGroup.Effect.ToString();
         await _attributeServices.Create(attGrpEnt);
         return CreatedAtAction(nameof(GetAttributeGroup), new { id = attGrpEnt.Id }, attGrpEnt);
     }
