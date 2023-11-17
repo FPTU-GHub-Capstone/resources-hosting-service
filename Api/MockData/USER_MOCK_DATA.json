@@ -8,7 +8,7 @@
     "Email": "Keshaun.Stanton75@gmail.com",
     "Phone": "1-720-275-0500 x968",
     "Code": "Code 1",
-    "Status": 87806,
+    "Status": 0,
     "Balance": 49122,
     "id": "1"
   },
@@ -21,7 +21,7 @@
     "Email": "Alvena_Huel73@yahoo.com",
     "Phone": "283.583.2852",
     "Code": "Code 2",
-    "Status": 33835,
+    "Status": 1,
     "Balance": 44836,
     "id": "2"
   },
@@ -34,7 +34,7 @@
     "Email": "Drake79@hotmail.com",
     "Phone": "(371) 702-1711",
     "Code": "Code 3",
-    "Status": 73744,
+    "Status": 2,
     "Balance": 32726,
     "id": "3"
   },
@@ -47,7 +47,7 @@
     "Email": "Westley.Krajcik@yahoo.com",
     "Phone": "(308) 794-9029",
     "Code": "Code 4",
-    "Status": 36813,
+    "Status": 2,
     "Balance": 3817,
     "id": "4"
   },
@@ -60,7 +60,7 @@
     "Email": "Madisyn.Cassin@yahoo.com",
     "Phone": "850.222.8780 x8010",
     "Code": "Code 5",
-    "Status": 69677,
+    "Status": 0,
     "Balance": 63987,
     "id": "5"
   },
@@ -73,7 +73,7 @@
     "Email": "Mohamed11@gmail.com",
     "Phone": "1-322-329-9579 x701",
     "Code": "Code 6",
-    "Status": 39450,
+    "Status": 0,
     "Balance": 25724,
     "id": "6"
   },
@@ -86,7 +86,7 @@
     "Email": "Adela.Altenwerth33@yahoo.com",
     "Phone": "904.306.5271 x5346",
     "Code": "Code 7",
-    "Status": 66411,
+    "Status": 1,
     "Balance": 96593,
     "id": "7"
   },
@@ -99,7 +99,7 @@
     "Email": "Brandy69@yahoo.com",
     "Phone": "(786) 398-4085 x017",
     "Code": "Code 8",
-    "Status": 60715,
+    "Status": 2,
     "Balance": 78886,
     "id": "8"
   },
@@ -112,7 +112,7 @@
     "Email": "Flavio_Wiza@gmail.com",
     "Phone": "(780) 504-7257 x76176",
     "Code": "Code 9",
-    "Status": 80375,
+    "Status": 1,
     "Balance": 68874,
     "id": "9"
   },
@@ -125,7 +125,7 @@
     "Email": "Omer74@gmail.com",
     "Phone": "683-601-9692 x33962",
     "Code": "Code 10",
-    "Status": 16357,
+    "Status": 0,
     "Balance": 84492,
     "id": "10"
   },
@@ -138,7 +138,7 @@
     "Email": "Ozella.Okuneva@yahoo.com",
     "Phone": "1-375-231-9060 x731",
     "Code": "Code 11",
-    "Status": 77787,
+    "Status": 1,
     "Balance": 77924,
     "id": "11"
   },
@@ -151,7 +151,7 @@
     "Email": "Hosea.Wolff@yahoo.com",
     "Phone": "1-948-531-6755 x120",
     "Code": "Code 12",
-    "Status": 39001,
+    "Status": 2,
     "Balance": 75031,
     "id": "12"
   },
@@ -164,7 +164,7 @@
     "Email": "Audie_MacGyver@hotmail.com",
     "Phone": "1-201-890-9809 x8047",
     "Code": "Code 13",
-    "Status": 82234,
+    "Status": 0,
     "Balance": 87629,
     "id": "13"
   },
@@ -177,7 +177,7 @@
     "Email": "Julio_Cruickshank97@hotmail.com",
     "Phone": "1-496-899-2138 x387",
     "Code": "Code 14",
-    "Status": 74781,
+    "Status": 1,
     "Balance": 97454,
     "id": "14"
   },
@@ -190,7 +190,7 @@
     "Email": "Kailyn.Nader31@gmail.com",
     "Phone": "801-943-0306 x301",
     "Code": "Code 15",
-    "Status": 62733,
+    "Status": 2,
     "Balance": 32040,
     "id": "15"
   }
