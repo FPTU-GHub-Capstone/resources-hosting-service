@@ -9,9 +9,11 @@ namespace ServiceLayer.Business;
 public class UserServices : IUserServices
 {
     public readonly IGenericRepository<UserEntity> _userRepo;
-    public UserServices(IGenericRepository<UserEntity> userRepo)
+    public readonly IGenericRepository<GameEntity> _gameRepo;
+    public UserServices(IGenericRepository<UserEntity> userRepo, IGenericRepository<GameEntity> gameRepo)
     {
         _userRepo = userRepo;
+        _gameRepo = gameRepo;
     }
     public async Task<ICollection<UserEntity>> List(string? email)
     {
@@ -26,6 +28,12 @@ public class UserServices : IUserServices
     {
         return await _userRepo.FoundOrThrowAsync(UserId,
            Constants.ENTITY.USER + Constants.ERROR.NOT_EXIST_ERROR);
+    }
+    public async Task<ICollection<UserEntity>> GetByGameId(Guid gameId)
+    {
+        return await _userRepo.WhereAsync(
+            user => user.Games.Any(game => game.Id == gameId)
+        );
     }
     public async Task<int> Count()
     {

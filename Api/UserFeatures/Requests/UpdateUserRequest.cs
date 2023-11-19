@@ -18,5 +18,6 @@ namespace WebApiLayer.UserFeatures.Requests
         public string? Phone { get; set; }
         [Range(0,2)]
         public int? Status { get; set; }
+        public Guid? GameId { get; set; }
     }
 }

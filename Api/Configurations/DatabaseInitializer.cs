@@ -98,7 +98,8 @@ public static class DatabaseInitializer
                     Logo = mockGame.Logo,
                     Link = mockGame.Link,
                     CreatedAt = DateTime.Now,
-                    ModifiedAt = DateTime.Now
+                    ModifiedAt = DateTime.Now,
+                    Users = new List<UserEntity> { users[_rand.Next(users.Count())] }
                 };
             await dbContext.Games.AddAsync(newGame);
             await dbContext.SaveChangesAsync();

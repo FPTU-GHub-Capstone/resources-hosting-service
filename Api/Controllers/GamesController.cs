@@ -17,12 +17,13 @@ public class GamesController : BaseController
     private readonly IGameServerServices _gameServerServices;
     private readonly ILevelServices _levelServices;
     private readonly IWalletCategoryServices _walletCategoryServices;
+    private readonly IUserServices _userServices;
     private readonly IGenericRepository<GameEntity> _gameRepo;
     private readonly IGenericRepository<UserEntity> _userRepo;
     public GamesController(IGameServices gameServices, IActivityTypeServices activityTypeServices
-        , IAssetTypeServices assetTypeServices
-        , ICharacterTypeServices characterTypeServices , IGameServerServices gameServerServices
-        , ILevelServices levelServices, IWalletCategoryServices walletCategoryServices
+        , IAssetTypeServices assetTypeServices, ICharacterTypeServices characterTypeServices 
+        , IGameServerServices gameServerServices, ILevelServices levelServices
+        , IWalletCategoryServices walletCategoryServices, IUserServices userServices
         , IGenericRepository<GameEntity> gameRepo, IGenericRepository<UserEntity> userRepo)
     {
         _gameServices = gameServices;
@@ -32,6 +33,7 @@ public class GamesController : BaseController
         _gameServerServices = gameServerServices;
         _levelServices = levelServices;
         _walletCategoryServices = walletCategoryServices;
+        _userServices = userServices;
         _gameRepo = gameRepo;
         _userRepo = userRepo;
     }
@@ -88,6 +90,11 @@ public class GamesController : BaseController
         return Ok(await _walletCategoryServices.GetByGameId(id));
     }
 
+    [HttpGet("{id}/users")]
+    public async Task<IActionResult> GetUsersByGameID(Guid id)
+    {
+        return Ok(await _userServices.GetByGameId(id));
+    }
     [HttpPost]
     public async Task<IActionResult> CreateGame([FromBody] CreateGameRequest newGame)
     {
