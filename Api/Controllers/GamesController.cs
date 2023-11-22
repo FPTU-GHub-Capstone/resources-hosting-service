@@ -11,6 +11,7 @@ namespace WebApiLayer.Controllers;
 public class GamesController : BaseController
 {
     private readonly IGameServices _gameServices;
+    private readonly IGameUserServices _gameUserServices;
     private readonly IActivityTypeServices _activityTypeServices;
     private readonly IAssetTypeServices _assetTypeServices;
     private readonly ICharacterTypeServices _characterTypeServices;
@@ -20,7 +21,7 @@ public class GamesController : BaseController
     private readonly IUserServices _userServices;
     private readonly IGenericRepository<GameEntity> _gameRepo;
     private readonly IGenericRepository<UserEntity> _userRepo;
-    public GamesController(IGameServices gameServices, IActivityTypeServices activityTypeServices
+    public GamesController(IGameServices gameServices, IActivityTypeServices activityTypeServices, IGameUserServices gameUserServices
         , IAssetTypeServices assetTypeServices, ICharacterTypeServices characterTypeServices 
         , IGameServerServices gameServerServices, ILevelServices levelServices
         , IWalletCategoryServices walletCategoryServices, IUserServices userServices
@@ -28,6 +29,7 @@ public class GamesController : BaseController
     {
         _gameServices = gameServices;
         _activityTypeServices = activityTypeServices;
+        _gameUserServices = gameUserServices;
         _assetTypeServices = assetTypeServices;
         _characterTypeServices = characterTypeServices;
         _gameServerServices = gameServerServices;
@@ -93,7 +95,7 @@ public class GamesController : BaseController
     [HttpGet("{id}/users")]
     public async Task<IActionResult> GetUsersByGameID(Guid id)
     {
-        return Ok(await _userServices.GetByGameId(id));
+        return Ok(await _gameUserServices.GetByGameId(id));
     }
     [HttpPost]
     public async Task<IActionResult> CreateGame([FromBody] CreateGameRequest newGame)

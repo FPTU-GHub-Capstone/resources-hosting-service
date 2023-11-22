@@ -8,6 +8,7 @@ public class GameEntity : BaseEntity
     public string Name { get; set; }
     public string Logo { get; set; }
     public string Link { get; set; }
+    [NotMapped]
     // M Users - M Games
     public virtual ICollection<UserEntity>? Users { get; set; }
     // 1 Game - M Activity Type

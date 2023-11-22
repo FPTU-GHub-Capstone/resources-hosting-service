@@ -12,26 +12,26 @@ namespace WebApiLayer.Controllers;
 public class UsersController : BaseController
 {
     private readonly IUserServices _userServices;
-    private readonly IGameServices _gameServices;
+    private readonly IGameUserServices _gameUserServices;
     private readonly IGenericRepository<UserEntity> _userRepo;
-    public UsersController(IUserServices userServices, IGenericRepository<UserEntity> userRepo, IGameServices gameServices)
+    private readonly IGenericRepository<GameUserEntity> _gameUserRepo;
+    public UsersController(IUserServices userServices, IGenericRepository<UserEntity> userRepo, IGameUserServices gameUserServices, IGenericRepository<GameUserEntity> gameUserRepo)
     {
         _userServices = userServices;
         _userRepo = userRepo;
-        _gameServices = gameServices;
+        _gameUserServices = gameUserServices;
+        _gameUserRepo = gameUserRepo;
     }
     [HttpGet]
     public async Task<IActionResult> GetUsers([FromQuery] string? email)
-    {
-        var users = await _userServices.List(email);
-        return Ok(users);
+    { 
+        return Ok(await _userServices.List(email));
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetUser(Guid id)
     {
-        var user = await _userServices.GetById(id);
-        return Ok(user);
+        return Ok(await _userServices.GetById(id));
     }
 
     [HttpPost]
@@ -40,29 +40,26 @@ public class UsersController : BaseController
         var user = new UserEntity();
         Mapper.Map(cUser, user);
         await _userServices.Create(user);
-        if (cUser.GameId != null)
-        {
-            var updateUser = await _userRepo.FoundOrThrowAsync(user.Id, Constants.ENTITY.USER + Constants.ERROR.NOT_EXIST_ERROR);
-            var game = await _gameServices.GetById((Guid)cUser.GameId);
-            updateUser.Games = new List<GameEntity> { game };
-            await _userServices.Update(updateUser);
-            user.Games = user.Games?.Select(g => new GameEntity { Id = g.Id }).ToList();
-        }
         return CreatedAtAction(nameof(GetUser), new { id = user.Id }, user);
+    }
+
+    [HttpPost("{id}/add-game")]
+    public async Task<IActionResult> CreateGameUser(Guid id, [FromQuery] Guid GameId)
+    {
+        var gameUser = new GameUserEntity {
+            UserId = id,
+            GameId = GameId
+        };
+        await _gameUserServices.Create(gameUser);
+        return CreatedAtAction(nameof(GetUser), new {id = id}, gameUser);
     }
 
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateUser(Guid id, [FromBody] UpdateUserRequest user)
     {
         var updateUser = await _userRepo.FoundOrThrowAsync(id, Constants.ENTITY.USER + Constants.ERROR.NOT_EXIST_ERROR);
-        if (user.GameId != null)
-        {
-            var game = await _gameServices.GetById((Guid)user.GameId);
-            updateUser.Games = new List<GameEntity> { game };
-        }
         Mapper.Map(user, updateUser);
         await _userServices.Update(updateUser);
-        updateUser.Games = updateUser.Games?.Select(g => new GameEntity { Id = g.Id }).ToList();
         return Ok(updateUser);
     }
 
@@ -71,6 +68,14 @@ public class UsersController : BaseController
     {
         await _userRepo.FoundOrThrowAsync(id, Constants.ENTITY.USER + Constants.ERROR.NOT_EXIST_ERROR);
         await _userServices.Delete(id);
+        return NoContent();
+    }
+
+    [HttpDelete("{id}/delete-game")]
+    public async Task<IActionResult> DeleteGameUser(Guid id)
+    {
+        await _gameUserRepo.FoundOrThrowAsync(id, Constants.ERROR.NOT_EXIST_ERROR);
+        await _gameUserServices.Delete(id);
         return NoContent();
     }
 }

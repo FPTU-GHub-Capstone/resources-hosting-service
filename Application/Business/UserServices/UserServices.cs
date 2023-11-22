@@ -8,32 +8,53 @@ namespace ServiceLayer.Business;
 
 public class UserServices : IUserServices
 {
-    public readonly IGenericRepository<UserEntity> _userRepo;
-    public readonly IGenericRepository<GameEntity> _gameRepo;
-    public UserServices(IGenericRepository<UserEntity> userRepo, IGenericRepository<GameEntity> gameRepo)
+    private readonly IGenericRepository<UserEntity> _userRepo;
+    private readonly IGenericRepository<GameUserEntity> _gameUserRepo;
+    private readonly IGenericRepository<GameEntity> _gameRepo;
+    public UserServices(IGenericRepository<UserEntity> userRepo, IGenericRepository<GameUserEntity> gameUserRepo
+        , IGenericRepository<GameEntity> gameRepo)
     {
         _userRepo = userRepo;
+        _gameUserRepo = gameUserRepo;
         _gameRepo = gameRepo;
     }
     public async Task<ICollection<UserEntity>> List(string? email)
     {
+        IList<UserEntity> userList;
         if (!string.IsNullOrEmpty(email))
         {
-            var user = await _userRepo.WhereAsync(u => u.Email.Equals(email));
-            return user;
+            userList = await _userRepo.WhereAsync(u => u.Email.Equals(email));
         }
-        return await _userRepo.ListAsync();
+        else
+        {
+            userList = await _userRepo.ListAsync();
+        }
+        foreach (var singleUser in userList)
+        {
+            var gameuser = await _gameUserRepo.WhereAsync(gu => gu.UserId == singleUser.Id);
+            if (gameuser != null)
+            {
+                foreach (var game in gameuser)
+                {
+                    singleUser.Games.Add(await _gameRepo.FirstOrDefaultAsync(g => g.Id == game.GameId));
+                }
+            }
+        }
+        return userList;
     }
     public async Task<UserEntity> GetById(Guid UserId)
     {
-        return await _userRepo.FoundOrThrowAsync(UserId,
+        UserEntity user = await _userRepo.FoundOrThrowAsync(UserId,
            Constants.ENTITY.USER + Constants.ERROR.NOT_EXIST_ERROR);
-    }
-    public async Task<ICollection<UserEntity>> GetByGameId(Guid gameId)
-    {
-        return await _userRepo.WhereAsync(
-            user => user.Games.Any(game => game.Id == gameId)
-        );
+        var gameuser = await _gameUserRepo.WhereAsync(gu => gu.UserId == user.Id);
+        if (gameuser != null)
+        {
+            foreach (var game in gameuser)
+            {
+                user.Games.Add(await _gameRepo.FirstOrDefaultAsync(g => g.Id == game.GameId));
+            }
+        }
+        return user;
     }
     public async Task<int> Count()
     {

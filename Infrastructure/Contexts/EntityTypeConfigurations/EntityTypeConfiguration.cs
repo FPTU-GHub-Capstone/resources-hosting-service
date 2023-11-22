@@ -94,10 +94,7 @@ public class EntityTypeConfiguration :
     //Game Entity
     public void Configure(EntityTypeBuilder<GameEntity> builder)
     {
-        builder
-             .HasMany(u => u.Users)
-             .WithMany(g => g.Games)
-             .UsingEntity(j => j.ToTable("GameEntityUserEntity"));
+
     }
     //Game Server
     public void Configure(EntityTypeBuilder<GameServerEntity> builder)

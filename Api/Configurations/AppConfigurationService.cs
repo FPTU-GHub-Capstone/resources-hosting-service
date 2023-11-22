@@ -31,6 +31,7 @@ namespace WebApiLayer.Configurations
             services.AddScoped<ICharacterTypeServices, CharacterTypeServices>();
             services.AddScoped<IGameServerServices, GameServerServices>();
             services.AddScoped<IGameServices, GameServices>();
+            services.AddScoped<IGameUserServices, GameUserServices>();
             services.AddScoped<ILevelProgressServices, LevelProgressServices>();
             services.AddScoped<ILevelServices, LevelServices>();
             services.AddScoped<IPaymentServices, PaymentServices>();

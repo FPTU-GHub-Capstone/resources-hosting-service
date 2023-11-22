@@ -15,8 +15,9 @@ public class UserEntity : BaseEntity
     public string Code { get; set; } = "";
     public int Status { get; set; } = 0;
     public float Balance { get; set; } = 0;
+    [NotMapped]
     // M User - M Games
-    public virtual ICollection<GameEntity>? Games { get; set; }
+    public virtual ICollection<GameEntity>? Games { get; set; } = new List<GameEntity>();
     // 1 User - M Characters
     public virtual ICollection<CharacterEntity>? Characters { get; set; }
     //1 User - M Payment
