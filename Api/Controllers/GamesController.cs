@@ -95,7 +95,7 @@ public class GamesController : BaseController
     [HttpGet("{id}/users")]
     public async Task<IActionResult> GetUsersByGameID(Guid id)
     {
-        return Ok(await _gameUserServices.GetByGameId(id));
+        return Ok(await _gameUserServices.GetUserByGameId(id));
     }
     [HttpPost]
     public async Task<IActionResult> CreateGame([FromBody] CreateGameRequest newGame)

@@ -39,26 +39,23 @@ public class LevelsController : BaseController
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateLevel([FromBody] CreateLevelsController[] level)
+    public async Task<IActionResult> CreateLevel([FromBody] CreateLevelsRequest[] level)
     {
-        LevelEntity newLevel; List<Guid> idList = new List<Guid>();
+        List<LevelEntity> levelList = new List<LevelEntity>();
         foreach (var singleLevel in level)
         {
             await _gameRepo.FoundOrThrowAsync(singleLevel.GameId, Constants.ENTITY.GAME +"id " + singleLevel.GameId + " " + Constants.ERROR.NOT_EXIST_ERROR);
             await _levelServices.CheckForDuplicateLevel(singleLevel.Name, singleLevel.GameId);
-        }
-        foreach (var singleLevel in level)
-        {
-            newLevel = new LevelEntity();
+            LevelEntity newLevel = new LevelEntity();
             Mapper.Map(singleLevel, newLevel);
-            await _levelServices.Create(newLevel);
-            idList.Add(newLevel.Id);
+            levelList.Add(newLevel);
         }
-        return CreatedAtAction(nameof(GetLevels), new { ids = idList }, level);
+        await _levelServices.Create(levelList);
+        return CreatedAtAction(nameof(GetLevels), new { ids = levelList.Select(l => l.Id).ToList() }, level);
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateLevel(Guid id, [FromBody] UpdateLevelsController level)
+    public async Task<IActionResult> UpdateLevel(Guid id, [FromBody] UpdateLevelsRequest level)
     {
         var updateLevel = await _levelRepo.FoundOrThrowAsync(id, Constants.ENTITY.LEVEL + Constants.ERROR.NOT_EXIST_ERROR);
         Mapper.Map(level, updateLevel);

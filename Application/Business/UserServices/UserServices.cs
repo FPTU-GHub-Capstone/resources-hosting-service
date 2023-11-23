@@ -20,41 +20,19 @@ public class UserServices : IUserServices
     }
     public async Task<ICollection<UserEntity>> List(string? email)
     {
-        IList<UserEntity> userList;
         if (!string.IsNullOrEmpty(email))
         {
-            userList = await _userRepo.WhereAsync(u => u.Email.Equals(email));
+            return await _userRepo.WhereAsync(u => u.Email.Equals(email));
         }
         else
         {
-            userList = await _userRepo.ListAsync();
+            return await _userRepo.ListAsync();
         }
-        foreach (var singleUser in userList)
-        {
-            var gameuser = await _gameUserRepo.WhereAsync(gu => gu.UserId == singleUser.Id);
-            if (gameuser != null)
-            {
-                foreach (var game in gameuser)
-                {
-                    singleUser.Games.Add(await _gameRepo.FirstOrDefaultAsync(g => g.Id == game.GameId));
-                }
-            }
-        }
-        return userList;
     }
     public async Task<UserEntity> GetById(Guid UserId)
     {
-        UserEntity user = await _userRepo.FoundOrThrowAsync(UserId,
+        return await _userRepo.FoundOrThrowAsync(UserId,
            Constants.ENTITY.USER + Constants.ERROR.NOT_EXIST_ERROR);
-        var gameuser = await _gameUserRepo.WhereAsync(gu => gu.UserId == user.Id);
-        if (gameuser != null)
-        {
-            foreach (var game in gameuser)
-            {
-                user.Games.Add(await _gameRepo.FirstOrDefaultAsync(g => g.Id == game.GameId));
-            }
-        }
-        return user;
     }
     public async Task<int> Count()
     {

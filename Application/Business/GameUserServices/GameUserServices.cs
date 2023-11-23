@@ -24,24 +24,30 @@ public class GameUserServices : IGameUserServices
     public async Task<ICollection<GameUserEntity>> List()
     {
         var list = await _gameUserRepo.ListAsync();
-        return await getGameAndUser(list);
+        return list;
     }
     public async Task<GameUserEntity> GetById(Guid id)
     {
-        var gu = await _gameUserRepo.FoundOrThrowAsync(id);
-        return await getGameAndUser(gu);
+        var gu = await _gameUserRepo.FoundOrThrowAsync(id,"This data is " + Constants.ERROR.NOT_EXIST_ERROR, new string[] { "User", "Game" });
+        return gu;
     }
 
     public async Task<ICollection<GameUserEntity>> GetByGameId(Guid id)
     {
-        var game = await _gameUserRepo.WhereAsync(gu => gu.GameId == id);
-        return await getGameAndUser(game);
+        var game = await _gameUserRepo.WhereAsync(gu => gu.GameId == id, new string[] {"User","Game"});
+        return game;
+    }
+
+    public async Task<List<UserEntity>> GetUserByGameId(Guid id)
+    {
+        var game = await _gameUserRepo.WhereAsync(gu => gu.GameId == id,new string[] {"User"});
+        return game.Select(g => g.User).ToList();
     }
 
     public async Task<ICollection<GameUserEntity>> GetByUserId(Guid id)
     {
-        var user = await _gameUserRepo.WhereAsync(gu => gu.UserId == id);
-        return await getGameAndUser(user);
+        var user = await _gameUserRepo.WhereAsync(gu => gu.UserId == id, new string[] { "User", "Game" });
+        return user;
     }
     public async Task Create(GameUserEntity gameUser)
     {
@@ -54,21 +60,6 @@ public class GameUserServices : IGameUserServices
         await _gameUserRepo.DeleteAsync(gameUser);
     }
 
-    public async Task<ICollection<GameUserEntity>> getGameAndUser(IList<GameUserEntity> list)
-    {
-        foreach (var item in list.Select((value, i) => (value, i)))
-        {
-            list[item.i].Game = await _gameRepo.FindByIdAsync(list[item.i].GameId);
-            list[item.i].User = await _userRepo.FindByIdAsync(list[item.i].UserId);
-        }
-        return list;
-    }
-    public async Task<GameUserEntity> getGameAndUser(GameUserEntity gu)
-    {
-        gu.Game = await _gameRepo.FindByIdAsync(gu.GameId);
-        gu.User = await _userRepo.FindByIdAsync(gu.UserId);
-        return gu;
-    }
     public async Task CheckDuplicateGameAndUser(GameUserEntity gu)
     {
         var checkGameUser = await _gameUserRepo.FirstOrDefaultAsync(

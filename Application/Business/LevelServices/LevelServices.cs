@@ -24,16 +24,8 @@ public class LevelServices : ILevelServices
     }
     public async Task<ICollection<LevelEntity>> List(Guid[] levelIds)
     {
-        List<LevelEntity> result = new List<LevelEntity>();
-        foreach (var levelId in levelIds.Distinct())
-        {
-            var level = await _levelRepo.FoundOrThrowAsync(levelId, "Level with ID " + levelId + " " + Constants.ERROR.NOT_EXIST_ERROR);
-            if (level is not null)
-            {
-                result.Add(level);
-            }
-        }
-        return result;
+        var levels = await _levelRepo.WhereAsync(level => levelIds.Contains(level.Id));
+        return levels;
     }
     public async Task<ICollection<LevelEntity>> GetByGameId(Guid gameId)
     {
@@ -48,9 +40,9 @@ public class LevelServices : ILevelServices
         var levels = await _levelRepo.WhereAsync(l => l.GameId.Equals(gameId));
         return levels.Count();
     }
-    public async Task Create(LevelEntity level)
+    public async Task Create(List<LevelEntity> level)
     {
-        await _levelRepo.CreateAsync(level);
+        await _levelRepo.CreateRangeAsync(level);
     }
     public async Task Update(LevelEntity level)
     {

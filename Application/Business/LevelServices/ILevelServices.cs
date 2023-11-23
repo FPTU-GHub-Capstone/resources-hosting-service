@@ -9,7 +9,7 @@ public interface ILevelServices
     Task<ICollection<LevelEntity>> GetByGameId(Guid gameId);
     Task<int> Count();
     Task<int> Count(Guid GameId); // Count levels in 1 game
-    Task Create(LevelEntity level);
+    Task Create(List<LevelEntity> level);
     Task Update(LevelEntity level);
     Task Delete(Guid levelId);
     Task CheckForDuplicateLevel(string name, Guid GameId, Guid? id = null);
