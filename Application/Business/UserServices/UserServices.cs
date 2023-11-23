@@ -24,10 +24,7 @@ public class UserServices : IUserServices
         {
             return await _userRepo.WhereAsync(u => u.Email.Equals(email));
         }
-        else
-        {
-            return await _userRepo.ListAsync();
-        }
+        return await _userRepo.ListAsync();
     }
     public async Task<UserEntity> GetById(Guid UserId)
     {

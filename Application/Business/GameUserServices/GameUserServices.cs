@@ -32,7 +32,7 @@ public class GameUserServices : IGameUserServices
         return gu;
     }
 
-    public async Task<ICollection<GameUserEntity>> GetByGameId(Guid id)
+    public async Task<ICollection<GameUserEntity>> GetGameUserByGameId(Guid id)
     {
         var game = await _gameUserRepo.WhereAsync(gu => gu.GameId == id, new string[] {"User","Game"});
         return game;
@@ -44,7 +44,7 @@ public class GameUserServices : IGameUserServices
         return game.Select(g => g.User).ToList();
     }
 
-    public async Task<ICollection<GameUserEntity>> GetByUserId(Guid id)
+    public async Task<ICollection<GameUserEntity>> GetGameUserByUserId(Guid id)
     {
         var user = await _gameUserRepo.WhereAsync(gu => gu.UserId == id, new string[] { "User", "Game" });
         return user;

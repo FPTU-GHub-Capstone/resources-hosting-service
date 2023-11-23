@@ -27,7 +27,7 @@ public class LevelServices : ILevelServices
         var levels = await _levelRepo.WhereAsync(level => levelIds.Contains(level.Id));
         return levels;
     }
-    public async Task<ICollection<LevelEntity>> GetByGameId(Guid gameId)
+    public async Task<ICollection<LevelEntity>> GetLevelByGameId(Guid gameId)
     {
         return await _levelRepo.WhereAsync(l => l.GameId.Equals(gameId));
     }
