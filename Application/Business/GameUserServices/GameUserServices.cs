@@ -31,23 +31,10 @@ public class GameUserServices : IGameUserServices
         var gu = await _gameUserRepo.FoundOrThrowAsync(id,"This data is " + Constants.ERROR.NOT_EXIST_ERROR, new string[] { "User", "Game" });
         return gu;
     }
-
-    public async Task<ICollection<GameUserEntity>> GetGameUserByGameId(Guid id)
-    {
-        var game = await _gameUserRepo.WhereAsync(gu => gu.GameId == id, new string[] {"User","Game"});
-        return game;
-    }
-
     public async Task<List<UserEntity>> GetUserByGameId(Guid id)
     {
         var game = await _gameUserRepo.WhereAsync(gu => gu.GameId == id,new string[] {"User"});
         return game.Select(g => g.User).ToList();
-    }
-
-    public async Task<ICollection<GameUserEntity>> GetGameUserByUserId(Guid id)
-    {
-        var user = await _gameUserRepo.WhereAsync(gu => gu.UserId == id, new string[] { "User", "Game" });
-        return user;
     }
     public async Task Create(GameUserEntity gameUser)
     {

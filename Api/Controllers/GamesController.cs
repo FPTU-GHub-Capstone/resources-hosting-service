@@ -83,7 +83,7 @@ public class GamesController : BaseController
     [HttpGet("{id}/levels")]
     public async Task<IActionResult> GetLevelByGameID(Guid id)
     {
-        return Ok(await _levelServices.GetByGameId(id));
+        return Ok(await _levelServices.GetLevelByGameId(id));
     }
 
     [HttpGet("{id}/wallet-category")]
