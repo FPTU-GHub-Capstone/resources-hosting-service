@@ -21,7 +21,7 @@ public class AssetTypeServices : IAssetTypeServices
     {
         return await _assetTypeRepo.FoundOrThrowAsync(assetTypeId, Constants.ENTITY.ASSET_ATTRIBUTE + Constants.ERROR.NOT_EXIST_ERROR);
     }
-    public async Task<ICollection<AssetTypeEntity>> GetByGameId(Guid gameId)
+    public async Task<ICollection<AssetTypeEntity>> ListAssTypesByGameId(Guid gameId)
     {
         return await _assetTypeRepo.WhereAsync(
             a => a.GameId.Equals(gameId));

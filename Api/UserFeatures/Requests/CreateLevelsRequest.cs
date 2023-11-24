@@ -4,7 +4,7 @@ using WebApiLayer.Mappings;
 
 namespace WebApiLayer.UserFeatures.Requests
 {
-    public class CreateLevelsController : IMapTo<LevelEntity>, IMapFrom<LevelEntity>
+    public class CreateLevelsRequest : IMapTo<LevelEntity>, IMapFrom<LevelEntity>
     {
         [Required]
         public string Name { get; set; }

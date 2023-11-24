@@ -21,7 +21,7 @@ public class WalletCategoryServices : IWalletCategoryServices
         return await _walletCategoryRepo.FoundOrThrowAsync(categoryId,
            Constants.ENTITY.WALLET_CATEGORY + Constants.ERROR.NOT_EXIST_ERROR);
     }
-    public async Task<ICollection<WalletCategoryEntity>> GetByGameId(Guid gameId)
+    public async Task<ICollection<WalletCategoryEntity>> ListWalCatsByGameId(Guid gameId)
     {
         return await _walletCategoryRepo.WhereAsync(wc => wc.GameId.Equals(gameId));
     }

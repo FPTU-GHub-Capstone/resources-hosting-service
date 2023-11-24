@@ -22,10 +22,13 @@ public class LevelsController : BaseController
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetLevels()
+    public async Task<IActionResult> GetLevels([FromQuery] Guid[]? idList)
     {
-        var levels = await _levelServices.List();
-        return Ok(levels);
+        if (idList != null && idList.Count() > 0)
+        {
+            return Ok(await _levelServices.List(idList));
+        }
+        return Ok(await _levelServices.List());
     }
 
     [HttpGet("{id}")]
@@ -36,17 +39,23 @@ public class LevelsController : BaseController
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateLevel([FromBody] CreateLevelsController level)
+    public async Task<IActionResult> CreateLevel([FromBody] CreateLevelsRequest[] level)
     {
-        await _gameRepo.FoundOrThrowAsync(level.GameId, Constants.ENTITY.GAME + Constants.ERROR.NOT_EXIST_ERROR);
-        var newLevel = new LevelEntity();
-        Mapper.Map(level, newLevel);
-        await _levelServices.Create(newLevel);
-        return CreatedAtAction(nameof(GetLevel), new { id = newLevel.Id }, newLevel);
+        List<LevelEntity> levelList = new List<LevelEntity>();
+        foreach (var singleLevel in level)
+        {
+            await _gameRepo.FoundOrThrowAsync(singleLevel.GameId, Constants.ENTITY.GAME +"id " + singleLevel.GameId + " " + Constants.ERROR.NOT_EXIST_ERROR);
+            await _levelServices.CheckForDuplicateLevel(singleLevel.Name, singleLevel.GameId);
+            LevelEntity newLevel = new LevelEntity();
+            Mapper.Map(singleLevel, newLevel);
+            levelList.Add(newLevel);
+        }
+        await _levelServices.Create(levelList);
+        return CreatedAtAction(nameof(GetLevels), new { ids = levelList.Select(l => l.Id).ToList() }, level);
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateLevel(Guid id, [FromBody] UpdateLevelsController level)
+    public async Task<IActionResult> UpdateLevel(Guid id, [FromBody] UpdateLevelsRequest level)
     {
         var updateLevel = await _levelRepo.FoundOrThrowAsync(id, Constants.ENTITY.LEVEL + Constants.ERROR.NOT_EXIST_ERROR);
         Mapper.Map(level, updateLevel);

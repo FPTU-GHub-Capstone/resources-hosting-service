@@ -11,27 +11,31 @@ namespace WebApiLayer.Controllers;
 public class GamesController : BaseController
 {
     private readonly IGameServices _gameServices;
+    private readonly IGameUserServices _gameUserServices;
     private readonly IActivityTypeServices _activityTypeServices;
     private readonly IAssetTypeServices _assetTypeServices;
     private readonly ICharacterTypeServices _characterTypeServices;
     private readonly IGameServerServices _gameServerServices;
     private readonly ILevelServices _levelServices;
     private readonly IWalletCategoryServices _walletCategoryServices;
+    private readonly IUserServices _userServices;
     private readonly IGenericRepository<GameEntity> _gameRepo;
     private readonly IGenericRepository<UserEntity> _userRepo;
-    public GamesController(IGameServices gameServices, IActivityTypeServices activityTypeServices
-        , IAssetTypeServices assetTypeServices
-        , ICharacterTypeServices characterTypeServices , IGameServerServices gameServerServices
-        , ILevelServices levelServices, IWalletCategoryServices walletCategoryServices
+    public GamesController(IGameServices gameServices, IActivityTypeServices activityTypeServices, IGameUserServices gameUserServices
+        , IAssetTypeServices assetTypeServices, ICharacterTypeServices characterTypeServices 
+        , IGameServerServices gameServerServices, ILevelServices levelServices
+        , IWalletCategoryServices walletCategoryServices, IUserServices userServices
         , IGenericRepository<GameEntity> gameRepo, IGenericRepository<UserEntity> userRepo)
     {
         _gameServices = gameServices;
         _activityTypeServices = activityTypeServices;
+        _gameUserServices = gameUserServices;
         _assetTypeServices = assetTypeServices;
         _characterTypeServices = characterTypeServices;
         _gameServerServices = gameServerServices;
         _levelServices = levelServices;
         _walletCategoryServices = walletCategoryServices;
+        _userServices = userServices;
         _gameRepo = gameRepo;
         _userRepo = userRepo;
     }
@@ -55,39 +59,44 @@ public class GamesController : BaseController
     [HttpGet("{id}/activity-types")]
     public async Task<IActionResult> GetActTypeByGameID(Guid id)
     {
-        return Ok(await _activityTypeServices.GetByGameId(id));
+        return Ok(await _activityTypeServices.ListActTypesByGameId(id));
     }
 
     [HttpGet("{id}/asset-types")]
     public async Task<IActionResult> GetAssTypeByGameID(Guid id)
     {
-        return Ok(await _assetTypeServices.GetByGameId(id));
+        return Ok(await _assetTypeServices.ListAssTypesByGameId(id));
     }
 
     [HttpGet("{id}/character-types")]
     public async Task<IActionResult> GetCharTypeByGameID(Guid id)
     {
-        return Ok(await _characterTypeServices.GetByGameId(id));
+        return Ok(await _characterTypeServices.ListCharTypesByGameId(id));
     }
 
     [HttpGet("{id}/game-servers")]
     public async Task<IActionResult> GetGameServerByGameID(Guid id)
     {
-        return Ok(await _gameServerServices.GetByGameId(id));
+        return Ok(await _gameServerServices.ListServersByGameId(id));
     }
 
     [HttpGet("{id}/levels")]
     public async Task<IActionResult> GetLevelByGameID(Guid id)
     {
-        return Ok(await _levelServices.GetByGameId(id));
+        return Ok(await _levelServices.ListLevelsByGameId(id));
     }
 
     [HttpGet("{id}/wallet-category")]
     public async Task<IActionResult> GetWalCatByGameID(Guid id)
     {
-        return Ok(await _walletCategoryServices.GetByGameId(id));
+        return Ok(await _walletCategoryServices.ListWalCatsByGameId(id));
     }
 
+    [HttpGet("{id}/users")]
+    public async Task<IActionResult> GetUsersByGameID(Guid id)
+    {
+        return Ok(await _gameUserServices.ListUsersByGameId(id));
+    }
     [HttpPost]
     public async Task<IActionResult> CreateGame([FromBody] CreateGameRequest newGame)
     {

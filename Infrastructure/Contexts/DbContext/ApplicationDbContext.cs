@@ -30,6 +30,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<CharacterEntity> Characters { get; set; }
     public DbSet<CharacterTypeEntity> CharacterTypes { get; set; }
     public DbSet<GameEntity> Games { get; set; }
+    public DbSet<GameUserEntity> GamesUsers { get; set; }
     public DbSet<GameServerEntity> GameServers { get; set; }
     public DbSet<LevelEntity> Levels { get; set; }
     public DbSet<LevelProgressEntity> LevelProgresses { get; set; }

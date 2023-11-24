@@ -8,17 +8,21 @@ namespace ServiceLayer.Business;
 
 public class UserServices : IUserServices
 {
-    public readonly IGenericRepository<UserEntity> _userRepo;
-    public UserServices(IGenericRepository<UserEntity> userRepo)
+    private readonly IGenericRepository<UserEntity> _userRepo;
+    private readonly IGenericRepository<GameUserEntity> _gameUserRepo;
+    private readonly IGenericRepository<GameEntity> _gameRepo;
+    public UserServices(IGenericRepository<UserEntity> userRepo, IGenericRepository<GameUserEntity> gameUserRepo
+        , IGenericRepository<GameEntity> gameRepo)
     {
         _userRepo = userRepo;
+        _gameUserRepo = gameUserRepo;
+        _gameRepo = gameRepo;
     }
     public async Task<ICollection<UserEntity>> List(string? email)
     {
         if (!string.IsNullOrEmpty(email))
         {
-            var user = await _userRepo.WhereAsync(u => u.Email.Equals(email));
-            return user;
+            return await _userRepo.WhereAsync(u => u.Email.Equals(email));
         }
         return await _userRepo.ListAsync();
     }

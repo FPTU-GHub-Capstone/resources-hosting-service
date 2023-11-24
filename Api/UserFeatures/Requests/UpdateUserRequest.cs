@@ -16,5 +16,8 @@ namespace WebApiLayer.UserFeatures.Requests
         public string? Email { get; set; }
         [RegularExpression(@"^(03|05|07|08|09)\d{8}$", ErrorMessage = "Invalid phone number")]
         public string? Phone { get; set; }
+        [Range(0,2)]
+        public int? Status { get; set; }
+        public Guid? GameId { get; set; }
     }
 }

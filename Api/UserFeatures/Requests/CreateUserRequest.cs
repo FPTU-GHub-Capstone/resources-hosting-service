@@ -10,6 +10,8 @@ namespace WebApiLayer.UserFeatures.Requests
         [Required]
         public string Username { get; set; }
         [Required]
+        public string Uid { get; set; }
+        [Required]
         public string Password { get; set; }
         [Required]
         public string FirstName { get; set; }
@@ -23,5 +25,6 @@ namespace WebApiLayer.UserFeatures.Requests
         [Required]
         [RegularExpression(@"^(03|05|07|08|09)\d{8}$", ErrorMessage = "Invalid phone number")]
         public string Phone { get; set; }
+        public Guid? GameId { get; set; }
     }
 }

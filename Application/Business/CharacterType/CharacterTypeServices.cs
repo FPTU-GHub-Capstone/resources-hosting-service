@@ -24,7 +24,7 @@ public class CharacterTypeServices : ICharacterTypeServices
         return await _characterTypeRepo.FoundOrThrowAsync(characterTypeId,
             Constants.ENTITY.CHARACTER_TYPE + Constants.ERROR.NOT_EXIST_ERROR);
     }
-    public async Task<ICollection<CharacterTypeEntity>> GetByGameId(Guid gameId)
+    public async Task<ICollection<CharacterTypeEntity>> ListCharTypesByGameId(Guid gameId)
     {
         return await _characterTypeRepo.WhereAsync(c => c.GameId.Equals(gameId));
     }

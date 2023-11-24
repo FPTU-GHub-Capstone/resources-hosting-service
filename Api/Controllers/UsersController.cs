@@ -3,6 +3,7 @@ using DomainLayer.Entities;
 using Microsoft.AspNetCore.Mvc;
 using RepositoryLayer.Repositories;
 using ServiceLayer.Business;
+using System.Runtime.ConstrainedExecution;
 using WebApiLayer.UserFeatures.Requests;
 
 namespace WebApiLayer.Controllers;
@@ -11,24 +12,26 @@ namespace WebApiLayer.Controllers;
 public class UsersController : BaseController
 {
     private readonly IUserServices _userServices;
+    private readonly IGameUserServices _gameUserServices;
     private readonly IGenericRepository<UserEntity> _userRepo;
-    public UsersController(IUserServices userServices, IGenericRepository<UserEntity> userRepo)
+    private readonly IGenericRepository<GameUserEntity> _gameUserRepo;
+    public UsersController(IUserServices userServices, IGenericRepository<UserEntity> userRepo, IGameUserServices gameUserServices, IGenericRepository<GameUserEntity> gameUserRepo)
     {
         _userServices = userServices;
         _userRepo = userRepo;
+        _gameUserServices = gameUserServices;
+        _gameUserRepo = gameUserRepo;
     }
     [HttpGet]
     public async Task<IActionResult> GetUsers([FromQuery] string? email)
-    {
-        var users = await _userServices.List(email);
-        return Ok(users);
+    { 
+        return Ok(await _userServices.List(email));
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetUser(Guid id)
     {
-        var user = await _userServices.GetById(id);
-        return Ok(user);
+        return Ok(await _userServices.GetById(id));
     }
 
     [HttpPost]
@@ -38,6 +41,17 @@ public class UsersController : BaseController
         Mapper.Map(cUser, user);
         await _userServices.Create(user);
         return CreatedAtAction(nameof(GetUser), new { id = user.Id }, user);
+    }
+
+    [HttpPost("{id}/add-game")]
+    public async Task<IActionResult> CreateGameUser(Guid id, [FromQuery] Guid GameId)
+    {
+        var gameUser = new GameUserEntity {
+            UserId = id,
+            GameId = GameId
+        };
+        await _gameUserServices.Create(gameUser);
+        return CreatedAtAction(nameof(GetUser), new {id = id}, gameUser);
     }
 
     [HttpPut("{id}")]
@@ -54,6 +68,14 @@ public class UsersController : BaseController
     {
         await _userRepo.FoundOrThrowAsync(id, Constants.ENTITY.USER + Constants.ERROR.NOT_EXIST_ERROR);
         await _userServices.Delete(id);
+        return NoContent();
+    }
+
+    [HttpDelete("{id}/delete-game")]
+    public async Task<IActionResult> DeleteGameUser(Guid id)
+    {
+        await _gameUserRepo.FoundOrThrowAsync(id, Constants.ERROR.NOT_EXIST_ERROR);
+        await _gameUserServices.Delete(id);
         return NoContent();
     }
 }

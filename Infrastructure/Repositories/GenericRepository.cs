@@ -128,6 +128,11 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
 
     public async Task CreateRangeAsync(IEnumerable<T> entities)
     {
+        foreach (var entity in entities)
+        {
+            entity.CreatedAt = DateTime.UtcNow;
+            entity.ModifiedAt = DateTime.UtcNow;
+        }
         await _context.AddRangeAsync(entities);
         await _context.SaveChangesAsync();
     }

@@ -2,6 +2,7 @@
 using DomainLayer.Entities;
 using DomainLayer.Exceptions;
 using RepositoryLayer.Repositories;
+using System.Security.Cryptography;
 
 namespace ServiceLayer.Business;
 
@@ -21,7 +22,12 @@ public class LevelServices : ILevelServices
         return await _levelRepo.FoundOrThrowAsync(levelId,
             Constants.ENTITY.LEVEL + Constants.ERROR.NOT_EXIST_ERROR);
     }
-    public async Task<ICollection<LevelEntity>> GetByGameId(Guid gameId)
+    public async Task<ICollection<LevelEntity>> List(Guid[] levelIds)
+    {
+        var levels = await _levelRepo.WhereAsync(level => levelIds.Contains(level.Id));
+        return levels;
+    }
+    public async Task<ICollection<LevelEntity>> ListLevelsByGameId(Guid gameId)
     {
         return await _levelRepo.WhereAsync(l => l.GameId.Equals(gameId));
     }
@@ -34,26 +40,25 @@ public class LevelServices : ILevelServices
         var levels = await _levelRepo.WhereAsync(l => l.GameId.Equals(gameId));
         return levels.Count();
     }
-    public async Task Create(LevelEntity level)
+    public async Task Create(List<LevelEntity> level)
     {
-        await CheckForDuplicateLevel(level);
-        await _levelRepo.CreateAsync(level);
+        await _levelRepo.CreateRangeAsync(level);
     }
     public async Task Update(LevelEntity level)
     {
-        await CheckForDuplicateLevel(level);
+        await CheckForDuplicateLevel(level.Name, level.GameId, level.Id);
         await _levelRepo.UpdateAsync(level);
     }
     public async Task Delete(Guid levelId)
     {
         await _levelRepo.DeleteSoftAsync(levelId);
     }
-    public async Task CheckForDuplicateLevel(LevelEntity level)
+    public async Task CheckForDuplicateLevel(string name, Guid GameId, Guid? id = null)
     {
-        var levelCheck = await _levelRepo.FirstOrDefaultAsync(l => l.Name == level.Name && l.GameId == level.GameId);
+        var levelCheck = await _levelRepo.FirstOrDefaultAsync(l => l.Name == name && l.GameId == GameId);
         if (levelCheck is not null)
         {
-            if (level.Id == Guid.Empty || levelCheck.Id != level.Id)
+            if (!id.HasValue || levelCheck.Id != id)
             {
                 throw new BadRequestException(Constants.ENTITY.LEVEL + Constants.ERROR.ALREADY_EXIST_ERROR);
             }

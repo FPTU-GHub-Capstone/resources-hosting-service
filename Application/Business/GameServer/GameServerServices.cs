@@ -23,7 +23,7 @@ public class GameServerServices : IGameServerServices
         return await _gameServerRepo.FoundOrThrowAsync(gameServerId,
             Constants.ENTITY.GAME_SERVER + Constants.ERROR.NOT_EXIST_ERROR);
     }
-    public async Task<ICollection<GameServerEntity>> GetByGameId(Guid gameId)
+    public async Task<ICollection<GameServerEntity>> ListServersByGameId(Guid gameId)
     {
         return await _gameServerRepo.WhereAsync(g => g.GameId.Equals(gameId));
     }

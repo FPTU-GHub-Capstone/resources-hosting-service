@@ -20,11 +20,11 @@ public class ActivityTypeServices : IActivityTypeServices
     {
         return await _activityTypeRepo.FoundOrThrowAsync(activityTypeId, Constants.ENTITY.ACTIVITY_TYPE + Constants.ERROR.NOT_EXIST_ERROR);
     }
-    public async Task<ICollection<ActivityTypeEntity>> GetByGameId(Guid gameid)
+    public async Task<ICollection<ActivityTypeEntity>> ListActTypesByGameId(Guid gameid)
     {
         return await _activityTypeRepo.WhereAsync(a => a.GameId.Equals(gameid));
     }
-    public async Task<ICollection<ActivityTypeEntity>> GetByCharacterId(Guid characterid)
+    public async Task<ICollection<ActivityTypeEntity>> ListActTypesByCharId(Guid characterid)
     {
         return await _activityTypeRepo.WhereAsync(a => a.CharacterId.Equals(characterid));
     }

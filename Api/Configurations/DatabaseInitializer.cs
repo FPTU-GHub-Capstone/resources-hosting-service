@@ -16,6 +16,7 @@ public static class DatabaseInitializer
         await dbContext.MockAttributeGroup();
         await dbContext.MockUser();
         await dbContext.MockGame();
+        await dbContext.MockGameUser();
         await dbContext.MockGameServer();
         await dbContext.MockAssetType();
         await dbContext.MockAsset();
@@ -103,6 +104,25 @@ public static class DatabaseInitializer
             await dbContext.Games.AddAsync(newGame);
             await dbContext.SaveChangesAsync();
         }
+    }
+    public static async Task MockGameUser(this ApplicationDbContext dbContext)
+    {
+        if (dbContext.GamesUsers.Any()) return;
+
+        var users = dbContext.Users.ToList();
+        var games = dbContext.Games.ToList();
+        for (int i =0; i < 20; i++)
+        {
+            await dbContext.GamesUsers.AddAsync(
+                new GameUserEntity
+                {
+                    GameId = games[_rand.Next(games.Count)].Id,
+                    UserId = users[_rand.Next(users.Count)].Id,
+                    CreatedAt = DateTime.Now,
+                    ModifiedAt = DateTime.Now
+            });
+        }
+        await dbContext.SaveChangesAsync();
     }
     public static async Task MockGameServer(this ApplicationDbContext dbContext)
     {
@@ -311,10 +331,9 @@ public static class DatabaseInitializer
                     CreatedAt = DateTime.Now,
                     ModifiedAt = DateTime.Now
                 };
-            } while (await dbContext.Levels.FirstOrDefaultAsync(l => l.Name == newLevel.Name && l.GameId == newLevel.GameId) != null);
-
-            await dbContext.Levels.AddAsync(newLevel);
-            await dbContext.SaveChangesAsync(); // Await this operation
+            } while (dbContext.Levels.FirstOrDefault(l => l.Name == newLevel.Name && l.GameId == newLevel.GameId) != null);
+            dbContext.Levels.Add(newLevel);
+            dbContext.SaveChanges(); // Await this operation
         }
     }
     public static async Task MockLevelProgress(this ApplicationDbContext dbContext)
