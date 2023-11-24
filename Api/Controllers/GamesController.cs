@@ -59,43 +59,43 @@ public class GamesController : BaseController
     [HttpGet("{id}/activity-types")]
     public async Task<IActionResult> GetActTypeByGameID(Guid id)
     {
-        return Ok(await _activityTypeServices.GetByGameId(id));
+        return Ok(await _activityTypeServices.ListActTypesByGameId(id));
     }
 
     [HttpGet("{id}/asset-types")]
     public async Task<IActionResult> GetAssTypeByGameID(Guid id)
     {
-        return Ok(await _assetTypeServices.GetByGameId(id));
+        return Ok(await _assetTypeServices.ListAssTypesByGameId(id));
     }
 
     [HttpGet("{id}/character-types")]
     public async Task<IActionResult> GetCharTypeByGameID(Guid id)
     {
-        return Ok(await _characterTypeServices.GetByGameId(id));
+        return Ok(await _characterTypeServices.ListCharTypesByGameId(id));
     }
 
     [HttpGet("{id}/game-servers")]
     public async Task<IActionResult> GetGameServerByGameID(Guid id)
     {
-        return Ok(await _gameServerServices.GetByGameId(id));
+        return Ok(await _gameServerServices.ListServersByGameId(id));
     }
 
     [HttpGet("{id}/levels")]
     public async Task<IActionResult> GetLevelByGameID(Guid id)
     {
-        return Ok(await _levelServices.GetLevelByGameId(id));
+        return Ok(await _levelServices.ListLevelsByGameId(id));
     }
 
     [HttpGet("{id}/wallet-category")]
     public async Task<IActionResult> GetWalCatByGameID(Guid id)
     {
-        return Ok(await _walletCategoryServices.GetByGameId(id));
+        return Ok(await _walletCategoryServices.ListWalCatsByGameId(id));
     }
 
     [HttpGet("{id}/users")]
     public async Task<IActionResult> GetUsersByGameID(Guid id)
     {
-        return Ok(await _gameUserServices.GetUserByGameId(id));
+        return Ok(await _gameUserServices.ListUsersByGameId(id));
     }
     [HttpPost]
     public async Task<IActionResult> CreateGame([FromBody] CreateGameRequest newGame)

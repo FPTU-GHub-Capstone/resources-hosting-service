@@ -26,12 +26,7 @@ public class GameUserServices : IGameUserServices
         var list = await _gameUserRepo.ListAsync();
         return list;
     }
-    public async Task<GameUserEntity> GetById(Guid id)
-    {
-        var gu = await _gameUserRepo.FoundOrThrowAsync(id,"This data is " + Constants.ERROR.NOT_EXIST_ERROR, new string[] { "User", "Game" });
-        return gu;
-    }
-    public async Task<List<UserEntity>> GetUserByGameId(Guid id)
+    public async Task<List<UserEntity>> ListUsersByGameId(Guid id)
     {
         var game = await _gameUserRepo.WhereAsync(gu => gu.GameId == id,new string[] {"User"});
         return game.Select(g => g.User).ToList();

@@ -3,7 +3,6 @@ using DomainLayer.Constants;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Options;
-using DomainLayer.Constants;
 using RepositoryLayer.Contexts;
 using RepositoryLayer.Repositories;
 using Serilog;
