@@ -27,3 +27,8 @@ services:
 volumes:
   mssql_volume:
     driver: local
+
+networks:
+  default:
+    external:
+      name: ghub-permission-lambda_default
