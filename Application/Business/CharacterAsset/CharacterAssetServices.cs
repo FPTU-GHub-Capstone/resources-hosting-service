@@ -27,11 +27,11 @@ public class CharacterAssetServices : ICharacterAssetServices
         return await _characterAssetRepo.FoundOrThrowAsync(characterAssetId, Constants.ENTITY.CHARACTER_ASSET + Constants.ERROR.NOT_EXIST_ERROR);
 
     }
-    public async Task<ICollection<CharacterAssetEntity>> GetByAssetId(Guid id)
+    public async Task<ICollection<CharacterAssetEntity>> ListCharAssByAssId(Guid id)
     {
         return await _characterAssetRepo.WhereAsync(cA => cA.AssetsId.Equals(id));
     }
-    public async Task<ICollection<CharacterAssetEntity>> GetByCharacterId(Guid id)
+    public async Task<ICollection<CharacterAssetEntity>> ListCharAssByCharId(Guid id)
     {
         return await _characterAssetRepo.WhereAsync(cA => cA.CharacterId.Equals(id));
     }

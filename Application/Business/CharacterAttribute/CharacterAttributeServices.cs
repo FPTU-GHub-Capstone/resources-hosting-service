@@ -23,11 +23,11 @@ public class CharacterAttributeServices : ICharacterAttributeServices
             Constants.ENTITY.CHARACTER_ATTRIBUTE + Constants.ERROR.NOT_EXIST_ERROR);
 
     }
-    public async Task<ICollection<CharacterAttributeEntity>> GetByCharacterId(Guid id)
+    public async Task<ICollection<CharacterAttributeEntity>> ListCharAttByCharId(Guid id)
     {
         return await _characterAttributeRepo.WhereAsync(cA => cA.CharacterId.Equals(id));
     }
-    public async Task<ICollection<CharacterAttributeEntity>> GetByAttributeGroupId(Guid id)
+    public async Task<ICollection<CharacterAttributeEntity>> ListCharAttByAttId(Guid id)
     {
         return await _characterAttributeRepo.WhereAsync(cA => cA.AttributeGroupId.Equals(id));
     }

@@ -28,8 +28,13 @@ public class GameUserServices : IGameUserServices
     }
     public async Task<List<UserEntity>> ListUsersByGameId(Guid id)
     {
-        var game = await _gameUserRepo.WhereAsync(gu => gu.GameId == id,new string[] {"User"});
-        return game.Select(g => g.User).ToList();
+        var user = await _gameUserRepo.WhereAsync(gu => gu.GameId == id,new string[] {"User"});
+        return user.Select(g => g.User).ToList();
+    }
+    public async Task<List<GameEntity>> ListGamesByUserId(Guid id)
+    {
+        var game = await _gameUserRepo.WhereAsync(gu => gu.UserId == id, new string[] { "Game" });
+        return game.Select(g => g.Game).ToList();
     }
     public async Task Create(GameUserEntity gameUser)
     {

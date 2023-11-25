@@ -22,15 +22,15 @@ public class CharacterServices : ICharacterServices
         return await _characterRepo.FoundOrThrowAsync(characterId, Constants.ENTITY.CHARACTER + Constants.ERROR.NOT_EXIST_ERROR);
 
     }
-    public async Task<ICollection<CharacterEntity>> GetByUserId(Guid id)
+    public async Task<ICollection<CharacterEntity>> ListCharByUserId(Guid id)
     {
         return await _characterRepo.WhereAsync(c => c.UserId == id);
     }
-    public async Task<ICollection<CharacterEntity>> GetByCharacterTypeId(Guid id)
+    public async Task<ICollection<CharacterEntity>> ListCharByCharTypeId(Guid id)
     {
         return await _characterRepo.WhereAsync(c => c.CharacterTypeId == id);
     }
-    public async Task<ICollection<CharacterEntity>> GetByGameServerId(Guid id)
+    public async Task<ICollection<CharacterEntity>> ListCharByGameServerId(Guid id)
     {
         return await _characterRepo.WhereAsync(c => c.GameServerId == id);
     }

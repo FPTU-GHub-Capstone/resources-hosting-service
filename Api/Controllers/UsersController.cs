@@ -12,15 +12,21 @@ namespace WebApiLayer.Controllers;
 public class UsersController : BaseController
 {
     private readonly IUserServices _userServices;
+    private readonly ICharacterServices _characterServices;
     private readonly IGameUserServices _gameUserServices;
+    private readonly IPaymentServices _paymentServices;
     private readonly IGenericRepository<UserEntity> _userRepo;
     private readonly IGenericRepository<GameUserEntity> _gameUserRepo;
-    public UsersController(IUserServices userServices, IGenericRepository<UserEntity> userRepo, IGameUserServices gameUserServices, IGenericRepository<GameUserEntity> gameUserRepo)
+    public UsersController(IUserServices userServices, IGenericRepository<UserEntity> userRepo
+        , IGameUserServices gameUserServices, IPaymentServices paymentServices
+        , IGenericRepository<GameUserEntity> gameUserRepo, ICharacterServices characterServices)
     {
         _userServices = userServices;
         _userRepo = userRepo;
         _gameUserServices = gameUserServices;
+        _paymentServices = paymentServices;
         _gameUserRepo = gameUserRepo;
+        _characterServices = characterServices;
     }
     [HttpGet]
     public async Task<IActionResult> GetUsers([FromQuery] string? email)
@@ -32,6 +38,24 @@ public class UsersController : BaseController
     public async Task<IActionResult> GetUser(Guid id)
     {
         return Ok(await _userServices.GetById(id));
+    }
+
+    [HttpGet("{id}/characters")]
+    public async Task<IActionResult> GetCharByUserID(Guid id)
+    {
+        return Ok(await _characterServices.ListCharByUserId(id));
+    }
+
+    [HttpGet("{id}/games")]
+    public async Task<IActionResult> GetGameByUserID(Guid id)
+    {
+        return Ok(await _gameUserServices.ListGamesByUserId(id));
+    }
+
+    [HttpGet("{id}/payments")]
+    public async Task<IActionResult> GetPaymentByUserID(Guid id)
+    {
+        return Ok(await _paymentServices.ListPaymentByUserId(id));
     }
 
     [HttpPost]
