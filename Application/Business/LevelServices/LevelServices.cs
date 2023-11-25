@@ -29,7 +29,8 @@ public class LevelServices : ILevelServices
     }
     public async Task<ICollection<LevelEntity>> ListLevelsByGameId(Guid gameId)
     {
-        return await _levelRepo.WhereAsync(l => l.GameId.Equals(gameId));
+        var levelsList =  await _levelRepo.WhereAsync(l => l.GameId.Equals(gameId));
+        return levelsList.OrderBy(l => l.LevelNo).ToList();
     }
     public async Task Create(List<LevelEntity> level)
     {

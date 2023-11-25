@@ -46,11 +46,12 @@ public class LevelsController : BaseController
         {
             await _gameRepo.FoundOrThrowAsync(singleLevel.GameId, Constants.ENTITY.GAME +"id " + singleLevel.GameId + " " + Constants.ERROR.NOT_EXIST_ERROR);
             LevelEntity newLevel = new LevelEntity();
+            newLevel.LevelNo = (await _levelRepo.WhereAsync(l => l.GameId == singleLevel.GameId)).Count() + levelList.Count(l=>l.GameId == singleLevel.GameId) + 1;
             Mapper.Map(singleLevel, newLevel);
             levelList.Add(newLevel);
         }
         await _levelServices.Create(levelList);
-        return CreatedAtAction(nameof(GetLevels), new { ids = levelList.Select(l => l.Id).ToList() }, level);
+        return CreatedAtAction(nameof(GetLevels), new { ids = levelList.Select(l => l.Id).ToList() }, levelList.ToList());
     }
 
     [HttpPut("{id}")]

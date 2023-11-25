@@ -323,11 +323,13 @@ public static class DatabaseInitializer
             LevelEntity newLevel;
             do
             {
+                Guid gameId = games[_rand.Next(games.Count)].Id;
                 newLevel = new LevelEntity()
                 {
                     Description = mockLevel.Description,
+                    LevelNo = dbContext.Levels.Count(g => g.GameId == gameId) + 1,
                     LevelUpPoint = mockLevel.LevelUpPoint,
-                    GameId = games[_rand.Next(games.Count)].Id,
+                    GameId = gameId,
                     CreatedAt = DateTime.Now,
                     ModifiedAt = DateTime.Now
                 };
