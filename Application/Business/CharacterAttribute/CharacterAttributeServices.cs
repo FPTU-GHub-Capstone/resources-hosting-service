@@ -27,14 +27,6 @@ public class CharacterAttributeServices : ICharacterAttributeServices
     {
         return await _characterAttributeRepo.WhereAsync(cA => cA.CharacterId.Equals(id));
     }
-    public async Task<ICollection<CharacterAttributeEntity>> ListCharAttByAttId(Guid id)
-    {
-        return await _characterAttributeRepo.WhereAsync(cA => cA.AttributeGroupId.Equals(id));
-    }
-    public async Task<int> Count()
-    {
-        return await _characterAttributeRepo.CountAsync();
-    }
     public async Task Create(CharacterAttributeEntity characterAttribute)
     {
         var charAttCheck = await _characterAttributeRepo.FirstOrDefaultAsync(

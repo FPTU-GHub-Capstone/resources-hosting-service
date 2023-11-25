@@ -21,11 +21,6 @@ public class GameUserServices : IGameUserServices
         _gameRepo = gameRepo;
         _userRepo = userRepo;
     }
-    public async Task<ICollection<GameUserEntity>> List()
-    {
-        var list = await _gameUserRepo.ListAsync();
-        return list;
-    }
     public async Task<List<UserEntity>> ListUsersByGameId(Guid id)
     {
         var user = await _gameUserRepo.WhereAsync(gu => gu.GameId == id,new string[] {"User"});
@@ -46,7 +41,6 @@ public class GameUserServices : IGameUserServices
         var gameUser = await _gameUserRepo.FoundOrThrowAsync(id);
         await _gameUserRepo.DeleteAsync(gameUser);
     }
-
     public async Task CheckDuplicateGameAndUser(GameUserEntity gu)
     {
         var checkGameUser = await _gameUserRepo.FirstOrDefaultAsync(

@@ -20,15 +20,6 @@ public class AssetServices : IAssetServices
     {
         return await _assetRepo.FoundOrThrowAsync(assetId, Constants.ENTITY.ASSET + Constants.ERROR.NOT_EXIST_ERROR);
     }
-    public async Task<ICollection<AssetEntity>> GetByAssetTypeId(Guid assetTypeid)
-    {
-        return await _assetRepo.WhereAsync(
-            a => a.AssetTypeId.Equals(assetTypeid));
-    }
-    public async Task<int> Count()
-    {
-        return await _assetRepo.CountAsync();
-    }
     public async Task Create(AssetEntity asset)
     {
         await _assetRepo.CreateAsync(asset);

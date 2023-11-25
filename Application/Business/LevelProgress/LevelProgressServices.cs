@@ -23,18 +23,6 @@ public class LevelProgressServices : ILevelProgressServices
         return await _levelProgressRepo.FoundOrThrowAsync(levelProgressId,
             Constants.ENTITY.LEVEL_PROGRESS + Constants.ERROR.NOT_EXIST_ERROR);
     }
-    public async Task<ICollection<LevelProgressEntity>> GetByCharacterId(Guid id)
-    {
-        return await _levelProgressRepo.WhereAsync(lp => lp.CharacterId.Equals(id));
-    }
-    public async Task<ICollection<LevelProgressEntity>> GetByLevelId(Guid id)
-    {
-        return await _levelProgressRepo.WhereAsync(lp => lp.LevelId.Equals(id));
-    }
-    public async Task<int> Count()
-    {
-        return await _levelProgressRepo.CountAsync();
-    }
     public async Task Create(LevelProgressEntity levelProgress)
     {
         await CheckDuplicateLevelProgress(levelProgress);

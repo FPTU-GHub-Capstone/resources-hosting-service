@@ -31,15 +31,6 @@ public class LevelServices : ILevelServices
     {
         return await _levelRepo.WhereAsync(l => l.GameId.Equals(gameId));
     }
-    public async Task<int> Count()
-    {
-        return await _levelRepo.CountAsync();
-    }
-    public async Task<int> Count(Guid gameId)
-    {
-        var levels = await _levelRepo.WhereAsync(l => l.GameId.Equals(gameId));
-        return levels.Count();
-    }
     public async Task Create(List<LevelEntity> level)
     {
         await _levelRepo.CreateRangeAsync(level);

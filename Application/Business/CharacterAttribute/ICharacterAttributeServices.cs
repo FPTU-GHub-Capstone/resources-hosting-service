@@ -7,8 +7,6 @@ public interface ICharacterAttributeServices
     Task<ICollection<CharacterAttributeEntity>> List();
     Task<CharacterAttributeEntity> GetById(Guid characterAttributeid);
     Task<ICollection<CharacterAttributeEntity>> ListCharAttByCharId(Guid id); //ListCharAttByCharId
-    Task<ICollection<CharacterAttributeEntity>> ListCharAttByAttId(Guid id); //ListCharAttByAttId
-    Task<int> Count();
     Task Create(CharacterAttributeEntity characterAttribute);
     Task Update(CharacterAttributeEntity characterAttribute);
     Task Delete(Guid characterAttributeid);

@@ -45,9 +45,9 @@ public class CharactersController : BaseController
     }
 
     [HttpGet("{id}/character-assets")]
-    public async Task<IActionResult> GetCharAssByCharID(Guid id)
+    public async Task<IActionResult> GetCharAssetByCharID(Guid id)
     {
-        var charAssList = await _characterAssetServices.ListCharAssByCharId(id);
+        var charAssList = await _characterAssetServices.ListCharAssetsByCharId(id);
         return Ok(charAssList);
     }
 

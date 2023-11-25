@@ -27,10 +27,6 @@ public class GameServerServices : IGameServerServices
     {
         return await _gameServerRepo.WhereAsync(g => g.GameId.Equals(gameId));
     }
-    public async Task<int> Count()
-    {
-        return await _gameServerRepo.CountAsync();
-    }
     public async Task Create(GameServerEntity gameServer)
     {
         await _gameServerRepo.CreateAsync(gameServer);

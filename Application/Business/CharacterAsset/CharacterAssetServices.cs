@@ -27,17 +27,9 @@ public class CharacterAssetServices : ICharacterAssetServices
         return await _characterAssetRepo.FoundOrThrowAsync(characterAssetId, Constants.ENTITY.CHARACTER_ASSET + Constants.ERROR.NOT_EXIST_ERROR);
 
     }
-    public async Task<ICollection<CharacterAssetEntity>> ListCharAssByAssId(Guid id)
-    {
-        return await _characterAssetRepo.WhereAsync(cA => cA.AssetsId.Equals(id));
-    }
-    public async Task<ICollection<CharacterAssetEntity>> ListCharAssByCharId(Guid id)
+    public async Task<ICollection<CharacterAssetEntity>> ListCharAssetsByCharId(Guid id)
     {
         return await _characterAssetRepo.WhereAsync(cA => cA.CharacterId.Equals(id));
-    }
-    public async Task<int> Count()
-    {
-        return await _characterAssetRepo.CountAsync();
     }
     public async Task Create(CharacterAssetEntity characterAsset)
     {
@@ -52,7 +44,6 @@ public class CharacterAssetServices : ICharacterAssetServices
     {
         await _characterAssetRepo.DeleteSoftAsync(characterAssetId);
     }
-
     public async Task CheckDuplicateCharacterAsset(CharacterAssetEntity charAss)
     {
         var checkCharAss = await _characterAssetRepo.FirstOrDefaultAsync(

@@ -40,10 +40,6 @@ public class GameServices : IGameServices
         }
         return result;
     }
-    public async Task<int> Count()
-    {
-        return await _gameRepo.CountAsync();
-    }
     public async Task Create(GameEntity game)
     {
         var gameCheck = await _gameRepo.FirstOrDefaultAsync(

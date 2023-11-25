@@ -25,10 +25,6 @@ public class WalletCategoryServices : IWalletCategoryServices
     {
         return await _walletCategoryRepo.WhereAsync(wc => wc.GameId.Equals(gameId));
     }
-    public async Task<int> Count()
-    {
-        return await _walletCategoryRepo.CountAsync();
-    }
     public async Task Create(WalletCategoryEntity walletCategory)
     {
         await CheckForDuplicateWalletCategory(walletCategory);

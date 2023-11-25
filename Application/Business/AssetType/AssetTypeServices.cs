@@ -8,7 +8,6 @@ namespace ServiceLayer.Business;
 public class AssetTypeServices : IAssetTypeServices
 {
     public readonly IGenericRepository<AssetTypeEntity> _assetTypeRepo;
-
     public AssetTypeServices(IGenericRepository<AssetTypeEntity> assetTypeRepo)
     {
         _assetTypeRepo = assetTypeRepo;
@@ -25,10 +24,6 @@ public class AssetTypeServices : IAssetTypeServices
     {
         return await _assetTypeRepo.WhereAsync(
             a => a.GameId.Equals(gameId));
-    }
-    public async Task<int> Count()
-    {
-        return await _assetTypeRepo.CountAsync();
     }
     public async Task Create(AssetTypeEntity assetType)
     {

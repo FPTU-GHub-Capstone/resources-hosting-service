@@ -26,18 +26,6 @@ public class CharacterServices : ICharacterServices
     {
         return await _characterRepo.WhereAsync(c => c.UserId == id);
     }
-    public async Task<ICollection<CharacterEntity>> ListCharByCharTypeId(Guid id)
-    {
-        return await _characterRepo.WhereAsync(c => c.CharacterTypeId == id);
-    }
-    public async Task<ICollection<CharacterEntity>> ListCharByGameServerId(Guid id)
-    {
-        return await _characterRepo.WhereAsync(c => c.GameServerId == id);
-    }
-    public async Task<int> Count()
-    {
-        return await _characterRepo.CountAsync();
-    }
     public async Task Create(CharacterEntity character)
     {
         await CheckForDuplicateCharacter(character);
