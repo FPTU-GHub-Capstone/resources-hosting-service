@@ -37,22 +37,15 @@ public class LevelServices : ILevelServices
     }
     public async Task Update(LevelEntity level)
     {
-        await CheckForDuplicateLevel(level.Name, level.GameId, level.Id);
+        var levelCheck = await _levelRepo.FirstOrDefaultAsync(l => l.GameId == level.GameId);
+        if (levelCheck is not null && levelCheck.Id != level.Id)
+        {
+                throw new BadRequestException(Constants.ENTITY.LEVEL + Constants.ERROR.ALREADY_EXIST_ERROR);
+        }
         await _levelRepo.UpdateAsync(level);
     }
     public async Task Delete(Guid levelId)
     {
         await _levelRepo.DeleteSoftAsync(levelId);
-    }
-    public async Task CheckForDuplicateLevel(string name, Guid GameId, Guid? id = null)
-    {
-        var levelCheck = await _levelRepo.FirstOrDefaultAsync(l => l.Name == name && l.GameId == GameId);
-        if (levelCheck is not null)
-        {
-            if (!id.HasValue || levelCheck.Id != id)
-            {
-                throw new BadRequestException(Constants.ENTITY.LEVEL + Constants.ERROR.ALREADY_EXIST_ERROR);
-            }
-        }
     }
 }

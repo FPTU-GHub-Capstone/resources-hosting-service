@@ -10,5 +10,4 @@ public interface ILevelServices
     Task Create(List<LevelEntity> level);
     Task Update(LevelEntity level);
     Task Delete(Guid levelId);
-    Task CheckForDuplicateLevel(string name, Guid GameId, Guid? id = null);
 }

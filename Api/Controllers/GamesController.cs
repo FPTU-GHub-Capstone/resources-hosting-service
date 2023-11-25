@@ -3,7 +3,9 @@ using DomainLayer.Entities;
 using Microsoft.AspNetCore.Mvc;
 using RepositoryLayer.Repositories;
 using ServiceLayer.Business;
+using System.Text.Json.Nodes;
 using WebApiLayer.UserFeatures.Requests;
+using WebApiLayer.UserFeatures.Response;
 
 namespace WebApiLayer.Controllers;
 
@@ -71,7 +73,16 @@ public class GamesController : BaseController
     [HttpGet("{id}/character-types")]
     public async Task<IActionResult> GetCharTypeByGameID(Guid id)
     {
-        return Ok(await _characterTypeServices.ListCharTypesByGameId(id));
+        var ctList = await _characterTypeServices.ListCharTypesByGameId(id);
+        List<CharacterTypeResponse> ctListResponse = new();
+        foreach (var ct in ctList)
+        {
+            var ctResponse = new CharacterTypeResponse();
+            Mapper.Map(ct, ctResponse);
+            ctResponse.BaseProperties = JsonObject.Parse(ct.BaseProperties);
+            ctListResponse.Add(ctResponse);
+        }
+        return Ok(ctListResponse);
     }
 
     [HttpGet("{id}/game-servers")]

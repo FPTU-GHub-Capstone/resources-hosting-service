@@ -45,7 +45,6 @@ public class LevelsController : BaseController
         foreach (var singleLevel in level)
         {
             await _gameRepo.FoundOrThrowAsync(singleLevel.GameId, Constants.ENTITY.GAME +"id " + singleLevel.GameId + " " + Constants.ERROR.NOT_EXIST_ERROR);
-            await _levelServices.CheckForDuplicateLevel(singleLevel.Name, singleLevel.GameId);
             LevelEntity newLevel = new LevelEntity();
             Mapper.Map(singleLevel, newLevel);
             levelList.Add(newLevel);
