@@ -9,5 +9,5 @@ public interface ILevelServices
     Task<ICollection<LevelEntity>> ListLevelsByGameId(Guid gameId);
     Task Create(List<LevelEntity> level);
     Task Update(LevelEntity level);
-    Task Delete(Guid levelId);
+    Task Delete(LevelEntity level);
 }

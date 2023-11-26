@@ -45,8 +45,14 @@ public class LevelServices : ILevelServices
         }
         await _levelRepo.UpdateAsync(level);
     }
-    public async Task Delete(Guid levelId)
+    public async Task Delete(LevelEntity level)
     {
-        await _levelRepo.DeleteSoftAsync(levelId);
+        var ListLevelsByGameId = await _levelRepo.WhereAsync(l => l.GameId == level.GameId && l.LevelNo > level.LevelNo);
+        foreach(var singleLevel in ListLevelsByGameId)
+        {
+            singleLevel.LevelNo -= 1;
+            await _levelRepo.UpdateAsync(singleLevel);
+        }
+        await _levelRepo.DeleteSoftAsync(level.Id);
     }
 }
