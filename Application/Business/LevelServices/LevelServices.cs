@@ -38,11 +38,6 @@ public class LevelServices : ILevelServices
     }
     public async Task Update(LevelEntity level)
     {
-        var levelCheck = await _levelRepo.FirstOrDefaultAsync(l => l.GameId == level.GameId);
-        if (levelCheck is not null && levelCheck.Id != level.Id)
-        {
-                throw new BadRequestException(Constants.ENTITY.LEVEL + Constants.ERROR.ALREADY_EXIST_ERROR);
-        }
         await _levelRepo.UpdateAsync(level);
     }
     public async Task Delete(LevelEntity level)
