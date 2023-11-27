@@ -28,10 +28,6 @@ public class CharacterTypeServices : ICharacterTypeServices
     {
         return await _characterTypeRepo.WhereAsync(c => c.GameId.Equals(gameId));
     }
-    public async Task<int> Count()
-    {
-        return await _characterTypeRepo.CountAsync();
-    }
     public async Task Create(CharacterTypeEntity characterType)
     {
         var ctCheck = await _characterTypeRepo.FirstOrDefaultAsync(

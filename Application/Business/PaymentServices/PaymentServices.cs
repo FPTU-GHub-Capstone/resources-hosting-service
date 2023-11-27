@@ -17,26 +17,9 @@ public class PaymentServices : IPaymentServices
     {
         return await _paymentRepo.ListAsync();
     }
-    public async Task<PaymentEntity> GetById(Guid paymentId)
-    {
-        return await _paymentRepo.FoundOrThrowAsync(paymentId,
-            Constants.ENTITY.PAYMENT + Constants.ERROR.NOT_EXIST_ERROR);
-    }
-    public async Task<ICollection<PaymentEntity>> GetByCharacterId(Guid id)
-    {
-        return await _paymentRepo.WhereAsync(c=>c.CharacterId== id);
-    }
-    public async Task<ICollection<PaymentEntity>> GetByUserId(Guid id)
+    public async Task<ICollection<PaymentEntity>> ListPaymentByUserId(Guid id)
     {
         return await _paymentRepo.WhereAsync(c => c.UserId == id);
-    }
-    public async Task<ICollection<PaymentEntity>> GetByWalletId(Guid id)
-    {
-        return await _paymentRepo.WhereAsync(c => c.WalletId == id);
-    }
-    public async Task<int> Count()
-    {
-        return await _paymentRepo.CountAsync();
     }
     public async Task Create(PaymentEntity entity) {
         var gameCheck = await _paymentRepo.FirstOrDefaultAsync(

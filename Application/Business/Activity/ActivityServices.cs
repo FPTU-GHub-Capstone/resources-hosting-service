@@ -19,18 +19,6 @@ public class ActivityServices : IActivityServices
     {
         return await _activityRepo.FoundOrThrowAsync(activityId, Constants.ENTITY.ACTIVITY + Constants.ERROR.NOT_EXIST_ERROR);
     }
-    public async Task<ActivityEntity> Search(string Name) {
-        return await _activityRepo.FirstOrDefaultAsync( a => a.Name.Equals(Name));
-    }
-    public async Task<ICollection<ActivityEntity>> SearchByTypeId(Guid activityTypeId)
-    {
-        return await _activityRepo.WhereAsync(
-            a => a.ActivityTypeId.Equals(activityTypeId));
-    }
-    public async Task<int> Count()
-    {
-        return await _activityRepo.CountAsync();
-    }
     public async Task Create(ActivityEntity activity)
     {
         await _activityRepo.CreateAsync(activity);

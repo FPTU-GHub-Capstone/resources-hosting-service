@@ -45,13 +45,13 @@ public class LevelsController : BaseController
         foreach (var singleLevel in level)
         {
             await _gameRepo.FoundOrThrowAsync(singleLevel.GameId, Constants.ENTITY.GAME +"id " + singleLevel.GameId + " " + Constants.ERROR.NOT_EXIST_ERROR);
-            await _levelServices.CheckForDuplicateLevel(singleLevel.Name, singleLevel.GameId);
             LevelEntity newLevel = new LevelEntity();
+            newLevel.LevelNo = (await _levelRepo.WhereAsync(l => l.GameId == singleLevel.GameId)).Count() + levelList.Count(l=>l.GameId == singleLevel.GameId) + 1;
             Mapper.Map(singleLevel, newLevel);
             levelList.Add(newLevel);
         }
         await _levelServices.Create(levelList);
-        return CreatedAtAction(nameof(GetLevels), new { ids = levelList.Select(l => l.Id).ToList() }, level);
+        return CreatedAtAction(nameof(GetLevels), new { ids = levelList.Select(l => l.Id).ToList() }, levelList.ToList());
     }
 
     [HttpPut("{id}")]
@@ -66,8 +66,8 @@ public class LevelsController : BaseController
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteLevel(Guid id)
     {
-        await _levelRepo.FoundOrThrowAsync(id, Constants.ENTITY.LEVEL + Constants.ERROR.NOT_EXIST_ERROR);
-        await _levelServices.Delete(id);
+        var level = await _levelRepo.FoundOrThrowAsync(id, Constants.ENTITY.LEVEL + Constants.ERROR.NOT_EXIST_ERROR);
+        await _levelServices.Delete(level);
         return NoContent();
     }
 }

@@ -29,16 +29,8 @@ public class LevelServices : ILevelServices
     }
     public async Task<ICollection<LevelEntity>> ListLevelsByGameId(Guid gameId)
     {
-        return await _levelRepo.WhereAsync(l => l.GameId.Equals(gameId));
-    }
-    public async Task<int> Count()
-    {
-        return await _levelRepo.CountAsync();
-    }
-    public async Task<int> Count(Guid gameId)
-    {
-        var levels = await _levelRepo.WhereAsync(l => l.GameId.Equals(gameId));
-        return levels.Count();
+        var levelsList =  await _levelRepo.WhereAsync(l => l.GameId.Equals(gameId));
+        return levelsList.OrderBy(l => l.LevelNo).ToList();
     }
     public async Task Create(List<LevelEntity> level)
     {
@@ -46,22 +38,16 @@ public class LevelServices : ILevelServices
     }
     public async Task Update(LevelEntity level)
     {
-        await CheckForDuplicateLevel(level.Name, level.GameId, level.Id);
         await _levelRepo.UpdateAsync(level);
     }
-    public async Task Delete(Guid levelId)
+    public async Task Delete(LevelEntity level)
     {
-        await _levelRepo.DeleteSoftAsync(levelId);
-    }
-    public async Task CheckForDuplicateLevel(string name, Guid GameId, Guid? id = null)
-    {
-        var levelCheck = await _levelRepo.FirstOrDefaultAsync(l => l.Name == name && l.GameId == GameId);
-        if (levelCheck is not null)
+        var ListLevelsByGameId = await _levelRepo.WhereAsync(l => l.GameId == level.GameId && l.LevelNo > level.LevelNo);
+        foreach(var singleLevel in ListLevelsByGameId)
         {
-            if (!id.HasValue || levelCheck.Id != id)
-            {
-                throw new BadRequestException(Constants.ENTITY.LEVEL + Constants.ERROR.ALREADY_EXIST_ERROR);
-            }
+            singleLevel.LevelNo -= 1;
+            await _levelRepo.UpdateAsync(singleLevel);
         }
+        await _levelRepo.DeleteSoftAsync(level.Id);
     }
 }

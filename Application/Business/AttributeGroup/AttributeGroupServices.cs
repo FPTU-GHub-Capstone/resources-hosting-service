@@ -19,10 +19,6 @@ public class AttributeGroupServices : IAttributeGroupServices
     {
         return await _attributeRepo.FoundOrThrowAsync(attributeGroupid, Constants.ENTITY.ATTRIBUTE_GROUP + Constants.ERROR.NOT_EXIST_ERROR);
     }
-    public async Task<int> Count()
-    {
-        return await _attributeRepo.CountAsync();
-    }
     public async Task Create(AttributeGroupEntity attributeGroup){
         await _attributeRepo.CreateAsync(attributeGroup);
     }

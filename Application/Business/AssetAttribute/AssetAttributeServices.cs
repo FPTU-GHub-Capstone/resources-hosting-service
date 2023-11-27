@@ -13,7 +13,6 @@ public class AssetAttributeServices : IAssetAttributeServices
     {
         _assetAttributeRepo = assetAttributeRepo;
     }
-
     public async Task<ICollection<AssetAttributeEntity>> List()
     {
         return await _assetAttributeRepo.ListAsync();
@@ -21,18 +20,6 @@ public class AssetAttributeServices : IAssetAttributeServices
     public async Task<AssetAttributeEntity> GetById(Guid assetAttributeId)
     {
         return await _assetAttributeRepo.FoundOrThrowAsync(assetAttributeId, Constants.ENTITY.ASSET_ATTRIBUTE + Constants.ERROR.NOT_EXIST_ERROR);
-    }
-    public async Task<ICollection<AssetAttributeEntity>> GetByAssetId(Guid assetId)
-    {
-        return await _assetAttributeRepo.WhereAsync(a => a.AssetId == assetId);
-    }
-    public async Task<ICollection<AssetAttributeEntity>> GetByAttGroupId(Guid attributeGroupId)
-    {
-        return await _assetAttributeRepo.WhereAsync(a => a.AttributeGroupId == attributeGroupId);
-    }
-    public async Task<int> Count()
-    {
-        return await _assetAttributeRepo.CountAsync();
     }
     public async Task Create(AssetAttributeEntity assetAttribute)
     {

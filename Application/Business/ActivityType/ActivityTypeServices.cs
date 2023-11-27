@@ -24,14 +24,6 @@ public class ActivityTypeServices : IActivityTypeServices
     {
         return await _activityTypeRepo.WhereAsync(a => a.GameId.Equals(gameid));
     }
-    public async Task<ICollection<ActivityTypeEntity>> ListActTypesByCharId(Guid characterid)
-    {
-        return await _activityTypeRepo.WhereAsync(a => a.CharacterId.Equals(characterid));
-    }
-    public async Task<int> Count()
-    {
-        return await _activityTypeRepo.CountAsync();
-    }
     public async Task Create(ActivityTypeEntity activityType)
     {
         await _activityTypeRepo.CreateAsync(activityType);

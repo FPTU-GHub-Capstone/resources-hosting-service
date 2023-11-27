@@ -6,8 +6,7 @@ namespace WebApiLayer.UserFeatures.Requests
 {
     public class CreateLevelsRequest : IMapTo<LevelEntity>, IMapFrom<LevelEntity>
     {
-        [Required]
-        public string Name { get; set; }
+        public string? Description { get; set; }
         [Required]
         public int LevelUpPoint { get; set; }
         [Required]

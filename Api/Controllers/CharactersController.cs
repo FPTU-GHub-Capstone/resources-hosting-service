@@ -11,14 +11,20 @@ namespace WebApiLayer.Controllers;
 public class CharactersController : BaseController
 {
     private readonly ICharacterServices _characterServices;
+    private readonly ICharacterAssetServices _characterAssetServices;
+    private readonly ICharacterAttributeServices _characterAttributeServices;
     private readonly IGenericRepository<CharacterEntity> _characterRepo;
     private readonly IGenericRepository<UserEntity> _userRepo;
     private readonly IGenericRepository<CharacterTypeEntity> _characterTypeRepo;
     private readonly IGenericRepository<GameServerEntity> _gameServerRepo;
-    public CharactersController(ICharacterServices characterServices, IGenericRepository<CharacterEntity> characterRepo, IGenericRepository<UserEntity> userRepo
-        , IGenericRepository<CharacterTypeEntity> characterTypeRepo, IGenericRepository<GameServerEntity> gameServerRepo)
+    public CharactersController(ICharacterServices characterServices, ICharacterAssetServices characterAssetServices
+        , ICharacterAttributeServices characterAttributeServices, IGenericRepository<CharacterEntity> characterRepo
+        , IGenericRepository<UserEntity> userRepo, IGenericRepository<CharacterTypeEntity> characterTypeRepo
+        , IGenericRepository<GameServerEntity> gameServerRepo)
     {
         _characterServices = characterServices;
+        _characterAssetServices = characterAssetServices;
+        _characterAttributeServices = characterAttributeServices;
         _characterRepo = characterRepo;
         _userRepo = userRepo;
         _characterTypeRepo = characterTypeRepo;
@@ -36,6 +42,20 @@ public class CharactersController : BaseController
     {
         var character = await _characterServices.GetById(id);
         return Ok(character);
+    }
+
+    [HttpGet("{id}/character-assets")]
+    public async Task<IActionResult> GetCharAssetByCharID(Guid id)
+    {
+        var charAssList = await _characterAssetServices.ListCharAssetsByCharId(id);
+        return Ok(charAssList);
+    }
+
+    [HttpGet("{id}/character-attributes")]
+    public async Task<IActionResult> GetCharAttByCharID(Guid id)
+    {
+        var charAttList = await _characterAttributeServices.ListCharAttByCharId(id);
+        return Ok(charAttList);
     }
 
     [HttpPost]

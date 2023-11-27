@@ -323,15 +323,17 @@ public static class DatabaseInitializer
             LevelEntity newLevel;
             do
             {
+                Guid gameId = games[_rand.Next(games.Count)].Id;
                 newLevel = new LevelEntity()
                 {
-                    Name = mockLevel.Name,
+                    Description = mockLevel.Description,
+                    LevelNo = dbContext.Levels.Count(g => g.GameId == gameId) + 1,
                     LevelUpPoint = mockLevel.LevelUpPoint,
-                    GameId = games[_rand.Next(games.Count)].Id,
+                    GameId = gameId,
                     CreatedAt = DateTime.Now,
                     ModifiedAt = DateTime.Now
                 };
-            } while (dbContext.Levels.FirstOrDefault(l => l.Name == newLevel.Name && l.GameId == newLevel.GameId) != null);
+            } while (dbContext.Levels.FirstOrDefault(l => l.Description == newLevel.Description && l.GameId == newLevel.GameId) != null);
             dbContext.Levels.Add(newLevel);
             dbContext.SaveChanges(); // Await this operation
         }

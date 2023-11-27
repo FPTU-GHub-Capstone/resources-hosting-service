@@ -20,14 +20,6 @@ public class TransactionServices : ITransactionServices
         return await _transactionRepo.FoundOrThrowAsync(transactionId,
            Constants.ENTITY.TRANSACTION + Constants.ERROR.NOT_EXIST_ERROR);
     }
-    public async Task<ICollection<TransactionEntity>> GetByWalletId(Guid walletId)
-    {
-        return await _transactionRepo.WhereAsync(t => t.WalletId.Equals(walletId));
-    }
-    public async Task<int> Count()
-    {
-        return await _transactionRepo.CountAsync();
-    }
     public async Task Create(TransactionEntity transaction) {
         await _transactionRepo.CreateAsync(transaction);
     }

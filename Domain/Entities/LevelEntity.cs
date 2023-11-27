@@ -5,7 +5,8 @@ namespace DomainLayer.Entities;
 [Table("Level")]
 public class LevelEntity : BaseEntity
 {
-    public string Name { get; set; }
+    public string? Description { get; set; }
+    public int LevelNo { get; set; }
     public int LevelUpPoint { get; set; }
     // 1 Game - M Levels
     public Guid GameId { get; set; }
