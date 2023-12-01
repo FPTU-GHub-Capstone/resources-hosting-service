@@ -7,6 +7,8 @@ public static class Constants
         public const string API_VERSION = "v1";
         public const string CORS = "CORS";
         public const string JSON_CONTENT_TYPE = "application/json";
+        public const string USER_POLICY = "User";
+        public const string USER_ID = "uid";
     }
 
     public static class ERROR
