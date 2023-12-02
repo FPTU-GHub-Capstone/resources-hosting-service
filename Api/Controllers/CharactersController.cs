@@ -13,18 +13,23 @@ public class CharactersController : BaseController
     private readonly ICharacterServices _characterServices;
     private readonly ICharacterAssetServices _characterAssetServices;
     private readonly ICharacterAttributeServices _characterAttributeServices;
+    private readonly IWalletServices _walletServices;
+    private readonly ILevelProgressServices _levelProgressServices;
     private readonly IGenericRepository<CharacterEntity> _characterRepo;
     private readonly IGenericRepository<UserEntity> _userRepo;
     private readonly IGenericRepository<CharacterTypeEntity> _characterTypeRepo;
     private readonly IGenericRepository<GameServerEntity> _gameServerRepo;
     public CharactersController(ICharacterServices characterServices, ICharacterAssetServices characterAssetServices
-        , ICharacterAttributeServices characterAttributeServices, IGenericRepository<CharacterEntity> characterRepo
-        , IGenericRepository<UserEntity> userRepo, IGenericRepository<CharacterTypeEntity> characterTypeRepo
-        , IGenericRepository<GameServerEntity> gameServerRepo)
+        , ICharacterAttributeServices characterAttributeServices, IWalletServices walletServices
+        , ILevelProgressServices levelProgressServices
+        , IGenericRepository<CharacterEntity> characterRepo, IGenericRepository<UserEntity> userRepo
+        , IGenericRepository<CharacterTypeEntity> characterTypeRepo, IGenericRepository<GameServerEntity> gameServerRepo)
     {
         _characterServices = characterServices;
         _characterAssetServices = characterAssetServices;
         _characterAttributeServices = characterAttributeServices;
+        _walletServices = walletServices;
+        _levelProgressServices = levelProgressServices;
         _characterRepo = characterRepo;
         _userRepo = userRepo;
         _characterTypeRepo = characterTypeRepo;
@@ -54,8 +59,19 @@ public class CharactersController : BaseController
     [HttpGet("{id}/character-attributes")]
     public async Task<IActionResult> GetCharAttByCharID(Guid id)
     {
-        var charAttList = await _characterAttributeServices.ListCharAttByCharId(id);
-        return Ok(charAttList);
+        return Ok(await _characterAttributeServices.ListCharAttByCharId(id));
+    }
+
+    [HttpGet("{id}/level-progress")]
+    public async Task<IActionResult> GetLevelProgressByCharID(Guid id)
+    {
+        return Ok(await _levelProgressServices.ListLevelProgByCharacterId(id));
+    }
+
+    [HttpGet("{id}/wallet")]
+    public async Task<IActionResult> GetWalletByCharID(Guid id)
+    {
+        return Ok(await _walletServices.ListWalletByCharacterId(id));
     }
 
     [HttpPost]

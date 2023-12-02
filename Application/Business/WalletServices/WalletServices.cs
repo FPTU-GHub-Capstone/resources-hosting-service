@@ -21,6 +21,10 @@ public class WalletServices : IWalletServices
         return await _walletRepo.FoundOrThrowAsync(walletId,
            Constants.ENTITY.WALLET + Constants.ERROR.NOT_EXIST_ERROR);
     }
+    public async Task<ICollection<WalletEntity>> ListWalletByCharacterId(Guid charId)
+    {
+        return await _walletRepo.WhereAsync(w => w.CharacterId.Equals(charId));
+    }
     public async Task Create(WalletEntity wallet)
     {
         await CheckDuplicateWallet(wallet);

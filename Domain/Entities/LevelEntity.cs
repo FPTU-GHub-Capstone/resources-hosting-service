@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace DomainLayer.Entities;
 
@@ -11,6 +12,7 @@ public class LevelEntity : BaseEntity
     // 1 Game - M Levels
     public Guid GameId { get; set; }
     public GameEntity Game { get; set; }
+    [JsonIgnore]
     // 1 Level Progress - 1 Level 
     public LevelProgressEntity LevelProgress { get; set; }
 }
