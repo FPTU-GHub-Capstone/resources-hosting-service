@@ -18,7 +18,7 @@ public class AssetServices : IAssetServices
     }
     public async Task<AssetEntity> GetById(Guid assetId)
     {
-        return await _assetRepo.FoundOrThrowAsync(assetId, Constants.ENTITY.ASSET + Constants.ERROR.NOT_EXIST_ERROR);
+        return await _assetRepo.FoundOrThrowAsync(assetId, Constants.Entities.ASSET + Constants.Errors.NOT_EXIST_ERROR);
     }
     public async Task Create(AssetEntity asset)
     {

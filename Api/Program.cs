@@ -38,7 +38,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseLoggingInterceptor();
-app.UseCors(Constants.HTTP.CORS);
+app.UseCors(Constants.Http.CORS);
 app.UseAutoWrapper();
 app.UseHttpsRedirection();
 app.UseAuthentication();

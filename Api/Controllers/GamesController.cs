@@ -11,7 +11,7 @@ using WebApiLayer.UserFeatures.Response;
 namespace WebApiLayer.Controllers;
 
 [Authorize]
-[Route(Constants.HTTP.API_VERSION + "/gms/games")]
+[Route(Constants.Http.API_VERSION + "/gms/games")]
 public class GamesController : BaseController
 {
     private readonly IGameServices _gameServices;
@@ -110,6 +110,7 @@ public class GamesController : BaseController
     {
         return Ok(await _gameUserServices.ListUsersByGameId(id));
     }
+    
     [HttpPost]
     public async Task<IActionResult> CreateGame([FromBody] CreateGameRequest newGame)
     {
@@ -122,7 +123,7 @@ public class GamesController : BaseController
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateGame(Guid id, [FromBody] UpdateGameRequest game)
     {
-        var updateGame = await _gameRepo.FoundOrThrowAsync(id, Constants.ENTITY.GAME + Constants.ERROR.NOT_EXIST_ERROR);
+        var updateGame = await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR);
         Mapper.Map(game, updateGame);
         await _gameServices.Update(updateGame);
         return Ok(updateGame);
@@ -131,7 +132,7 @@ public class GamesController : BaseController
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteGame(Guid id)
     {
-        await _gameRepo.FoundOrThrowAsync(id, Constants.ENTITY.GAME + Constants.ERROR.NOT_EXIST_ERROR);
+        await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR);
         await _gameServices.Delete(id);
         return NoContent();
     }

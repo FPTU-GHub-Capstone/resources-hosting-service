@@ -8,7 +8,7 @@ using WebApiLayer.UserFeatures.Requests;
 
 namespace WebApiLayer.Controllers;
 
-[Route(Constants.HTTP.API_VERSION + "/gms/users")]
+[Route(Constants.Http.API_VERSION + "/gms/users")]
 public class UsersController : BaseController
 {
     private readonly IUserServices _userServices;
@@ -81,7 +81,7 @@ public class UsersController : BaseController
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateUser(Guid id, [FromBody] UpdateUserRequest user)
     {
-        var updateUser = await _userRepo.FoundOrThrowAsync(id, Constants.ENTITY.USER + Constants.ERROR.NOT_EXIST_ERROR);
+        var updateUser = await _userRepo.FoundOrThrowAsync(id, Constants.Entities.USER + Constants.Errors.NOT_EXIST_ERROR);
         Mapper.Map(user, updateUser);
         await _userServices.Update(updateUser);
         return Ok(updateUser);
@@ -90,7 +90,7 @@ public class UsersController : BaseController
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteUser(Guid id)
     {
-        await _userRepo.FoundOrThrowAsync(id, Constants.ENTITY.USER + Constants.ERROR.NOT_EXIST_ERROR);
+        await _userRepo.FoundOrThrowAsync(id, Constants.Entities.USER + Constants.Errors.NOT_EXIST_ERROR);
         await _userServices.Delete(id);
         return NoContent();
     }
@@ -98,7 +98,7 @@ public class UsersController : BaseController
     [HttpDelete("{id}/delete-game")]
     public async Task<IActionResult> DeleteGameUser(Guid id)
     {
-        await _gameUserRepo.FoundOrThrowAsync(id, Constants.ERROR.NOT_EXIST_ERROR);
+        await _gameUserRepo.FoundOrThrowAsync(id, Constants.Errors.NOT_EXIST_ERROR);
         await _gameUserServices.Delete(id);
         return NoContent();
     }

@@ -19,7 +19,7 @@ public class WalletServices : IWalletServices
     public async Task<WalletEntity> GetById(Guid walletId)
     {
         return await _walletRepo.FoundOrThrowAsync(walletId,
-           Constants.ENTITY.WALLET + Constants.ERROR.NOT_EXIST_ERROR);
+           Constants.Entities.WALLET + Constants.Errors.NOT_EXIST_ERROR);
     }
     public async Task<ICollection<WalletEntity>> ListWalletByCharacterId(Guid charId)
     {
@@ -45,7 +45,7 @@ public class WalletServices : IWalletServices
             w => w.CharacterId.Equals(wallet.CharacterId) && w.WalletCategoryId.Equals(wallet.WalletCategoryId));
         if (checkWallet is not null && (checkWallet.Id == Guid.Empty || checkWallet.Id != wallet.Id))
         {
-            throw new NotFoundException(Constants.ENTITY.WALLET + Constants.ERROR.ALREADY_EXIST_ERROR);
+            throw new NotFoundException(Constants.Entities.WALLET + Constants.Errors.ALREADY_EXIST_ERROR);
         }
     }
 }

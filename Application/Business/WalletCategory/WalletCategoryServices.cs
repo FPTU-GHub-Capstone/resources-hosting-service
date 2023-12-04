@@ -19,7 +19,7 @@ public class WalletCategoryServices : IWalletCategoryServices
     public async Task<WalletCategoryEntity> GetById(Guid categoryId)
     {
         return await _walletCategoryRepo.FoundOrThrowAsync(categoryId,
-           Constants.ENTITY.WALLET_CATEGORY + Constants.ERROR.NOT_EXIST_ERROR);
+           Constants.Entities.WALLET_CATEGORY + Constants.Errors.NOT_EXIST_ERROR);
     }
     public async Task<ICollection<WalletCategoryEntity>> ListWalCatsByGameId(Guid gameId)
     {
@@ -47,7 +47,7 @@ public class WalletCategoryServices : IWalletCategoryServices
         {
             if (checkWalCat.Id == Guid.Empty || checkWalCat.Id != walletCategory.Id)
             {
-                throw new BadRequestException(Constants.ENTITY.WALLET_CATEGORY + Constants.ERROR.ALREADY_EXIST_ERROR);
+                throw new BadRequestException(Constants.Entities.WALLET_CATEGORY + Constants.Errors.ALREADY_EXIST_ERROR);
             }
         }
     }

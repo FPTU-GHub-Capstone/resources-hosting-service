@@ -7,7 +7,7 @@ using WebApiLayer.UserFeatures.Requests;
 
 namespace WebApiLayer.Controllers;
 
-[Route(Constants.HTTP.API_VERSION + "/gms/payments")]
+[Route(Constants.Http.API_VERSION + "/gms/payments")]
 public class PaymentsController : BaseController
 {
     private readonly IPaymentServices _paymentServices;
@@ -40,9 +40,9 @@ public class PaymentsController : BaseController
     [HttpPost]
     public async Task<IActionResult> CreatePayment([FromBody] CreatePaymentRequest payment)
     {
-        await _characterRepo.FoundOrThrowAsync(payment.CharacterId, Constants.ENTITY.CHARACTER + Constants.ERROR.NOT_EXIST_ERROR);
-        await _userRepo.FoundOrThrowAsync(payment.UserId, Constants.ENTITY.USER + Constants.ERROR.NOT_EXIST_ERROR);
-        await _walletRepo.FoundOrThrowAsync(payment.WalletId, Constants.ENTITY.WALLET + Constants.ERROR.NOT_EXIST_ERROR);
+        await _characterRepo.FoundOrThrowAsync(payment.CharacterId, Constants.Entities.CHARACTER + Constants.Errors.NOT_EXIST_ERROR);
+        await _userRepo.FoundOrThrowAsync(payment.UserId, Constants.Entities.USER + Constants.Errors.NOT_EXIST_ERROR);
+        await _walletRepo.FoundOrThrowAsync(payment.WalletId, Constants.Entities.WALLET + Constants.Errors.NOT_EXIST_ERROR);
         var newPayment = new PaymentEntity();
         Mapper.Map(payment, newPayment);
         await _paymentServices.Create(newPayment);
@@ -52,7 +52,7 @@ public class PaymentsController : BaseController
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdatePayment(Guid id, [FromBody] UpdatePaymentRequest payment)
     {
-        var updatePayment = await _paymentRepo.FoundOrThrowAsync(id, Constants.ENTITY.PAYMENT + Constants.ERROR.NOT_EXIST_ERROR);
+        var updatePayment = await _paymentRepo.FoundOrThrowAsync(id, Constants.Entities.PAYMENT + Constants.Errors.NOT_EXIST_ERROR);
         Mapper.Map(payment, updatePayment);
         await _paymentServices.Update(updatePayment);
         return Ok(updatePayment);
@@ -61,7 +61,7 @@ public class PaymentsController : BaseController
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeletePayment(Guid id)
     {
-        await _paymentRepo.FoundOrThrowAsync(id, Constants.ENTITY.PAYMENT + Constants.ERROR.NOT_EXIST_ERROR);
+        await _paymentRepo.FoundOrThrowAsync(id, Constants.Entities.PAYMENT + Constants.Errors.NOT_EXIST_ERROR);
         await _paymentServices.Delete(id);
         return NoContent();
     }

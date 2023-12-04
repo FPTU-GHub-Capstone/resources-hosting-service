@@ -2,22 +2,27 @@
 
 public static class Constants
 {
-    public static class HTTP
+    public static class Http
     {
         public const string API_VERSION = "v1";
         public const string CORS = "CORS";
         public const string JSON_CONTENT_TYPE = "application/json";
         public const string USER_POLICY = "User";
-        public const string USER_ID = "uid";
     }
 
-    public static class ERROR
+    public static class HttpContext
+    {
+        public const string UID = "uid";
+        public const string SCP = "http://schemas.microsoft.com/identity/claims/scope";
+    }
+
+    public static class Errors
     {
         public const string NOT_EXIST_ERROR = "not exist";
         public const string ALREADY_EXIST_ERROR = "already exist";
     }
 
-    public static class ENTITY
+    public static class Entities
     {
         public const string ACTIVITY = "Activity ";
         public const string ACTIVITY_TYPE = "Activity Type ";

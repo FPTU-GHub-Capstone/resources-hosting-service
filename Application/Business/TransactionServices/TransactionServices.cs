@@ -18,7 +18,7 @@ public class TransactionServices : ITransactionServices
     public async Task<TransactionEntity> GetById(Guid transactionId)
     {
         return await _transactionRepo.FoundOrThrowAsync(transactionId,
-           Constants.ENTITY.TRANSACTION + Constants.ERROR.NOT_EXIST_ERROR);
+           Constants.Entities.TRANSACTION + Constants.Errors.NOT_EXIST_ERROR);
     }
     public async Task Create(TransactionEntity transaction) {
         await _transactionRepo.CreateAsync(transaction);

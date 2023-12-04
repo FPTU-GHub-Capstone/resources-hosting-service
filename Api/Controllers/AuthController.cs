@@ -15,10 +15,11 @@ using WebApiLayer.Configurations.AppConfig;
 using WebApiLayer.UserFeatures.Requests;
 using WebApiLayer.UserFeatures.Response;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApiLayer.Controllers;
 
-[Route(Constants.HTTP.API_VERSION + "/gms")]
+[Route(Constants.Http.API_VERSION + "/gms")]
 public class AuthController : BaseController
 {
     private readonly HttpClient _client;
@@ -36,12 +37,13 @@ public class AuthController : BaseController
         _userRepo = userRepo;
     }
 
+    [AllowAnonymous]
     [HttpPost("login")]
     public async Task<IActionResult> Login(LoginRequest loginRequest)
     {
         string loginEndpoint = $"{_client.BaseAddress}/login";
         var jsonData = BuildJsonLoginReqBody(loginRequest);
-        var contentData = new StringContent(jsonData, Encoding.UTF8, Constants.HTTP.JSON_CONTENT_TYPE);
+        var contentData = new StringContent(jsonData, Encoding.UTF8, Constants.Http.JSON_CONTENT_TYPE);
         var response = await _client.PostAsync(loginEndpoint, contentData);
         if (! response.IsSuccessStatusCode)
         {
@@ -61,12 +63,13 @@ public class AuthController : BaseController
        return JsonConvert.SerializeObject(reqData);
     }
 
+    [AllowAnonymous]
     [HttpPost("register")]
     public async Task<IActionResult> Register(RegisterRequest registerRequest)
     {
         string registerEndpoint = $"{_client.BaseAddress}/register";
         var jsonData = BuildJsonRegisterReqBody(registerRequest);
-        var contentData = new StringContent(jsonData, Encoding.UTF8, Constants.HTTP.JSON_CONTENT_TYPE);
+        var contentData = new StringContent(jsonData, Encoding.UTF8, Constants.Http.JSON_CONTENT_TYPE);
         var response = await _client.PostAsync(registerEndpoint, contentData);
         if (!response.IsSuccessStatusCode)
         {
@@ -97,6 +100,8 @@ public class AuthController : BaseController
         var stringData = await response.Content.ReadAsStringAsync();
         return JsonConvert.DeserializeObject<T>(stringData); ;
     }
+
+    [AllowAnonymous]
     [HttpPost("gentoken")]
     public async Task<IActionResult> GenToken(LoginRequest loginRequest)
     {

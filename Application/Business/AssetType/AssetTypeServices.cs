@@ -18,7 +18,7 @@ public class AssetTypeServices : IAssetTypeServices
     }
     public async Task<AssetTypeEntity> GetById(Guid assetTypeId)
     {
-        return await _assetTypeRepo.FoundOrThrowAsync(assetTypeId, Constants.ENTITY.ASSET_ATTRIBUTE + Constants.ERROR.NOT_EXIST_ERROR);
+        return await _assetTypeRepo.FoundOrThrowAsync(assetTypeId, Constants.Entities.ASSET_ATTRIBUTE + Constants.Errors.NOT_EXIST_ERROR);
     }
     public async Task<ICollection<AssetTypeEntity>> ListAssTypesByGameId(Guid gameId)
     {
@@ -47,7 +47,7 @@ public class AssetTypeServices : IAssetTypeServices
         {
             if (assetType.Id == Guid.Empty || checkAssetType.Id != assetType.Id)
             {
-                throw new BadRequestException(Constants.ENTITY.ASSET_TYPE + Constants.ERROR.ALREADY_EXIST_ERROR);
+                throw new BadRequestException(Constants.Entities.ASSET_TYPE + Constants.Errors.ALREADY_EXIST_ERROR);
             }
         }
     }

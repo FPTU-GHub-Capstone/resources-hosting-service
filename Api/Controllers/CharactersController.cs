@@ -7,7 +7,7 @@ using WebApiLayer.UserFeatures.Requests;
 
 namespace WebApiLayer.Controllers;
 
-[Route(Constants.HTTP.API_VERSION + "/gms/characters")]
+[Route(Constants.Http.API_VERSION + "/gms/characters")]
 public class CharactersController : BaseController
 {
     private readonly ICharacterServices _characterServices;
@@ -77,9 +77,9 @@ public class CharactersController : BaseController
     [HttpPost]
     public async Task<IActionResult> CreateCharacter([FromBody] CreateCharacterRequest character)
     {
-        await _userRepo.FoundOrThrowAsync(character.UserId, Constants.ENTITY.USER + Constants.ERROR.NOT_EXIST_ERROR);
-        await _characterTypeRepo.FoundOrThrowAsync(character.CharacterTypeId, Constants.ENTITY.USER + Constants.ERROR.NOT_EXIST_ERROR);
-        await _gameServerRepo.FoundOrThrowAsync(character.GameServerId, Constants.ENTITY.USER + Constants.ERROR.NOT_EXIST_ERROR);
+        await _userRepo.FoundOrThrowAsync(character.UserId, Constants.Entities.USER + Constants.Errors.NOT_EXIST_ERROR);
+        await _characterTypeRepo.FoundOrThrowAsync(character.CharacterTypeId, Constants.Entities.USER + Constants.Errors.NOT_EXIST_ERROR);
+        await _gameServerRepo.FoundOrThrowAsync(character.GameServerId, Constants.Entities.USER + Constants.Errors.NOT_EXIST_ERROR);
         var newC = new CharacterEntity();
         Mapper.Map(character, newC);
         await _characterServices.Create(newC);
@@ -89,7 +89,7 @@ public class CharactersController : BaseController
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateCharacter(Guid id, [FromBody] UpdateCharacterRequest character)
     {
-        var updateC = await _characterRepo.FoundOrThrowAsync(id, Constants.ENTITY.CHARACTER + Constants.ERROR.NOT_EXIST_ERROR);
+        var updateC = await _characterRepo.FoundOrThrowAsync(id, Constants.Entities.CHARACTER + Constants.Errors.NOT_EXIST_ERROR);
         Mapper.Map(character, updateC);
         await _characterServices.Update(updateC);
         return Ok(updateC);
@@ -98,7 +98,7 @@ public class CharactersController : BaseController
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteCharacter(Guid id)
     {
-        await _characterRepo.FoundOrThrowAsync(id, Constants.ENTITY.CHARACTER + Constants.ERROR.NOT_EXIST_ERROR);
+        await _characterRepo.FoundOrThrowAsync(id, Constants.Entities.CHARACTER + Constants.Errors.NOT_EXIST_ERROR);
         await _characterServices.Delete(id);
         return NoContent();
     }

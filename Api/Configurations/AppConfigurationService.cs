@@ -65,7 +65,7 @@ namespace WebApiLayer.Configurations
 
         public static void AddCorsMechanism(this IServiceCollection services)
         {
-            services.AddCors(p => p.AddPolicy(Constants.HTTP.CORS, build =>
+            services.AddCors(p => p.AddPolicy(Constants.Http.CORS, build =>
             {
                 build.WithOrigins("*")
                      .AllowAnyMethod()
@@ -80,7 +80,7 @@ namespace WebApiLayer.Configurations
                 {
                     IsApiOnly = false,
                     ShowIsErrorFlagForSuccessfulResponse = true,
-                    WrapWhenApiPathStartsWith = $"/{Constants.HTTP.API_VERSION}",
+                    WrapWhenApiPathStartsWith = $"/{Constants.Http.API_VERSION}",
                 }
             );
             return app;

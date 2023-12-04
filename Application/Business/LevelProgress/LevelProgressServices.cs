@@ -21,7 +21,7 @@ public class LevelProgressServices : ILevelProgressServices
     public async Task<LevelProgressEntity> GetById(Guid levelProgressId)
     {
         return await _levelProgressRepo.FoundOrThrowAsync(levelProgressId,
-            Constants.ENTITY.LEVEL_PROGRESS + Constants.ERROR.NOT_EXIST_ERROR);
+            Constants.Entities.LEVEL_PROGRESS + Constants.Errors.NOT_EXIST_ERROR);
     }
     public async Task<ICollection<LevelProgressEntity>> ListLevelProgByCharacterId(Guid charId)
     {
@@ -49,7 +49,7 @@ public class LevelProgressServices : ILevelProgressServices
             lP => lP.CharacterId == levelProg.CharacterId && lP.LevelId == levelProg.LevelId);
         if (checkLevelProg is not null && (checkLevelProg.Id == Guid.Empty || checkLevelProg.Id != levelProg.Id))
         {
-            throw new BadRequestException(Constants.ENTITY.LEVEL_PROGRESS + Constants.ERROR.ALREADY_EXIST_ERROR);
+            throw new BadRequestException(Constants.Entities.LEVEL_PROGRESS + Constants.Errors.ALREADY_EXIST_ERROR);
         }
     }
     public async Task CheckLevelProgressExpPoint(LevelProgressEntity levelProg)

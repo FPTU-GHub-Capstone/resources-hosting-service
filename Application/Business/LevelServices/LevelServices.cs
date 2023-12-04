@@ -20,7 +20,7 @@ public class LevelServices : ILevelServices
     public async Task<LevelEntity> GetById(Guid levelId)
     {
         return await _levelRepo.FoundOrThrowAsync(levelId,
-            Constants.ENTITY.LEVEL + Constants.ERROR.NOT_EXIST_ERROR);
+            Constants.Entities.LEVEL + Constants.Errors.NOT_EXIST_ERROR);
     }
     public async Task<ICollection<LevelEntity>> List(Guid[] levelIds)
     {

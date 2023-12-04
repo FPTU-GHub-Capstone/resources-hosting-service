@@ -24,7 +24,7 @@ public class UserServices : IUserServices
     public async Task<UserEntity> GetById(Guid UserId)
     {
         return await _userRepo.FoundOrThrowAsync(UserId,
-           Constants.ENTITY.USER + Constants.ERROR.NOT_EXIST_ERROR);
+           Constants.Entities.USER + Constants.Errors.NOT_EXIST_ERROR);
     }
     public async Task Create(UserEntity user) {
         var userCheck = await _userRepo.FirstOrDefaultAsync(

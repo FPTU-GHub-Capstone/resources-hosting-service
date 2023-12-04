@@ -20,7 +20,7 @@ public class CharacterAttributeServices : ICharacterAttributeServices
     public async Task<CharacterAttributeEntity> GetById(Guid characterAttributeid)
     {
         return await _characterAttributeRepo.FoundOrThrowAsync(characterAttributeid, 
-            Constants.ENTITY.CHARACTER_ATTRIBUTE + Constants.ERROR.NOT_EXIST_ERROR);
+            Constants.Entities.CHARACTER_ATTRIBUTE + Constants.Errors.NOT_EXIST_ERROR);
 
     }
     public async Task<ICollection<CharacterAttributeEntity>> ListCharAttByCharId(Guid id)

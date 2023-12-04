@@ -7,7 +7,7 @@ using WebApiLayer.UserFeatures.Requests;
 
 namespace WebApiLayer.Controllers;
 
-[Route(Constants.HTTP.API_VERSION + "/gms/game-servers")]
+[Route(Constants.Http.API_VERSION + "/gms/game-servers")]
 public class GameServersController : BaseController
 {
     private readonly IGameServerServices _gameServerServices;
@@ -35,7 +35,7 @@ public class GameServersController : BaseController
     [HttpPost]
     public async Task<IActionResult> CreateGameServer([FromBody] CreateGameServerRequest gameServer)
     {
-        await _gameRepo.FoundOrThrowAsync(gameServer.GameId, Constants.ENTITY.GAME + Constants.ERROR.NOT_EXIST_ERROR);
+        await _gameRepo.FoundOrThrowAsync(gameServer.GameId, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR);
         var newGameServer = new GameServerEntity();
         Mapper.Map(gameServer, newGameServer);
         await _gameServerServices.Create(newGameServer);
@@ -45,7 +45,7 @@ public class GameServersController : BaseController
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateGameServer(Guid id, [FromBody] UpdateGameServerRequest gameServer)
     {
-        var updateGameServer = await _gameServerRepo.FoundOrThrowAsync(id, Constants.ENTITY.GAME_SERVER + Constants.ERROR.NOT_EXIST_ERROR);
+        var updateGameServer = await _gameServerRepo.FoundOrThrowAsync(id, Constants.Entities.GAME_SERVER + Constants.Errors.NOT_EXIST_ERROR);
         Mapper.Map(gameServer, updateGameServer);
         await _gameServerServices.Update(updateGameServer);
         return Ok(updateGameServer);
@@ -54,7 +54,7 @@ public class GameServersController : BaseController
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteGameServer(Guid id)
     {
-        await _gameServerRepo.FoundOrThrowAsync(id, Constants.ENTITY.GAME_SERVER + Constants.ERROR.NOT_EXIST_ERROR);
+        await _gameServerRepo.FoundOrThrowAsync(id, Constants.Entities.GAME_SERVER + Constants.Errors.NOT_EXIST_ERROR);
         await _gameServerServices.Delete(id);
         return NoContent();
     }

@@ -17,7 +17,7 @@ public class AttributeGroupServices : IAttributeGroupServices
     }
     public async Task<AttributeGroupEntity> GetById(Guid attributeGroupid)
     {
-        return await _attributeRepo.FoundOrThrowAsync(attributeGroupid, Constants.ENTITY.ATTRIBUTE_GROUP + Constants.ERROR.NOT_EXIST_ERROR);
+        return await _attributeRepo.FoundOrThrowAsync(attributeGroupid, Constants.Entities.ATTRIBUTE_GROUP + Constants.Errors.NOT_EXIST_ERROR);
     }
     public async Task Create(AttributeGroupEntity attributeGroup){
         await _attributeRepo.CreateAsync(attributeGroup);
