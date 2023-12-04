@@ -20,6 +20,9 @@ services.AddSwaggerGen();
     services.AddDbServices();
     services.AddAppServices();
     services.AddCorsMechanism();
+    services.AddAppAuthentication();
+    services.AddAppAuthorization();
+    services.AddSwagger();
     services.AddAutoMapper(Assembly.GetExecutingAssembly());
 }
 #endregion
@@ -38,6 +41,7 @@ app.UseLoggingInterceptor();
 app.UseCors(Constants.HTTP.CORS);
 app.UseAutoWrapper();
 app.UseHttpsRedirection();
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 app.Run();

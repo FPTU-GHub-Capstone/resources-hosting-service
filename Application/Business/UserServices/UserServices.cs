@@ -9,14 +9,9 @@ namespace ServiceLayer.Business;
 public class UserServices : IUserServices
 {
     private readonly IGenericRepository<UserEntity> _userRepo;
-    private readonly IGenericRepository<GameUserEntity> _gameUserRepo;
-    private readonly IGenericRepository<GameEntity> _gameRepo;
-    public UserServices(IGenericRepository<UserEntity> userRepo, IGenericRepository<GameUserEntity> gameUserRepo
-        , IGenericRepository<GameEntity> gameRepo)
+    public UserServices(IGenericRepository<UserEntity> userRepo)
     {
         _userRepo = userRepo;
-        _gameUserRepo = gameUserRepo;
-        _gameRepo = gameRepo;
     }
     public async Task<ICollection<UserEntity>> List(string? email)
     {

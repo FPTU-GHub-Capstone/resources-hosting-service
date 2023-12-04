@@ -1,5 +1,6 @@
 ﻿using DomainLayer.Constants;
 using DomainLayer.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RepositoryLayer.Repositories;
 using ServiceLayer.Business;
@@ -9,6 +10,7 @@ using WebApiLayer.UserFeatures.Response;
 
 namespace WebApiLayer.Controllers;
 
+[Authorize]
 [Route(Constants.HTTP.API_VERSION + "/gms/games")]
 public class GamesController : BaseController
 {

@@ -1,14 +1,20 @@
 ﻿using DomainLayer.Constants;
 using DomainLayer.Entities;
 using DomainLayer.Exceptions;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using RepositoryLayer.Repositories;
 using ServiceLayer.Business;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using WebApiLayer.Configurations.AppConfig;
 using WebApiLayer.UserFeatures.Requests;
 using WebApiLayer.UserFeatures.Response;
+using Microsoft.IdentityModel.Tokens;
 
 namespace WebApiLayer.Controllers;
 
@@ -16,14 +22,18 @@ namespace WebApiLayer.Controllers;
 public class AuthController : BaseController
 {
     private readonly HttpClient _client;
+    private readonly AppSettings _appSettings;
     private readonly IUserServices _userServices;
-    public AuthController(IOptions<AppSettings> appSettings, IUserServices userServices)
+    private readonly IGenericRepository<UserEntity> _userRepo;
+    public AuthController(IOptions<AppSettings> appSettings, IUserServices userServices, IGenericRepository<UserEntity> userRepo)
     {
+        _appSettings = appSettings.Value;
         _client = new HttpClient
         {
             BaseAddress = new Uri(appSettings.Value.IdpUrl),
         };
         _userServices = userServices;
+        _userRepo = userRepo;
     }
 
     [HttpPost("login")]
@@ -86,5 +96,47 @@ public class AuthController : BaseController
     {
         var stringData = await response.Content.ReadAsStringAsync();
         return JsonConvert.DeserializeObject<T>(stringData); ;
+    }
+    [HttpPost("gentoken")]
+    public async Task<IActionResult> GenToken(LoginRequest loginRequest)
+    {
+        var user = await _userRepo.FirstOrDefaultAsync(u => u.Username == loginRequest.Username);
+        if(user == null)
+        {
+            throw new NotFoundException("Not found");
+        }
+        var token = await GetUserToken(loginRequest);
+        return Ok(new
+        {
+            token = new JwtSecurityTokenHandler().WriteToken(token),
+            expiration = token.ValidTo
+        });
+    }
+
+    private async Task<JwtSecurityToken> GetUserToken(LoginRequest loginRequest)
+    {
+        var user = await _userRepo.FirstOrDefaultAsync(u => u.Username == loginRequest.Username);
+
+        var authClaims = new List<Claim> {
+            new Claim("id", user.Id.ToString()),
+            new Claim(ClaimTypes.Name, user.Username),
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            new Claim(ClaimTypes.Role, "User")
+        };
+        var token = GenerateToken(authClaims);
+        return token;
+    }
+
+    private JwtSecurityToken GenerateToken(List<Claim> authClaims)
+    {
+        var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appSettings.JWTOptions.Secret));
+        var token = new JwtSecurityToken(
+            issuer: _appSettings.JWTOptions.ValidIssuer,
+            audience: _appSettings.JWTOptions.ValidAudience,
+            expires: DateTime.Now.AddHours(3),
+            claims: authClaims,
+            signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
+        );
+        return token;
     }
 }

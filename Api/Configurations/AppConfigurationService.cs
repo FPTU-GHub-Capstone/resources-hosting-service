@@ -1,13 +1,18 @@
 ﻿using AutoWrapper;
 using DomainLayer.Constants;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using RepositoryLayer.Contexts;
 using RepositoryLayer.Repositories;
 using Serilog;
 using Serilog.Events;
 using ServiceLayer.Business;
+using System.Text;
 using WebApiLayer.Configurations.AppConfig;
 
 
@@ -117,6 +122,68 @@ namespace WebApiLayer.Configurations
             await using ApplicationDbContext dbContext =
                 scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             await DatabaseInitializer.InitializeAsync(dbContext);
+        }
+
+        public static IServiceCollection AddAppAuthentication(this IServiceCollection services)
+        {
+            services.AddAuthentication(options => {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options => {
+                var appSettings = services.BuildServiceProvider().GetService<IOptions<AppSettings>>().Value;
+                options.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(appSettings.JWTOptions.Secret)),
+                    ValidateIssuerSigningKey = false
+                };
+            });
+            return services;
+        }
+
+        public static IServiceCollection AddAppAuthorization(this IServiceCollection services)
+        {
+            services.AddAuthorization();
+            return services;
+        }
+
+        public static IServiceCollection AddSwagger(this IServiceCollection services)
+        {
+            services.AddSwaggerGen(c => {
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "FU Flower Bouquet Management",
+                    Version = "v1"
+                });
+                OpenApiSecurityScheme securityDefinition = new()
+                {
+                    Name = "Bearer",
+                    BearerFormat = "JWT",
+                    Scheme = "bearer",
+                    Description = "Specify the authorization token.",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.Http,
+                };
+                c.AddSecurityDefinition("jwt_auth", securityDefinition);
+                OpenApiSecurityScheme securityScheme = new OpenApiSecurityScheme()
+                {
+                    Reference = new OpenApiReference()
+                    {
+                        Id = "jwt_auth",
+                        Type = ReferenceType.SecurityScheme
+                    }
+                };
+                OpenApiSecurityRequirement securityRequirements = new() {
+            {
+                securityScheme,
+                new string[] { }
+            },
+        };
+                c.AddSecurityRequirement(securityRequirements);
+            });
+            return services;
         }
     }
 }
