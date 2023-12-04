@@ -21,7 +21,7 @@ services.AddSwaggerGen();
     services.AddAppServices();
     services.AddCorsMechanism();
     services.AddAppAuthentication();
-    services.AddAppAuthorization();
+    services.AddAuthorization();
     services.AddSwagger();
     services.AddAutoMapper(Assembly.GetExecutingAssembly());
 }

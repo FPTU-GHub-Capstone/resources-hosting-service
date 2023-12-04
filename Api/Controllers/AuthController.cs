@@ -118,10 +118,7 @@ public class AuthController : BaseController
         var user = await _userRepo.FirstOrDefaultAsync(u => u.Username == loginRequest.Username);
 
         var authClaims = new List<Claim> {
-            new Claim("id", user.Id.ToString()),
-            new Claim(ClaimTypes.Name, user.Username),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new Claim(ClaimTypes.Role, "User")
+            new Claim("uid", user.Uid),
         };
         var token = GenerateToken(authClaims);
         return token;
@@ -131,8 +128,6 @@ public class AuthController : BaseController
     {
         var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appSettings.JWTOptions.Secret));
         var token = new JwtSecurityToken(
-            issuer: _appSettings.JWTOptions.ValidIssuer,
-            audience: _appSettings.JWTOptions.ValidAudience,
             expires: DateTime.Now.AddHours(3),
             claims: authClaims,
             signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)

@@ -1,7 +1,6 @@
 ﻿using AutoWrapper;
 using DomainLayer.Constants;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Options;
@@ -12,6 +11,7 @@ using RepositoryLayer.Repositories;
 using Serilog;
 using Serilog.Events;
 using ServiceLayer.Business;
+using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using WebApiLayer.Configurations.AppConfig;
 
@@ -127,26 +127,45 @@ namespace WebApiLayer.Configurations
         public static IServiceCollection AddAppAuthentication(this IServiceCollection services)
         {
             services.AddAuthentication(options => {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(options => {
                 var appSettings = services.BuildServiceProvider().GetService<IOptions<AppSettings>>().Value;
                 options.TokenValidationParameters = new TokenValidationParameters()
                 {
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(appSettings.JWTOptions.Secret)),
-                    ValidateIssuerSigningKey = false
+                    LifetimeValidator = CustomLifetimeValidator(),
+                    ValidateActor = false,
+                    ValidateAudience = false,
+                    ValidateIssuer = false,
+                };
+                options.Events = new JwtBearerEvents
+                {
+                    OnAuthenticationFailed = context =>
+                    {
+                        Console.WriteLine($"Authentication failed: {context.Exception}");
+                        return Task.CompletedTask;
+                    },
                 };
             });
             return services;
         }
 
-        public static IServiceCollection AddAppAuthorization(this IServiceCollection services)
+        private static LifetimeValidator CustomLifetimeValidator()
         {
-            services.AddAuthorization();
-            return services;
+            static bool lifetimeValidator(DateTime? _notBefore, DateTime? _expires, SecurityToken securityToken, TokenValidationParameters _validationParameters)
+            {
+                if (securityToken is JwtSecurityToken jwtSecurityToken)
+                {
+                    var expirationClaim = (long?)jwtSecurityToken.Payload["exp"];
+                    if (expirationClaim == null)
+                    {
+                        return false;
+                    }
+                    return expirationClaim > DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+                }
+                return false;
+            }
+            return lifetimeValidator;
         }
 
         public static IServiceCollection AddSwagger(this IServiceCollection services)
