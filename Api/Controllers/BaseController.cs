@@ -3,6 +3,7 @@ using DomainLayer.Constants;
 using DomainLayer.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Security.Claims;
 
 namespace WebApiLayer.Controllers;
@@ -46,5 +47,11 @@ public abstract class BaseController : ControllerBase
         var scp = HttpContext.User.Claims.Where(a => a.Type == Constants.HttpContext.SCP)
                 .Select(scope => scope.Value).ToArray();
         return scp;
+    }
+
+    protected async Task<T> BuildJsonResponse<T>(HttpResponseMessage response)
+    {
+        var stringData = await response.Content.ReadAsStringAsync();
+        return JsonConvert.DeserializeObject<T>(stringData); ;
     }
 }

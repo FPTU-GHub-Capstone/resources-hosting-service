@@ -94,10 +94,4 @@ public class AuthController : BaseController
         };
         return JsonConvert.SerializeObject(reqData);
     }
-
-    private async Task<T> BuildJsonResponse<T>(HttpResponseMessage response)
-    {
-        var stringData = await response.Content.ReadAsStringAsync();
-        return JsonConvert.DeserializeObject<T>(stringData); ;
-    }
 }

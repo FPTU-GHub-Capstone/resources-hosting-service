@@ -1,7 +1,9 @@
 ﻿using DomainLayer.Constants;
 using DomainLayer.Entities;
+using DomainLayer.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.FileSystemGlobbing.Internal;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using RepositoryLayer.Repositories;
@@ -9,6 +11,7 @@ using ServiceLayer.Business;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json.Nodes;
+using System.Text.RegularExpressions;
 using WebApiLayer.Configurations.AppConfig;
 using WebApiLayer.UserFeatures.Requests;
 using WebApiLayer.UserFeatures.Response;
@@ -66,18 +69,41 @@ public class GamesController : BaseController
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetGames([FromQuery] Guid[]? idList)
+    public async Task<IActionResult> GetGames()
     {
-        if (idList != null && idList.Count() > 0)
+        var stringScope = await GetUserScope();
+        if (stringScope.Contains("games:*:get"))
         {
-            return Ok(await _gameServices.List(idList));
+            return Ok(await _gameServices.List());
         }
-        return Ok(await _gameServices.List());
+        var scope = stringScope.Split(' ');
+        var getGamePattern = @"^games:(?<id>[^:]+):get$";
+        var ids = scope.Where(scp => Regex.IsMatch(scp, getGamePattern)).Select(scp => scp.Split(':')[1]); // games:{id}:get
+        var guids = ids.Select(Guid.Parse).ToArray();
+        return Ok(await _gameServices.List(guids));
+    }
+
+    private async Task<string> GetUserScope()
+    {
+        var enpoint = $"{_client.BaseAddress}/profile";
+        using (var request = new HttpRequestMessage(HttpMethod.Get, enpoint))
+        {
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", CurrentToken);
+            var response = await _client.SendAsync(request);
+            response.EnsureSuccessStatusCode();
+            var result = await BuildJsonResponse<GetProfileResponse>(response);
+            return result.scope;
+        }
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetGame(Guid id)
     {
+        var stringScope = await GetUserScope();
+        if (!stringScope.Contains("games:*:get") && !stringScope.Contains($"games:{id}:get"))
+        {
+            throw new ForbiddenException();
+        }
         return Ok(await _gameServices.GetById(id));
     }
 
