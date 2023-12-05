@@ -7,7 +7,7 @@ using WebApiLayer.UserFeatures.Requests;
 
 namespace WebApiLayer.Controllers;
 
-[Route(Constants.HTTP.API_VERSION + "/gms/asset-attributes")]
+[Route(Constants.Http.API_VERSION + "/gms/asset-attributes")]
 public class AssetAttributesController : BaseController
 {
     private readonly IAssetAttributeServices _assetAttServices;
@@ -38,8 +38,8 @@ public class AssetAttributesController : BaseController
     [HttpPost]
     public async Task<IActionResult> CreateAssetAttribute([FromBody] CreateAssetAttributeRequest assetAtt)
     {
-        await _assetRepo.FoundOrThrowAsync(assetAtt.AssetId, Constants.ENTITY.ASSET + Constants.ERROR.NOT_EXIST_ERROR);
-        await _attGrpRepo.FoundOrThrowAsync(assetAtt.AttributeGroupId, Constants.ENTITY.ATTRIBUTE_GROUP + Constants.ERROR.NOT_EXIST_ERROR);
+        await _assetRepo.FoundOrThrowAsync(assetAtt.AssetId, Constants.Entities.ASSET + Constants.Errors.NOT_EXIST_ERROR);
+        await _attGrpRepo.FoundOrThrowAsync(assetAtt.AttributeGroupId, Constants.Entities.ATTRIBUTE_GROUP + Constants.Errors.NOT_EXIST_ERROR);
         var newAssAtt = new AssetAttributeEntity();
         Mapper.Map(assetAtt, newAssAtt);
         await _assetAttServices.Create(newAssAtt);
@@ -49,7 +49,7 @@ public class AssetAttributesController : BaseController
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateAssetAttribute(Guid id, [FromBody] UpdateAssetAttributeRequest assetAtt)
     {
-        var updateAssAtt = await _assetAttRepo.FoundOrThrowAsync(id, Constants.ENTITY.ASSET_ATTRIBUTE + Constants.ERROR.NOT_EXIST_ERROR);
+        var updateAssAtt = await _assetAttRepo.FoundOrThrowAsync(id, Constants.Entities.ASSET_ATTRIBUTE + Constants.Errors.NOT_EXIST_ERROR);
         Mapper.Map(assetAtt, updateAssAtt);
         await _assetAttServices.Update(updateAssAtt);
         return Ok(updateAssAtt);
@@ -58,7 +58,7 @@ public class AssetAttributesController : BaseController
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteAssetAttribute(Guid id)
     {
-        await _assetAttRepo.FoundOrThrowAsync(id, Constants.ENTITY.ASSET_ATTRIBUTE + Constants.ERROR.NOT_EXIST_ERROR);
+        await _assetAttRepo.FoundOrThrowAsync(id, Constants.Entities.ASSET_ATTRIBUTE + Constants.Errors.NOT_EXIST_ERROR);
         await _assetAttServices.Delete(id);
         return NoContent();
     }

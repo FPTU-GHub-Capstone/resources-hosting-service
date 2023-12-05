@@ -9,7 +9,7 @@ using WebApiLayer.UserFeatures.Response;
 
 namespace WebApiLayer.Controllers;
 
-[Route(Constants.HTTP.API_VERSION + "/gms/character-types")]
+[Route(Constants.Http.API_VERSION + "/gms/character-types")]
 public class CharacterTypesController : BaseController
 {
     private readonly ICharacterTypeServices _characterTypeServices;
@@ -47,7 +47,7 @@ public class CharacterTypesController : BaseController
     [HttpPost]
     public async Task<IActionResult> CreateCharacterType([FromBody] CreateCharacterTypeRequest charType)
     {
-        await _gameRepo.FoundOrThrowAsync(charType.GameId, Constants.ENTITY.GAME + Constants.ERROR.NOT_EXIST_ERROR);
+        await _gameRepo.FoundOrThrowAsync(charType.GameId, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR);
         var newCT = new CharacterTypeEntity();
         Mapper.Map(charType, newCT);
         newCT.BaseProperties = charType.BaseProperties.ToString();
@@ -58,7 +58,7 @@ public class CharacterTypesController : BaseController
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateCharacterType(Guid id, [FromBody] UpdateCharacterTypeRequest charType)
     {
-        var ct = await _characterTypeRepo.FoundOrThrowAsync(id, Constants.ENTITY.CHARACTER_TYPE + Constants.ERROR.NOT_EXIST_ERROR);
+        var ct = await _characterTypeRepo.FoundOrThrowAsync(id, Constants.Entities.CHARACTER_TYPE + Constants.Errors.NOT_EXIST_ERROR);
         Mapper.Map(charType, ct);
         await _characterTypeServices.Update(ct);
         return Ok(ct);
@@ -67,7 +67,7 @@ public class CharacterTypesController : BaseController
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteCharacterType(Guid id)
     {
-        await _characterTypeRepo.FoundOrThrowAsync(id, Constants.ENTITY.CHARACTER_TYPE + Constants.ERROR.NOT_EXIST_ERROR);
+        await _characterTypeRepo.FoundOrThrowAsync(id, Constants.Entities.CHARACTER_TYPE + Constants.Errors.NOT_EXIST_ERROR);
         await _characterTypeServices.Delete(id);
         return NoContent();
     }

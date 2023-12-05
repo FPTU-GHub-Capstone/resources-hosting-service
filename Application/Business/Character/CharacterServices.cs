@@ -19,7 +19,7 @@ public class CharacterServices : ICharacterServices
     }
     public async Task<CharacterEntity> GetById(Guid characterId)
     {
-        return await _characterRepo.FoundOrThrowAsync(characterId, Constants.ENTITY.CHARACTER + Constants.ERROR.NOT_EXIST_ERROR);
+        return await _characterRepo.FoundOrThrowAsync(characterId, Constants.Entities.CHARACTER + Constants.Errors.NOT_EXIST_ERROR);
 
     }
     public async Task<ICollection<CharacterEntity>> ListCharByUserId(Guid id)
@@ -48,7 +48,7 @@ public class CharacterServices : ICharacterServices
         {
             if (character.Id == Guid.Empty || character.Id != cCheck.Id)
             {
-                throw new BadRequestException(Constants.ENTITY.CHARACTER + Constants.ERROR.ALREADY_EXIST_ERROR);
+                throw new BadRequestException(Constants.Entities.CHARACTER + Constants.Errors.ALREADY_EXIST_ERROR);
             }
         }
     }

@@ -8,10 +8,8 @@ namespace WebApiLayer.UserFeatures.Requests
     {
         [Required]
         public string Name { get; set; }
-        [Required]
-        public string Logo { get; set; }
-        [Required]
-        public string Link { get; set; }
+        public string? Logo { get; set; }
+        public string? Link { get; set; }
 
     }
 }

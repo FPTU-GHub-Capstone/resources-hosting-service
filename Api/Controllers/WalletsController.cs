@@ -8,7 +8,7 @@ using WebApiLayer.UserFeatures.Requests;
 
 namespace WebApiLayer.Controllers;
 
-[Route(Constants.HTTP.API_VERSION + "/gms/wallets")]
+[Route(Constants.Http.API_VERSION + "/gms/wallets")]
 public class WalletsController : BaseController
 {
     private readonly IWalletServices _walletServices;
@@ -39,8 +39,8 @@ public class WalletsController : BaseController
     [HttpPost]
     public async Task<IActionResult> CreateWallet([FromBody] CreateWalletRequest wallet)
     {
-        await _walletCatRepo.FoundOrThrowAsync(wallet.WalletCategoryId, Constants.ENTITY.WALLET_CATEGORY + Constants.ERROR.NOT_EXIST_ERROR);
-        await _characterRepo.FoundOrThrowAsync(wallet.CharacterId, Constants.ENTITY.CHARACTER + Constants.ERROR.NOT_EXIST_ERROR);
+        await _walletCatRepo.FoundOrThrowAsync(wallet.WalletCategoryId, Constants.Entities.WALLET_CATEGORY + Constants.Errors.NOT_EXIST_ERROR);
+        await _characterRepo.FoundOrThrowAsync(wallet.CharacterId, Constants.Entities.CHARACTER + Constants.Errors.NOT_EXIST_ERROR);
         var newWallet = new WalletEntity();
         Mapper.Map(wallet, newWallet);
         await _walletServices.Create(newWallet);
@@ -50,7 +50,7 @@ public class WalletsController : BaseController
     [HttpPut("{id}")]
     public async Task<IActionResult> Put(Guid id, [FromBody] UpdateWalletRequest wallet)
     {
-        var updateWallet = await _walletRepo.FoundOrThrowAsync(id, Constants.ENTITY.WALLET + Constants.ERROR.NOT_EXIST_ERROR);
+        var updateWallet = await _walletRepo.FoundOrThrowAsync(id, Constants.Entities.WALLET + Constants.Errors.NOT_EXIST_ERROR);
         Mapper.Map(wallet, updateWallet);
         await _walletServices.Update(updateWallet);
         return Ok(updateWallet);
@@ -59,7 +59,7 @@ public class WalletsController : BaseController
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(Guid id)
     {
-        await _walletRepo.FoundOrThrowAsync(id, Constants.ENTITY.WALLET + Constants.ERROR.NOT_EXIST_ERROR);
+        await _walletRepo.FoundOrThrowAsync(id, Constants.Entities.WALLET + Constants.Errors.NOT_EXIST_ERROR);
         await _walletServices.Delete(id);
         return NoContent();
     }

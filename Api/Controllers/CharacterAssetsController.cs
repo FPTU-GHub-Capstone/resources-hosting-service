@@ -7,7 +7,7 @@ using WebApiLayer.UserFeatures.Requests;
 
 namespace WebApiLayer.Controllers;
 
-[Route(Constants.HTTP.API_VERSION + "/gms/character-assets")]
+[Route(Constants.Http.API_VERSION + "/gms/character-assets")]
 public class CharacterAssetsController : BaseController
 {
     private readonly ICharacterAssetServices _characterAssetServices;
@@ -39,8 +39,8 @@ public class CharacterAssetsController : BaseController
     [HttpPost]
     public async Task<IActionResult> CreateCharacterAsset([FromBody] CreateCharacterAssetRequest charAss)
     {
-        await _assetRepo.FoundOrThrowAsync(charAss.AssetsId, Constants.ENTITY.ASSET + Constants.ERROR.NOT_EXIST_ERROR);
-        await _characterRepo.FoundOrThrowAsync(charAss.CharacterId, Constants.ENTITY.CHARACTER + Constants.ERROR.NOT_EXIST_ERROR);
+        await _assetRepo.FoundOrThrowAsync(charAss.AssetsId, Constants.Entities.ASSET + Constants.Errors.NOT_EXIST_ERROR);
+        await _characterRepo.FoundOrThrowAsync(charAss.CharacterId, Constants.Entities.CHARACTER + Constants.Errors.NOT_EXIST_ERROR);
         var newCharAss = new CharacterAssetEntity();
         Mapper.Map(charAss, newCharAss);
         await _characterAssetServices.Create(newCharAss);
@@ -50,7 +50,7 @@ public class CharacterAssetsController : BaseController
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateCharacterAsset(Guid id, [FromBody] UpdateCharacterAssetRequest charAss)
     {
-        var updateCharAss = await _characterAssetRepo.FoundOrThrowAsync(id, Constants.ENTITY.CHARACTER_ASSET + Constants.ERROR.NOT_EXIST_ERROR);
+        var updateCharAss = await _characterAssetRepo.FoundOrThrowAsync(id, Constants.Entities.CHARACTER_ASSET + Constants.Errors.NOT_EXIST_ERROR);
         Mapper.Map(charAss, updateCharAss);
         await _characterAssetServices.Update(updateCharAss);
         return Ok(updateCharAss);
@@ -59,7 +59,7 @@ public class CharacterAssetsController : BaseController
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteCharacterAsset(Guid id)
     {
-        await _characterAssetRepo.FoundOrThrowAsync(id, Constants.ENTITY.CHARACTER_ASSET + Constants.ERROR.NOT_EXIST_ERROR);
+        await _characterAssetRepo.FoundOrThrowAsync(id, Constants.Entities.CHARACTER_ASSET + Constants.Errors.NOT_EXIST_ERROR);
         await _characterAssetServices.Delete(id);
         return NoContent();
     }

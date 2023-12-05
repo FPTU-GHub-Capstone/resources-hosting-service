@@ -19,7 +19,7 @@ public class AssetAttributeServices : IAssetAttributeServices
     }
     public async Task<AssetAttributeEntity> GetById(Guid assetAttributeId)
     {
-        return await _assetAttributeRepo.FoundOrThrowAsync(assetAttributeId, Constants.ENTITY.ASSET_ATTRIBUTE + Constants.ERROR.NOT_EXIST_ERROR);
+        return await _assetAttributeRepo.FoundOrThrowAsync(assetAttributeId, Constants.Entities.ASSET_ATTRIBUTE + Constants.Errors.NOT_EXIST_ERROR);
     }
     public async Task Create(AssetAttributeEntity assetAttribute)
     {
@@ -40,7 +40,7 @@ public class AssetAttributeServices : IAssetAttributeServices
             l => l.AssetId == assAtt.AssetId && l.AttributeGroupId == assAtt.AttributeGroupId);
         if (checkAssAtt is not null && (assAtt.Id == Guid.Empty || checkAssAtt.Id != assAtt.Id))
         {
-            throw new BadRequestException(Constants.ENTITY.ATTRIBUTE_GROUP + Constants.ERROR.ALREADY_EXIST_ERROR);
+            throw new BadRequestException(Constants.Entities.ATTRIBUTE_GROUP + Constants.Errors.ALREADY_EXIST_ERROR);
         }
     }
 }

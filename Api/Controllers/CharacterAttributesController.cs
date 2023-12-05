@@ -8,7 +8,7 @@ using WebApiLayer.UserFeatures.Requests;
 
 namespace WebApiLayer.Controllers;
 
-[Route(Constants.HTTP.API_VERSION + "/gms/character-attributes")]
+[Route(Constants.Http.API_VERSION + "/gms/character-attributes")]
 public class CharacterAtributesController : BaseController
 {
     private readonly ICharacterAttributeServices _charAttServices;
@@ -41,8 +41,8 @@ public class CharacterAtributesController : BaseController
     [HttpPost]
     public async Task<IActionResult> CreateCharacterAttribute([FromBody] CreateCharacterAttributeRequest charAtt)
     {
-        await _charRepo.FoundOrThrowAsync(charAtt.CharacterId, Constants.ENTITY.CHARACTER + Constants.ERROR.NOT_EXIST_ERROR);
-        await _attGrpRepo.FoundOrThrowAsync(charAtt.AttributeGroupId, Constants.ENTITY.ATTRIBUTE_GROUP + Constants.ERROR.NOT_EXIST_ERROR);
+        await _charRepo.FoundOrThrowAsync(charAtt.CharacterId, Constants.Entities.CHARACTER + Constants.Errors.NOT_EXIST_ERROR);
+        await _attGrpRepo.FoundOrThrowAsync(charAtt.AttributeGroupId, Constants.Entities.ATTRIBUTE_GROUP + Constants.Errors.NOT_EXIST_ERROR);
         var newCharAtt = new CharacterAttributeEntity();
         Mapper.Map(charAtt, newCharAtt);
         await _charAttServices.Create(newCharAtt);
@@ -52,7 +52,7 @@ public class CharacterAtributesController : BaseController
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateCharacterAttribute(Guid id, [FromBody] UpdateCharacterAttributeRequest charAtt)
     {
-        var newCharAtt = await _charAttRepo.FoundOrThrowAsync(id, Constants.ENTITY.CHARACTER_ATTRIBUTE + Constants.ERROR.NOT_EXIST_ERROR);
+        var newCharAtt = await _charAttRepo.FoundOrThrowAsync(id, Constants.Entities.CHARACTER_ATTRIBUTE + Constants.Errors.NOT_EXIST_ERROR);
         Mapper.Map(charAtt, newCharAtt);
         await _charAttServices.Update(newCharAtt);
         return Ok(newCharAtt);
@@ -61,7 +61,7 @@ public class CharacterAtributesController : BaseController
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteCharacterAttribute(Guid id)
     {
-        await _charAttRepo.FoundOrThrowAsync(id, Constants.ENTITY.CHARACTER_ATTRIBUTE + Constants.ERROR.NOT_EXIST_ERROR);
+        await _charAttRepo.FoundOrThrowAsync(id, Constants.Entities.CHARACTER_ATTRIBUTE + Constants.Errors.NOT_EXIST_ERROR);
         await _charAttServices.Delete(id);
         return NoContent();
     }

@@ -47,7 +47,7 @@ public class GameUserServices : IGameUserServices
             guser => guser.GameId.Equals(gu.GameId) && guser.UserId.Equals(gu.UserId));
         if (checkGameUser is not null)
         {
-            throw new BadRequestException("This user is " + Constants.ERROR.ALREADY_EXIST_ERROR + " in this game");
+            throw new BadRequestException("This user is " + Constants.Errors.ALREADY_EXIST_ERROR + " in this game");
         }
     }
 }

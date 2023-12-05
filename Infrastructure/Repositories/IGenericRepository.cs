@@ -11,7 +11,7 @@ public interface IGenericRepository<T>
     Task CreateRangeAsync(IEnumerable<T> entities);
     Task<List<T>> ListAsync();
     Task<T> FindByIdAsync(Guid id, params string[] navigationProperties);
-    Task<T> FoundOrThrowAsync(Guid id, string message = Constants.ERROR.NOT_EXIST_ERROR, params string[] navigationProperties);
+    Task<T> FoundOrThrowAsync(Guid id, string message = Constants.Errors.NOT_EXIST_ERROR, params string[] navigationProperties);
     Task<IList<T>> WhereAsync(Expression<Func<T, bool>> predicate, params string[] navigationProperties);
     Task UpdateAsync(T updated);
     Task<T> DeleteAsync(Guid id);

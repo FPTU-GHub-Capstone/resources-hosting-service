@@ -22,7 +22,7 @@ public class CharacterTypeServices : ICharacterTypeServices
     public async Task<CharacterTypeEntity> GetById(Guid characterTypeId)
     {
         return await _characterTypeRepo.FoundOrThrowAsync(characterTypeId,
-            Constants.ENTITY.CHARACTER_TYPE + Constants.ERROR.NOT_EXIST_ERROR);
+            Constants.Entities.CHARACTER_TYPE + Constants.Errors.NOT_EXIST_ERROR);
     }
     public async Task<ICollection<CharacterTypeEntity>> ListCharTypesByGameId(Guid gameId)
     {

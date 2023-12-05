@@ -7,7 +7,7 @@ using WebApiLayer.UserFeatures.Requests;
 
 namespace WebApiLayer.Controllers;
 
-[Route(Constants.HTTP.API_VERSION + "/gms/levels")]
+[Route(Constants.Http.API_VERSION + "/gms/levels")]
 public class LevelsController : BaseController
 {
     private readonly ILevelServices _levelServices;
@@ -44,7 +44,7 @@ public class LevelsController : BaseController
         List<LevelEntity> levelList = new List<LevelEntity>();
         foreach (var singleLevel in level)
         {
-            await _gameRepo.FoundOrThrowAsync(singleLevel.GameId, Constants.ENTITY.GAME +"id " + singleLevel.GameId + " " + Constants.ERROR.NOT_EXIST_ERROR);
+            await _gameRepo.FoundOrThrowAsync(singleLevel.GameId, Constants.Entities.GAME +"id " + singleLevel.GameId + " " + Constants.Errors.NOT_EXIST_ERROR);
             LevelEntity newLevel = new LevelEntity();
             newLevel.LevelNo = (await _levelRepo.WhereAsync(l => l.GameId == singleLevel.GameId)).Count() + levelList.Count(l=>l.GameId == singleLevel.GameId) + 1;
             Mapper.Map(singleLevel, newLevel);
@@ -57,7 +57,7 @@ public class LevelsController : BaseController
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateLevel(Guid id, [FromBody] UpdateLevelsRequest level)
     {
-        var updateLevel = await _levelRepo.FoundOrThrowAsync(id, Constants.ENTITY.LEVEL + Constants.ERROR.NOT_EXIST_ERROR);
+        var updateLevel = await _levelRepo.FoundOrThrowAsync(id, Constants.Entities.LEVEL + Constants.Errors.NOT_EXIST_ERROR);
         Mapper.Map(level, updateLevel);
         await _levelServices.Update(updateLevel);
         return Ok(updateLevel);
@@ -66,7 +66,7 @@ public class LevelsController : BaseController
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteLevel(Guid id)
     {
-        var level = await _levelRepo.FoundOrThrowAsync(id, Constants.ENTITY.LEVEL + Constants.ERROR.NOT_EXIST_ERROR);
+        var level = await _levelRepo.FoundOrThrowAsync(id, Constants.Entities.LEVEL + Constants.Errors.NOT_EXIST_ERROR);
         await _levelServices.Delete(level);
         return NoContent();
     }

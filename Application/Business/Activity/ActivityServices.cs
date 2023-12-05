@@ -17,7 +17,7 @@ public class ActivityServices : IActivityServices
     }
     public async Task<ActivityEntity> Search(Guid activityId)
     {
-        return await _activityRepo.FoundOrThrowAsync(activityId, Constants.ENTITY.ACTIVITY + Constants.ERROR.NOT_EXIST_ERROR);
+        return await _activityRepo.FoundOrThrowAsync(activityId, Constants.Entities.ACTIVITY + Constants.Errors.NOT_EXIST_ERROR);
     }
     public async Task Create(ActivityEntity activity)
     {

@@ -18,7 +18,7 @@ public class ActivityTypeServices : IActivityTypeServices
     }
     public async Task<ActivityTypeEntity> GetById(Guid activityTypeId)
     {
-        return await _activityTypeRepo.FoundOrThrowAsync(activityTypeId, Constants.ENTITY.ACTIVITY_TYPE + Constants.ERROR.NOT_EXIST_ERROR);
+        return await _activityTypeRepo.FoundOrThrowAsync(activityTypeId, Constants.Entities.ACTIVITY_TYPE + Constants.Errors.NOT_EXIST_ERROR);
     }
     public async Task<ICollection<ActivityTypeEntity>> ListActTypesByGameId(Guid gameid)
     {

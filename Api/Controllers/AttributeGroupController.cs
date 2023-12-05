@@ -9,7 +9,7 @@ using WebApiLayer.UserFeatures.Response;
 
 namespace WebApiLayer.Controllers;
 
-[Route(Constants.HTTP.API_VERSION + "/gms/attribute-groups")]
+[Route(Constants.Http.API_VERSION + "/gms/attribute-groups")]
 public class AttributeGroupController : BaseController
 {
     private readonly IAttributeGroupServices _attributeServices;
@@ -54,7 +54,7 @@ public class AttributeGroupController : BaseController
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateAttributeGroup(Guid id, [FromBody] UpdateAttributeGroupRequest attributeGroup)
     {
-        var attGrpEnt = await _attributeRepo.FoundOrThrowAsync(id, Constants.ENTITY.ATTRIBUTE_GROUP + Constants.ERROR.NOT_EXIST_ERROR);
+        var attGrpEnt = await _attributeRepo.FoundOrThrowAsync(id, Constants.Entities.ATTRIBUTE_GROUP + Constants.Errors.NOT_EXIST_ERROR);
         Mapper.Map(attributeGroup, attGrpEnt);
         await _attributeServices.Update(attGrpEnt);
         return Ok(attGrpEnt);
@@ -63,7 +63,7 @@ public class AttributeGroupController : BaseController
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteAttributeGroup(Guid id)
     {
-        await _attributeRepo.FoundOrThrowAsync(id, Constants.ENTITY.ATTRIBUTE_GROUP + Constants.ERROR.NOT_EXIST_ERROR);
+        await _attributeRepo.FoundOrThrowAsync(id, Constants.Entities.ATTRIBUTE_GROUP + Constants.Errors.NOT_EXIST_ERROR);
         await _attributeServices.Delete(id);
         return NoContent();
     }

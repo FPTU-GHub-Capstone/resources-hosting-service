@@ -7,7 +7,7 @@ using WebApiLayer.UserFeatures.Requests;
 
 namespace WebApiLayer.Controllers;
 
-[Route(Constants.HTTP.API_VERSION + "/gms/assets")]
+[Route(Constants.Http.API_VERSION + "/gms/assets")]
 public class AssetsController : BaseController
 {
     private readonly IAssetServices _assetServices;
@@ -35,7 +35,7 @@ public class AssetsController : BaseController
     [HttpPost]
     public async Task<IActionResult> CreateAsset([FromBody] CreateAssetRequest asset)
     {
-        await _assetTypeRepo.FoundOrThrowAsync(asset.AssetTypeId, Constants.ENTITY.ASSET_TYPE + Constants.ERROR.NOT_EXIST_ERROR);
+        await _assetTypeRepo.FoundOrThrowAsync(asset.AssetTypeId, Constants.Entities.ASSET_TYPE + Constants.Errors.NOT_EXIST_ERROR);
         var newAsset = new AssetEntity();
         Mapper.Map(asset, newAsset);
         await _assetServices.Create(newAsset);
@@ -45,7 +45,7 @@ public class AssetsController : BaseController
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateAsset(Guid id, [FromBody] UpdateAssetRequest asset)
     {
-        var updateAsset = await _assetRepo.FoundOrThrowAsync(id, Constants.ENTITY.ASSET + Constants.ERROR.NOT_EXIST_ERROR);
+        var updateAsset = await _assetRepo.FoundOrThrowAsync(id, Constants.Entities.ASSET + Constants.Errors.NOT_EXIST_ERROR);
         Mapper.Map(asset, updateAsset);
         await _assetServices.Update(updateAsset);
         return Ok(updateAsset);
@@ -54,7 +54,7 @@ public class AssetsController : BaseController
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteAsset(Guid id)
     {
-        await _assetRepo.FoundOrThrowAsync(id, Constants.ENTITY.ASSET + Constants.ERROR.NOT_EXIST_ERROR);
+        await _assetRepo.FoundOrThrowAsync(id, Constants.Entities.ASSET + Constants.Errors.NOT_EXIST_ERROR);
         await _assetServices.Delete(id);
         return NoContent();
     }

@@ -21,7 +21,7 @@ public class GameServerServices : IGameServerServices
     public async Task<GameServerEntity> GetById(Guid gameServerId)
     {
         return await _gameServerRepo.FoundOrThrowAsync(gameServerId,
-            Constants.ENTITY.GAME_SERVER + Constants.ERROR.NOT_EXIST_ERROR);
+            Constants.Entities.GAME_SERVER + Constants.Errors.NOT_EXIST_ERROR);
     }
     public async Task<ICollection<GameServerEntity>> ListServersByGameId(Guid gameId)
     {

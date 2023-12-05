@@ -7,7 +7,7 @@ using WebApiLayer.UserFeatures.Requests;
 
 namespace WebApiLayer.Controllers;
 
-[Route(Constants.HTTP.API_VERSION + "/gms/asset-types")]
+[Route(Constants.Http.API_VERSION + "/gms/asset-types")]
 public class AssetTypesController : BaseController
 {
     private readonly IAssetTypeServices _assetTypeServices;
@@ -37,7 +37,7 @@ public class AssetTypesController : BaseController
     [HttpPost]
     public async Task<IActionResult> CreateAssetType([FromBody] CreateAssetTypeRequest assetType)
     {
-        await _gameRepo.FoundOrThrowAsync(assetType.GameId, Constants.ENTITY.GAME + Constants.ERROR.NOT_EXIST_ERROR);
+        await _gameRepo.FoundOrThrowAsync(assetType.GameId, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR);
         var cAssetType = new AssetTypeEntity();
         Mapper.Map(assetType, cAssetType);
         await _assetTypeServices.Create(cAssetType);
@@ -47,7 +47,7 @@ public class AssetTypesController : BaseController
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateAssetType(Guid id, [FromBody] UpdateAssetTypeRequest assetType)
     {
-        var uAssetType = await _assetTypeRepo.FoundOrThrowAsync(id, Constants.ENTITY.ASSET_TYPE + Constants.ERROR.NOT_EXIST_ERROR);
+        var uAssetType = await _assetTypeRepo.FoundOrThrowAsync(id, Constants.Entities.ASSET_TYPE + Constants.Errors.NOT_EXIST_ERROR);
         Mapper.Map(assetType, uAssetType);
         await _assetTypeServices.Update(uAssetType);
         return Ok(uAssetType);
@@ -56,7 +56,7 @@ public class AssetTypesController : BaseController
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteAssetType(Guid id)
     {
-        await _assetTypeRepo.FoundOrThrowAsync(id, Constants.ENTITY.ASSET_TYPE + Constants.ERROR.NOT_EXIST_ERROR);
+        await _assetTypeRepo.FoundOrThrowAsync(id, Constants.Entities.ASSET_TYPE + Constants.Errors.NOT_EXIST_ERROR);
         await _assetTypeServices.Delete(id);
         return NoContent();
     }

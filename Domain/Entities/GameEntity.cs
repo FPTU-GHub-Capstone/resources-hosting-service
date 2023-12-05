@@ -6,8 +6,8 @@ namespace DomainLayer.Entities;
 public class GameEntity : BaseEntity
 {
     public string Name { get; set; }
-    public string Logo { get; set; }
-    public string Link { get; set; }
+    public string? Logo { get; set; }
+    public string? Link { get; set; }
     // 1 Game - M Activity Type
     public virtual ICollection<ActivityTypeEntity>? ActivityTypes { get; set; }
     // M Game - M Attribute Group

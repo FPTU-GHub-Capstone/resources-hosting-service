@@ -1,5 +1,6 @@
 ﻿using DomainLayer.Constants;
 using DomainLayer.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RepositoryLayer.Repositories;
 using ServiceLayer.Business;
@@ -7,7 +8,7 @@ using WebApiLayer.UserFeatures.Requests;
 
 namespace WebApiLayer.Controllers;
 
-[Route(Constants.HTTP.API_VERSION + "/gms/activities")]
+[Route(Constants.Http.API_VERSION + "/gms/activities")]
 public class ActivitiesController : BaseController
 {
     private readonly IActivityServices _activityServices;
@@ -28,6 +29,7 @@ public class ActivitiesController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetActivitíes()
     {
+        Console.WriteLine(CurrentScp);
         return Ok(await _activityServices.List());
     }
 
@@ -40,9 +42,9 @@ public class ActivitiesController : BaseController
     [HttpPost]
     public async Task<IActionResult> CreateActivity([FromBody] CreateActivityRequest act)
     {
-        await _activityTypeRepo.FoundOrThrowAsync(act.ActivityTypeId, Constants.ENTITY.ACTIVITY_TYPE + Constants.ERROR.NOT_EXIST_ERROR);
-        await _transactionRepo.FoundOrThrowAsync(act.TransactionId, Constants.ENTITY.TRANSACTION + Constants.ERROR.NOT_EXIST_ERROR);
-        await _characterRepo.FoundOrThrowAsync(act.CharacterId, Constants.ENTITY.CHARACTER + Constants.ERROR.NOT_EXIST_ERROR);
+        await _activityTypeRepo.FoundOrThrowAsync(act.ActivityTypeId, Constants.Entities.ACTIVITY_TYPE + Constants.Errors.NOT_EXIST_ERROR);
+        await _transactionRepo.FoundOrThrowAsync(act.TransactionId, Constants.Entities.TRANSACTION + Constants.Errors.NOT_EXIST_ERROR);
+        await _characterRepo.FoundOrThrowAsync(act.CharacterId, Constants.Entities.CHARACTER + Constants.Errors.NOT_EXIST_ERROR);
         var newAct = new ActivityEntity();
         Mapper.Map(act, newAct);
         await _activityServices.Create(newAct);
@@ -52,7 +54,7 @@ public class ActivitiesController : BaseController
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateActivity(Guid id, [FromBody] UpdateActivityRequest act)
     {
-        var updateAct = await _activityRepo.FoundOrThrowAsync(id, Constants.ENTITY.ACTIVITY + Constants.ERROR.NOT_EXIST_ERROR);
+        var updateAct = await _activityRepo.FoundOrThrowAsync(id, Constants.Entities.ACTIVITY + Constants.Errors.NOT_EXIST_ERROR);
         Mapper.Map(act, updateAct);
         await _activityServices.Update(updateAct);
         return Ok(updateAct);
@@ -61,7 +63,7 @@ public class ActivitiesController : BaseController
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteActivity(Guid id)
     {
-        await _activityRepo.FoundOrThrowAsync(id, Constants.ENTITY.ACTIVITY + Constants.ERROR.NOT_EXIST_ERROR);
+        await _activityRepo.FoundOrThrowAsync(id, Constants.Entities.ACTIVITY + Constants.Errors.NOT_EXIST_ERROR);
         await _activityServices.Delete(id);
         return NoContent();
     }

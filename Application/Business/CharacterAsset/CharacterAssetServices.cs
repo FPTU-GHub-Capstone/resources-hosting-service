@@ -24,7 +24,7 @@ public class CharacterAssetServices : ICharacterAssetServices
     }
     public async Task<CharacterAssetEntity> GetById(Guid characterAssetId)
     {
-        return await _characterAssetRepo.FoundOrThrowAsync(characterAssetId, Constants.ENTITY.CHARACTER_ASSET + Constants.ERROR.NOT_EXIST_ERROR);
+        return await _characterAssetRepo.FoundOrThrowAsync(characterAssetId, Constants.Entities.CHARACTER_ASSET + Constants.Errors.NOT_EXIST_ERROR);
 
     }
     public async Task<ICollection<CharacterAssetEntity>> ListCharAssetsByCharId(Guid id)
@@ -50,7 +50,7 @@ public class CharacterAssetServices : ICharacterAssetServices
             cA => cA.AssetsId.Equals(charAss.AssetsId) && cA.CharacterId.Equals(charAss.CharacterId));
         if (checkCharAss is not null && (charAss.Id == Guid.Empty || checkCharAss.Id != charAss.Id))
         {
-            throw new BadRequestException(Constants.ENTITY.CHARACTER_ASSET + Constants.ERROR.ALREADY_EXIST_ERROR);
+            throw new BadRequestException(Constants.Entities.CHARACTER_ASSET + Constants.Errors.ALREADY_EXIST_ERROR);
         }
     }
 }
