@@ -13,6 +13,7 @@ public static class Constants
     public static class HttpContext
     {
         public const string UID = "uid";
+        public const string SID = "sid";
         public const string SCP = "http://schemas.microsoft.com/identity/claims/scope";
     }
 

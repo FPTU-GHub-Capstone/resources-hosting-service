@@ -16,12 +16,20 @@ public abstract class BaseController : ControllerBase
 
     protected string CurrentUid => GetCurrentUid();
 
+    protected string CurrentSid => GetCurrentSid();
+
     protected string[] CurrentScp => GetCurrentScp();
 
     protected string GetCurrentUid()
     {
-        var uid = HttpContext.User.Claims.FirstOrDefault(a => a.Type == "uid") ?? throw new ForbiddenException();
+        var uid = HttpContext.User.Claims.FirstOrDefault(a => a.Type == Constants.HttpContext.UID) ?? throw new ForbiddenException();
         return uid.Value;
+    }
+
+    protected string GetCurrentSid()
+    {
+        var sid = HttpContext.User.Claims.FirstOrDefault(a => a.Type == Constants.HttpContext.SID) ?? throw new ForbiddenException();
+        return sid.Value;
     }
 
     protected string[] GetCurrentScp()
