@@ -2,9 +2,14 @@
 using DomainLayer.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using RepositoryLayer.Repositories;
 using ServiceLayer.Business;
+using System.Net.Http.Headers;
+using System.Text;
 using System.Text.Json.Nodes;
+using WebApiLayer.Configurations.AppConfig;
 using WebApiLayer.UserFeatures.Requests;
 using WebApiLayer.UserFeatures.Response;
 
@@ -25,11 +30,22 @@ public class GamesController : BaseController
     private readonly IUserServices _userServices;
     private readonly IGenericRepository<GameEntity> _gameRepo;
     private readonly IGenericRepository<UserEntity> _userRepo;
-    public GamesController(IGameServices gameServices, IActivityTypeServices activityTypeServices, IGameUserServices gameUserServices
-        , IAssetTypeServices assetTypeServices, ICharacterTypeServices characterTypeServices 
-        , IGameServerServices gameServerServices, ILevelServices levelServices
-        , IWalletCategoryServices walletCategoryServices, IUserServices userServices
-        , IGenericRepository<GameEntity> gameRepo, IGenericRepository<UserEntity> userRepo)
+    private readonly HttpClient _client;
+    private readonly AppSettings _appSettings;
+
+    public GamesController(
+        IGameServices gameServices, 
+        IActivityTypeServices activityTypeServices, 
+        IGameUserServices gameUserServices, 
+        IAssetTypeServices assetTypeServices, 
+        ICharacterTypeServices characterTypeServices, 
+        IGameServerServices gameServerServices, 
+        ILevelServices levelServices, 
+        IWalletCategoryServices walletCategoryServices, 
+        IUserServices userServices, 
+        IGenericRepository<GameEntity> gameRepo, 
+        IGenericRepository<UserEntity> userRepo,
+        IOptions<AppSettings> appSettings)
     {
         _gameServices = gameServices;
         _activityTypeServices = activityTypeServices;
@@ -42,6 +58,11 @@ public class GamesController : BaseController
         _userServices = userServices;
         _gameRepo = gameRepo;
         _userRepo = userRepo;
+        _appSettings = appSettings.Value;
+        _client = new HttpClient
+        {
+            BaseAddress = new Uri(appSettings.Value.IdpUrl),
+        };
     }
 
     [HttpGet]
@@ -110,14 +131,43 @@ public class GamesController : BaseController
     {
         return Ok(await _gameUserServices.ListUsersByGameId(id));
     }
-    
+
     [HttpPost]
     public async Task<IActionResult> CreateGame([FromBody] CreateGameRequest newGame)
     {
         var gameEntity = new GameEntity();
         Mapper.Map(newGame, gameEntity);
         await _gameServices.Create(gameEntity);
-        return CreatedAtAction(nameof(GetGame), new { id = gameEntity.Id }, gameEntity);
+
+        var gameId = gameEntity.Id.ToString();
+        await UpdateUserScope(gameId);
+        return CreatedAtAction(nameof(GetGame), new { id = gameId }, gameEntity);
+    }
+
+    private async Task UpdateUserScope(string gameId)
+    {
+        var enpoint = $"{_client.BaseAddress}/users/{CurrentUid}/add-scope";
+        var jsonData = BuildJsonUpdateScopeReqBody(gameId);
+        using (var request = new HttpRequestMessage(HttpMethod.Put, enpoint))
+        {
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", CurrentToken);
+            request.Content = new StringContent(jsonData, Encoding.UTF8, Constants.Http.JSON_CONTENT_TYPE);
+            var response = await _client.SendAsync(request);
+            response.EnsureSuccessStatusCode();
+        }
+    }
+    private string BuildJsonUpdateScopeReqBody(string gameId)
+    {
+        var scope = new string[] {
+            $"games:{gameId}:get",
+            $"games:{gameId}:update",
+            $"games:{gameId}:delete",
+        } ;
+        var reqData = new Dictionary<string, object>
+        {
+            { "scope", scope },
+        };
+        return JsonConvert.SerializeObject(reqData);
     }
 
     [HttpPut("{id}")]

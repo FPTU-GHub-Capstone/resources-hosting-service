@@ -20,6 +20,15 @@ public abstract class BaseController : ControllerBase
 
     protected string[] CurrentScp => GetCurrentScp();
 
+    protected string CurrentToken => GetCurrentToken();
+
+    protected string GetCurrentToken()
+    {
+        const string bearerPrefix = "Bearer ";
+        var token = Request.Headers["Authorization"].ToString();
+        return token.Substring(bearerPrefix.Length);
+    }
+
     protected string GetCurrentUid()
     {
         var uid = HttpContext.User.Claims.FirstOrDefault(a => a.Type == Constants.HttpContext.UID) ?? throw new ForbiddenException();
