@@ -100,43 +100,4 @@ public class AuthController : BaseController
         var stringData = await response.Content.ReadAsStringAsync();
         return JsonConvert.DeserializeObject<T>(stringData); ;
     }
-
-    [AllowAnonymous]
-    [HttpPost("gentoken")]
-    public async Task<IActionResult> GenToken(LoginRequest loginRequest)
-    {
-        var user = await _userRepo.FirstOrDefaultAsync(u => u.Username == loginRequest.Username);
-        if(user == null)
-        {
-            throw new NotFoundException("Not found");
-        }
-        var token = await GetUserToken(loginRequest);
-        return Ok(new
-        {
-            token = new JwtSecurityTokenHandler().WriteToken(token),
-            expiration = token.ValidTo
-        });
-    }
-
-    private async Task<JwtSecurityToken> GetUserToken(LoginRequest loginRequest)
-    {
-        var user = await _userRepo.FirstOrDefaultAsync(u => u.Username == loginRequest.Username);
-
-        var authClaims = new List<Claim> {
-            new Claim("uid", user.Uid),
-        };
-        var token = GenerateToken(authClaims);
-        return token;
-    }
-
-    private JwtSecurityToken GenerateToken(List<Claim> authClaims)
-    {
-        var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appSettings.JWTOptions.Secret));
-        var token = new JwtSecurityToken(
-            expires: DateTime.Now.AddHours(3),
-            claims: authClaims,
-            signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
-        );
-        return token;
-    }
 }

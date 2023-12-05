@@ -173,7 +173,7 @@ namespace WebApiLayer.Configurations
             services.AddSwaggerGen(c => {
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
-                    Title = "FU Flower Bouquet Management",
+                    Title = "Game Management Services",
                     Version = "v1"
                 });
                 OpenApiSecurityScheme securityDefinition = new()
