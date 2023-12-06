@@ -71,14 +71,23 @@ public class GamesController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetGames()
     {
-        var stringScope = await GetUserScope();
-        if (stringScope.Contains("games:*:get"))
+        //var stringScope = await GetUserScope();
+        //if (stringScope.Contains("games:*:get"))
+        //{
+        //    return Ok(await _gameServices.List());
+        //}
+        //var scope = stringScope.Split(' ');
+        //var getGamePattern = @"^games:(?<id>[^:]+):get$";
+        //var ids = scope.Where(scp => Regex.IsMatch(scp, getGamePattern)).Select(scp => scp.Split(':')[1]); // games:{id}:get
+        //var guids = ids.Select(Guid.Parse).ToArray();
+        //return Ok(await _gameServices.List(guids));
+
+        if (CurrentScp.Contains("games:*:get"))
         {
             return Ok(await _gameServices.List());
         }
-        var scope = stringScope.Split(' ');
         var getGamePattern = @"^games:(?<id>[^:]+):get$";
-        var ids = scope.Where(scp => Regex.IsMatch(scp, getGamePattern)).Select(scp => scp.Split(':')[1]); // games:{id}:get
+        var ids = CurrentScp.Where(scp => Regex.IsMatch(scp, getGamePattern)).Select(scp => scp.Split(':')[1]); // games:{id}:get
         var guids = ids.Select(Guid.Parse).ToArray();
         return Ok(await _gameServices.List(guids));
     }
@@ -96,14 +105,25 @@ public class GamesController : BaseController
         }
     }
 
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetGame(Guid id)
+    private void CheckGamePermission(Guid gameId)
     {
-        var stringScope = await GetUserScope();
-        if (!stringScope.Contains("games:*:get") && !stringScope.Contains($"games:{id}:get"))
+        if (!CurrentScp.Contains("games:*:get") && !CurrentScp.Contains($"games:{gameId}:get"))
         {
             throw new ForbiddenException();
         }
+    }
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetGame(Guid id)
+    {
+        //var stringScope = await GetUserScope();
+        //if (!stringScope.Contains("games:*:get") && !stringScope.Contains($"games:{id}:get"))
+        //{
+        //    throw new ForbiddenException();
+        //}
+        //return Ok(await _gameServices.GetById(id));
+
+        CheckGamePermission(id);
         return Ok(await _gameServices.GetById(id));
     }
 
