@@ -33,10 +33,6 @@ public class GameServices : IGameServices
             {
                 result.Add(game);
             }
-            else
-            {
-                throw new NotFoundException("Game with ID " + gameId + " " + Constants.Errors.NOT_EXIST_ERROR);
-            }
         }
         return result;
     }
