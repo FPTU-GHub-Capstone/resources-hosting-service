@@ -10,6 +10,6 @@ namespace WebApiLayer.UserFeatures.Requests
         public string Name { get; set; }
         public string? Logo { get; set; }
         public string? Link { get; set; }
-
+        public string? Banner { get; set; }
     }
 }
