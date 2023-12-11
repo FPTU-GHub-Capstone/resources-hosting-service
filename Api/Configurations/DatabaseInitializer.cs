@@ -97,7 +97,8 @@ public static class DatabaseInitializer
                 {
                     Name = mockGame.Name,
                     Logo = mockGame.Logo,
-                    Link = mockGame.Link,
+                    Link = $"dummy {mockGame.Link}",
+                    Banner = mockGame.Link,
                     CreatedAt = DateTime.Now,
                     ModifiedAt = DateTime.Now
                 };
