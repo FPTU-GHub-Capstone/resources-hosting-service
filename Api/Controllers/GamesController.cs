@@ -105,9 +105,25 @@ public class GamesController : BaseController
         }
     }
 
-    private void CheckGamePermission(Guid gameId)
+    private void CheckGetGamePermission(Guid gameId)
     {
         if (!CurrentScp.Contains("games:*:get") && !CurrentScp.Contains($"games:{gameId}:get"))
+        {
+            throw new ForbiddenException();
+        }
+    }
+
+    private void CheckUpdateGamePermission(Guid gameId)
+    {
+        if (!CurrentScp.Contains("games:*:update") && !CurrentScp.Contains($"games:{gameId}:update"))
+        {
+            throw new ForbiddenException();
+        }
+    }
+
+    private void CheckDeleteGamePermission(Guid gameId)
+    {
+        if (!CurrentScp.Contains("games:*:delete") && !CurrentScp.Contains($"games:{gameId}:delete"))
         {
             throw new ForbiddenException();
         }
@@ -123,7 +139,7 @@ public class GamesController : BaseController
         //}
         //return Ok(await _gameServices.GetById(id));
 
-        CheckGamePermission(id);
+        CheckGetGamePermission(id);
         return Ok(await _gameServices.GetById(id));
     }
 
@@ -219,8 +235,23 @@ public class GamesController : BaseController
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateGame(Guid id, [FromBody] UpdateGameRequest game)
     {
+        CheckUpdateGamePermission(id);
         var updateGame = await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR);
         Mapper.Map(game, updateGame);
+        await _gameServices.Update(updateGame);
+        return Ok(updateGame);
+    }
+
+    [HttpPut("{id}/upgrade-plan")]
+    public async Task<IActionResult> UpgradeGame(Guid id, [FromBody] UpgradePlanRequest req)
+    {
+        CheckUpdateGamePermission(id);
+        var updateGame = await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR);
+        if (req.GamePlan <= updateGame.GamePlan)
+        {
+            throw new BadRequestException("Cannot downgrade plan");
+        }
+        updateGame.GamePlan = req.GamePlan;
         await _gameServices.Update(updateGame);
         return Ok(updateGame);
     }
@@ -228,6 +259,7 @@ public class GamesController : BaseController
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteGame(Guid id)
     {
+        CheckDeleteGamePermission(id);
         await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR);
         await _gameServices.Delete(id);
         return NoContent();

@@ -100,7 +100,8 @@ public static class DatabaseInitializer
                     Link = $"dummy {mockGame.Link}",
                     Banner = mockGame.Link,
                     CreatedAt = DateTime.Now,
-                    ModifiedAt = DateTime.Now
+                    ModifiedAt = DateTime.Now,
+                    GamePlan = GamePlan.Basic,
                 };
             await dbContext.Games.AddAsync(newGame);
             await dbContext.SaveChangesAsync();
