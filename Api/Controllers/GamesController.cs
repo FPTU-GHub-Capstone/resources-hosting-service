@@ -105,30 +105,6 @@ public class GamesController : BaseController
         }
     }
 
-    private void CheckGetGamePermission(Guid gameId)
-    {
-        if (!CurrentScp.Contains("games:*:get") && !CurrentScp.Contains($"games:{gameId}:get"))
-        {
-            throw new ForbiddenException();
-        }
-    }
-
-    private void CheckUpdateGamePermission(Guid gameId)
-    {
-        if (!CurrentScp.Contains("games:*:update") && !CurrentScp.Contains($"games:{gameId}:update"))
-        {
-            throw new ForbiddenException();
-        }
-    }
-
-    private void CheckDeleteGamePermission(Guid gameId)
-    {
-        if (!CurrentScp.Contains("games:*:delete") && !CurrentScp.Contains($"games:{gameId}:delete"))
-        {
-            throw new ForbiddenException();
-        }
-    }
-
     [HttpGet("{id}")]
     public async Task<IActionResult> GetGame(Guid id)
     {
