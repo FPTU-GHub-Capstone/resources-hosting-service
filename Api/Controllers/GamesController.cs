@@ -84,8 +84,8 @@ public class GamesController : BaseController
 
         if (CurrentScp.Contains("games:*:get"))
         {
-            return Ok(await _gameServices.List());
-        }
+        return Ok(await _gameServices.List());
+    }
         var getGamePattern = @"^games:(?<id>[^:]+):get$";
         var ids = CurrentScp.Where(scp => Regex.IsMatch(scp, getGamePattern)).Select(scp => scp.Split(':')[1]); // games:{id}:get
         var guids = ids.Select(Guid.Parse).ToArray();
@@ -122,18 +122,21 @@ public class GamesController : BaseController
     [HttpGet("{id}/activity-types")]
     public async Task<IActionResult> GetActTypeByGameID(Guid id)
     {
+        CheckGetGamePermission(id);
         return Ok(await _activityTypeServices.ListActTypesByGameId(id));
     }
 
     [HttpGet("{id}/asset-types")]
     public async Task<IActionResult> GetAssTypeByGameID(Guid id)
     {
+        CheckGetGamePermission(id);
         return Ok(await _assetTypeServices.ListAssTypesByGameId(id));
     }
 
     [HttpGet("{id}/character-types")]
     public async Task<IActionResult> GetCharTypeByGameID(Guid id)
     {
+        CheckGetGamePermission(id);
         var ctList = await _characterTypeServices.ListCharTypesByGameId(id);
         List<CharacterTypeResponse> ctListResponse = new();
         foreach (var ct in ctList)
@@ -149,25 +152,37 @@ public class GamesController : BaseController
     [HttpGet("{id}/game-servers")]
     public async Task<IActionResult> GetGameServerByGameID(Guid id)
     {
+        CheckGetGamePermission(id);
         return Ok(await _gameServerServices.ListServersByGameId(id));
     }
 
     [HttpGet("{id}/levels")]
     public async Task<IActionResult> GetLevelByGameID(Guid id)
     {
+        CheckGetGamePermission(id);
         return Ok(await _levelServices.ListLevelsByGameId(id));
     }
 
     [HttpGet("{id}/wallet-categories")]
     public async Task<IActionResult> GetWalCatByGameID(Guid id)
     {
+        CheckGetGamePermission(id);
         return Ok(await _walletCategoryServices.ListWalCatsByGameId(id));
     }
 
     [HttpGet("{id}/users")]
     public async Task<IActionResult> GetUsersByGameID(Guid id)
     {
+        CheckGetGamePermission(id);
         return Ok(await _gameUserServices.ListUsersByGameId(id));
+    }
+
+    [AllowAnonymous]
+    [HttpGet("{id}/count-record")]
+    public async Task<IActionResult> CountRecordsByGameId(Guid id)
+    {
+        CheckGetGamePermission(id);
+        return Ok(await _gameServices.CountRecord(id));
     }
 
     [HttpPost]

@@ -1,5 +1,6 @@
 ﻿using DomainLayer.Constants;
 using DomainLayer.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RepositoryLayer.Repositories;
 using ServiceLayer.Business;
@@ -30,6 +31,13 @@ public class AssetsController : BaseController
     public async Task<IActionResult> GetAsset(Guid id)
     {
         return Ok(await _assetServices.GetById(id));
+    }
+
+    [AllowAnonymous]
+    [HttpGet("{id}/games")]
+    public async Task<IActionResult> GetAssetByGameID(Guid id)
+    {
+        return Ok(await _assetServices.ListAssetsByGameId(id));
     }
 
     [HttpPost]

@@ -8,11 +8,26 @@ namespace ServiceLayer.Business;
 
 public class GameServices : IGameServices
 {
-    public readonly IGenericRepository<GameEntity> _gameRepo;
+    private readonly IGenericRepository<GameEntity> _gameRepo;
+    private readonly IActivityTypeServices _activityTypeService;
+    private readonly IAssetTypeServices _assetTypeService;
+    private readonly IAssetServices _assetService;
+    private readonly ICharacterServices _characterService;
+    private readonly ICharacterTypeServices _characterTypeService;
+    private readonly ILevelServices _levelService;
+    private readonly IWalletCategoryServices _walletCategoryService;
 
-    public GameServices(IGenericRepository<GameEntity> gameRepo)
+    public GameServices(IGenericRepository<GameEntity> gameRepo, IActivityTypeServices activityTypeService
+        , IAssetTypeServices assetTypeService, ICharacterServices characterService, ICharacterTypeServices characterTypeService
+        , ILevelServices levelService, IWalletCategoryServices walletCategoryService)
     {
         _gameRepo = gameRepo;
+        _activityTypeService = activityTypeService;
+        _assetTypeService = assetTypeService;
+        _characterService = characterService;
+        _characterTypeService = characterTypeService;
+        _levelService = levelService;
+        _walletCategoryService = walletCategoryService;
     }
     public async Task<ICollection<GameEntity>> List()
     {
@@ -39,6 +54,16 @@ public class GameServices : IGameServices
             }
         }
         return result;
+    }
+    public async Task<int> CountRecord(Guid id)
+    {
+        return (await _activityTypeService.ListActTypesByGameId(id)).Count()
+            + (await _assetTypeService.ListAssTypesByGameId(id)).Count()
+            + (await _assetService.ListAssetsByGameId(id)).Count()
+            + (await _characterService.ListCharByGameId(id)).Count()
+            + (await _characterTypeService.ListCharTypesByGameId(id)).Count()
+            + (await _levelService.ListLevelsByGameId(id)).Count()
+            + (await _walletCategoryService.ListWalCatsByGameId(id)).Count();
     }
     public async Task Create(GameEntity game)
     {
