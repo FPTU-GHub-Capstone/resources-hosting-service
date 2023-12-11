@@ -9,7 +9,8 @@ public class GameEntity : BaseEntity
     public string? Logo { get; set; }
     public string? Link { get; set; }
     public string? Banner { get; set; }
-    public int MonthlyRequests { get; set; } = 0;
+    public int MonthlyWriteUnits { get; set; } = 0;
+    public int MonthlyReadUnits{ get; set; } = 0;
     public bool IsActive { get; set; } = true; 
 
     // 1 Game - M Activity Type
