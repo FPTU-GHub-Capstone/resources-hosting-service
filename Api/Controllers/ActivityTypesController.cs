@@ -27,7 +27,11 @@ public class ActivityTypesController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetActivityTypes()
     {
-        return Ok(await _activityTypeServices.List());
+        if (CurrentScp.Contains("activitytypes:*:get"))
+        {
+            return Ok(await _activityTypeServices.List());
+        }
+        return NoContent();
     }
 
     [HttpGet("{id}")]

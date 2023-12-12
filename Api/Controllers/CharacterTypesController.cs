@@ -25,16 +25,20 @@ public class CharacterTypesController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetCharacterTypes()
     {
-        var ctList = await _characterTypeServices.List();
-        List<CharacterTypeResponse> ctListResponse = new();
-        foreach (var ct in ctList)
+        if (CurrentScp.Contains("charactertypes:*:get"))
         {
-            var ctResponse = new CharacterTypeResponse();
-            Mapper.Map(ct, ctResponse);
-            ctResponse.BaseProperties = JsonObject.Parse(ct.BaseProperties);
-            ctListResponse.Add(ctResponse);
+            var ctList = await _characterTypeServices.List();
+            List<CharacterTypeResponse> ctListResponse = new();
+            foreach (var ct in ctList)
+            {
+                var ctResponse = new CharacterTypeResponse();
+                Mapper.Map(ct, ctResponse);
+                ctResponse.BaseProperties = JsonObject.Parse(ct.BaseProperties);
+                ctListResponse.Add(ctResponse);
+            }
+            return Ok(ctListResponse);
         }
-        return Ok(ctListResponse);
+        return NoContent();
     }
 
     [HttpGet("{id}")]

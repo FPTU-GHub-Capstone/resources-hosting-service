@@ -38,8 +38,11 @@ public class CharactersController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetCharacters()
     {
-        var cList = await _characterServices.List();
-        return Ok(cList);
+        if (CurrentScp.Contains("characters:*:get"))
+        {
+            return Ok(await _characterServices.List());
+        }
+        return NoContent();
     }
 
     [HttpGet("{id}")]
@@ -71,7 +74,7 @@ public class CharactersController : BaseController
     [HttpGet("{id}/wallet")]
     public async Task<IActionResult> GetWalletByCharID(Guid id)
     {
-        return Ok(await _walletServices.ListWalletByCharacterId(id));
+        return Ok(await _walletServices.ListWalletsByCharacterId(id));
     }
 
     [HttpPost]

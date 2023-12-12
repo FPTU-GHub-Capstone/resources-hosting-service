@@ -7,12 +7,12 @@ namespace ServiceLayer.Business;
 public class AssetServices : IAssetServices
 {
     private readonly IGenericRepository<AssetEntity> _assetRepo;
-    private readonly IAssetTypeServices _assetTypeService;
+    private readonly IAssetTypeServices _assetTypeServices;
 
     public AssetServices(IGenericRepository<AssetEntity> assetRepo, IAssetTypeServices assetTypeService)
     {
         _assetRepo = assetRepo;
-        _assetTypeService = assetTypeService;
+        _assetTypeServices = assetTypeService;
     }
     public async Task<ICollection<AssetEntity>> List()
     {
@@ -25,7 +25,7 @@ public class AssetServices : IAssetServices
 
     public async Task<ICollection<AssetEntity>> ListAssetsByGameId(Guid gameId)
     {
-        var assetTypeIds = (await _assetTypeService.ListAssTypesByGameId(gameId)).Select(a=>a.Id);
+        var assetTypeIds = (await _assetTypeServices.ListAssTypesByGameId(gameId)).Select(a=>a.Id);
         return await _assetRepo.WhereAsync(a => assetTypeIds.Contains(a.AssetTypeId));
     }
     public async Task Create(AssetEntity asset)

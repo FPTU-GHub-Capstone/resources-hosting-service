@@ -6,10 +6,12 @@ namespace ServiceLayer.Business;
 
 public class TransactionServices : ITransactionServices
 {
-    public readonly IGenericRepository<TransactionEntity> _transactionRepo;
-    public TransactionServices(IGenericRepository<TransactionEntity> transactionRepo)
+    private readonly IGenericRepository<TransactionEntity> _transactionRepo;
+    private readonly IWalletServices _walletServices;
+    public TransactionServices(IGenericRepository<TransactionEntity> transactionRepo, IWalletServices walletServices)
     {
         _transactionRepo = transactionRepo;
+        _walletServices = walletServices;
     }
     public async Task<ICollection<TransactionEntity>> List()
     {
@@ -20,6 +22,13 @@ public class TransactionServices : ITransactionServices
         return await _transactionRepo.FoundOrThrowAsync(transactionId,
            Constants.Entities.TRANSACTION + Constants.Errors.NOT_EXIST_ERROR);
     }
+
+    public async Task<ICollection<TransactionEntity>> ListTransactionsByGameId(Guid gameId)
+    {
+        var walletIds = (await _walletServices.ListWalletsByGameId(gameId)).Select(x => x.Id);
+        return await _transactionRepo.WhereAsync(x => walletIds.Contains(x.WalletId));
+    }
+
     public async Task Create(TransactionEntity transaction) {
         await _transactionRepo.CreateAsync(transaction);
     }

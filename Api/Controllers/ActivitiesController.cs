@@ -4,10 +4,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RepositoryLayer.Repositories;
 using ServiceLayer.Business;
+using System.Text.RegularExpressions;
 using WebApiLayer.UserFeatures.Requests;
 
 namespace WebApiLayer.Controllers;
 
+[Authorize]
 [Route(Constants.Http.API_VERSION + "/gms/activities")]
 public class ActivitiesController : BaseController
 {
@@ -29,8 +31,11 @@ public class ActivitiesController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetActivitíes()
     {
-        Console.WriteLine(CurrentScp);
-        return Ok(await _activityServices.List());
+        if (CurrentScp.Contains("activities:*:get"))
+        {
+            return Ok(await _activityServices.List());
+        }
+        return NoContent();
     }
 
     [HttpGet("{id}")]

@@ -26,7 +26,11 @@ public class AssetAttributesController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetAssetAttributes()
     {
-        return Ok(await _assetAttServices.List());
+        if (CurrentScp.Contains("assetattributes:*:get"))
+        {
+            return Ok(await _assetAttServices.List());
+        }
+        return NoContent();
     }
 
     [HttpGet("{id}")]

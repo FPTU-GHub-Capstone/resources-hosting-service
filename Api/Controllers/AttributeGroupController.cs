@@ -1,5 +1,6 @@
 ﻿using DomainLayer.Constants;
 using DomainLayer.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RepositoryLayer.Repositories;
 using ServiceLayer.Business;
@@ -14,24 +15,31 @@ public class AttributeGroupController : BaseController
 {
     private readonly IAttributeGroupServices _attributeServices;
     private readonly IGenericRepository<AttributeGroupEntity> _attributeRepo;
-    public AttributeGroupController(IAttributeGroupServices attributeServices, IGenericRepository<AttributeGroupEntity> attributeRepo)
+    private readonly IGenericRepository<GameEntity> _gameRepo;
+    public AttributeGroupController(IAttributeGroupServices attributeServices, IGenericRepository<AttributeGroupEntity> attributeRepo
+        , IGenericRepository<GameEntity> gameRepo)
     {
         _attributeServices = attributeServices;
         _attributeRepo = attributeRepo;
+        _gameRepo = gameRepo;
     }
     [HttpGet]
     public async Task<IActionResult> GetAttributeGroups()
     {
-        var attributes = await _attributeServices.List();
-        List<AttributeGroupResponse> attGrpList = new();
-        foreach(var attribute in attributes)
+        if (CurrentScp.Contains("attributegroups:*:get"))
         {
-            var attGrp = new AttributeGroupResponse();
-            Mapper.Map(attribute, attGrp);
-            attGrp.Effect = JsonObject.Parse(attribute.Effect);
-            attGrpList.Add(attGrp);
+            var attributes = await _attributeServices.List();
+            List<AttributeGroupResponse> attGrpList = new();
+            foreach (var attribute in attributes)
+            {
+                var attGrp = new AttributeGroupResponse();
+                Mapper.Map(attribute, attGrp);
+                attGrp.Effect = JsonObject.Parse(attribute.Effect);
+                attGrpList.Add(attGrp);
+            }
+            return Ok(attGrpList);
         }
-        return Ok(attGrpList);
+        return NoContent();
     }
 
     [HttpGet("{id}")]
@@ -44,6 +52,7 @@ public class AttributeGroupController : BaseController
     [HttpPost]
     public async Task<IActionResult> CreateAttributeGroup([FromBody] CreateAttributeGroupRequest attributeGroup)
     {
+        await _gameRepo.FoundOrThrowAsync(attributeGroup.GameId, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR);
         var attGrpEnt = new AttributeGroupEntity();
         Mapper.Map(attributeGroup, attGrpEnt);
         attGrpEnt.Effect = attributeGroup.Effect.ToString();

@@ -25,8 +25,11 @@ public class CharacterAssetsController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetCharacterAssets([FromQuery] Guid? characterId)
     {
-        var cList = await _characterAssetServices.List(characterId);
-        return Ok(cList);
+        if (CurrentScp.Contains("characterassets:*:get"))
+        {
+            return Ok(await _characterAssetServices.List(characterId));
+        }
+        return NoContent();
     }
 
     [HttpGet("{id}")]

@@ -23,7 +23,11 @@ public class GameServersController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetGameServers()
     {
-        return Ok(await _gameServerServices.List());
+        if (CurrentScp.Contains("gameservers:*:get"))
+        {
+            return Ok(await _gameServerServices.List());
+        }
+        return NoContent();
     }
 
     [HttpGet("{id}")]

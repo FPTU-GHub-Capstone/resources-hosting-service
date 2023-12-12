@@ -24,7 +24,11 @@ public class TransactionsController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetTransactions()
     {
-        return Ok(await _transactionServices.List());
+        if (CurrentScp.Contains("transactions:*:get"))
+        {
+            return Ok(await _transactionServices.List());
+        }
+        return NoContent();
     }
 
     [HttpGet("{id}")]

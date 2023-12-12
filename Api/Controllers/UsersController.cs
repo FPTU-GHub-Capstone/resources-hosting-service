@@ -31,7 +31,11 @@ public class UsersController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetUsers([FromQuery] string? email)
     { 
-        return Ok(await _userServices.List(email));
+        if (CurrentScp.Contains("users:*:get"))
+        {
+            return Ok(await _userServices.List(email));
+        }
+        return NoContent();
     }
 
     [HttpGet("{id}")]

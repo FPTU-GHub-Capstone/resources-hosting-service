@@ -24,7 +24,11 @@ public class AssetsController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetAssets()
     {
-        return Ok(await _assetServices.List());
+        if (CurrentScp.Contains("assets:*:get"))
+        {
+            return Ok(await _assetServices.List());
+        }
+        return NoContent();
     }
 
     [HttpGet("{id}")]
@@ -33,7 +37,6 @@ public class AssetsController : BaseController
         return Ok(await _assetServices.GetById(id));
     }
 
-    [AllowAnonymous]
     [HttpGet("{id}/games")]
     public async Task<IActionResult> GetAssetByGameID(Guid id)
     {

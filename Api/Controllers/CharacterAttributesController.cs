@@ -27,8 +27,11 @@ public class CharacterAtributesController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetCharacterAttributes()
     {
-        var charAttList = await _charAttServices.List();
-        return Ok(charAttList);
+        if (CurrentScp.Contains("characterattributes:*:get"))
+        {
+            return Ok(await _charAttServices.List());
+        }
+        return NoContent();
     }
 
     [HttpGet("{id}")]

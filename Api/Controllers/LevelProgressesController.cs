@@ -26,7 +26,11 @@ public class LevelProgressesController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetLevelProgresses()
     {
-        return Ok(await _levelProgressServices.List());
+        if (CurrentScp.Contains("levelprogresses:*:get"))
+        {
+            return Ok(await _levelProgressServices.List());
+        }
+        return NoContent();
     }
 
     [HttpGet("{id}")]

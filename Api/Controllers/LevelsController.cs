@@ -24,11 +24,15 @@ public class LevelsController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetLevels([FromQuery] Guid[]? idList)
     {
-        if (idList != null && idList.Count() > 0)
+        if (CurrentScp.Contains("levels:*:get"))
         {
-            return Ok(await _levelServices.List(idList));
+            if (idList != null && idList.Count() > 0)
+            {
+                return Ok(await _levelServices.List(idList));
+            }
+            return Ok(await _levelServices.List());
         }
-        return Ok(await _levelServices.List());
+        return NoContent();
     }
 
     [HttpGet("{id}")]

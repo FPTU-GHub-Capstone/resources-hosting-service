@@ -23,8 +23,11 @@ public class AssetTypesController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetAssetTypes()
     {
-        var assetTypeList = await _assetTypeServices.List();
-        return Ok(assetTypeList);
+        if (CurrentScp.Contains("assettypes:*:get"))
+        {
+            return Ok(await _assetTypeServices.List());
+        }
+        return NoContent();
     }
 
     [HttpGet("{id}")]

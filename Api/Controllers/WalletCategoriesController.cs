@@ -24,7 +24,11 @@ public class WalletCategoriesController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetWalletCategories()
     {
-        return Ok(await _walletCategoryServices.List());
+        if (CurrentScp.Contains("walletcategories:*:get"))
+        {
+            return Ok(await _walletCategoryServices.List());
+        }
+        return NoContent();
     }
 
     [HttpGet("{id}")]

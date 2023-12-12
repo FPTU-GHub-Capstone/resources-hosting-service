@@ -28,7 +28,11 @@ public class PaymentsController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetPayments()
     {
-        return Ok(await _paymentServices.List());
+        if (CurrentScp.Contains("payments:*:get"))
+        {
+            return Ok(await _paymentServices.List());
+        }
+        return NoContent();
     }
 
     [HttpGet("{id}")]
