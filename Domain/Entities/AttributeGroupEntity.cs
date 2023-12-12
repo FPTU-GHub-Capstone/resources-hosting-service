@@ -7,6 +7,7 @@ public class AttributeGroupEntity : BaseEntity
 {
     public string Name { get; set; }
     public string Effect { get; set; } // JSON
-    // M Attribute Group - M Game
-    public virtual ICollection<GameEntity>? Games { get; set; }
+    // M Attribute Group - 1 Game
+    public Guid GameId { get; set; }
+    public GameEntity Game { get; set; }
 }
