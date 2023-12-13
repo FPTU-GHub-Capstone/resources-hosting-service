@@ -174,7 +174,7 @@ public class GamesController : BaseController
     [HttpGet("{id}")]
     public async Task<IActionResult> GetGame(Guid id)
     {
-        CheckGetGamePermission(id);
+        RequiredScope("games:*:get", $"games:{id}:get");
         return Ok(await _gameServices.GetById(id));
     }
 
@@ -182,14 +182,22 @@ public class GamesController : BaseController
     [HttpGet("{id}/activities")]
     public async Task<IActionResult> GetActivitiesByGameID([FromRoute] Guid id)
     {
-        CheckGetActivityPermission(id);
+        RequiredScope(
+            $"games:{id}:get", 
+            "activities:*:get", 
+            $"activities:{id}:get"
+        );
         return Ok(await _activityServices.ListActivitiesByGameId(id));
     }
 
     [HttpPost("{id}/activities")]
     public async Task<IActionResult> CreateActivity([FromRoute] Guid id, [FromBody] CreateActivityRequest act)
     {
-        CheckCreateActivityPermission(id);
+        RequiredScope(
+            "activities:create",
+            $"activities:{id}:create",
+            $"games:{id}:update"
+        );
         await _activityTypeRepo.FoundOrThrowAsync(act.ActivityTypeId, Constants.Entities.ACTIVITY_TYPE + Constants.Errors.NOT_EXIST_ERROR);
         await _transactionRepo.FoundOrThrowAsync(act.TransactionId, Constants.Entities.TRANSACTION + Constants.Errors.NOT_EXIST_ERROR);
         await _characterRepo.FoundOrThrowAsync(act.CharacterId, Constants.Entities.CHARACTER + Constants.Errors.NOT_EXIST_ERROR);
@@ -204,14 +212,22 @@ public class GamesController : BaseController
     [HttpGet("{id}/activity-types")]
     public async Task<IActionResult> GetActTypesByGameID(Guid id)
     {
-        CheckGetActivityTypePermission(id);
+        RequiredScope(
+            $"games:{id}:get",
+            "activitytypes:*:get",
+            $"activitytypes:{id}:get"
+        );
         return Ok(await _activityTypeServices.ListActTypesByGameId(id));
     }
 
     [HttpPost("{id}/activity-types")]
     public async Task<IActionResult> CreateActivityType([FromRoute] Guid id, [FromBody] CreateActivityTypeRequest activityType)
     {
-        CheckCreateActivityTypePermission(id);
+        RequiredScope(
+            "activitytypes:create",
+           $"activitytypes:{id}:create",
+           $"games:{id}:update"
+        );
         await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR);
         await _characterRepo.FoundOrThrowAsync(activityType.CharacterId, Constants.Entities.CHARACTER + Constants.Errors.NOT_EXIST_ERROR);
         var newActivityType = new ActivityTypeEntity { GameId = id };
@@ -226,14 +242,22 @@ public class GamesController : BaseController
     [HttpGet("{id}/asset-attributes")]
     public async Task<IActionResult> GetAssetAttributesByGameID(Guid id)
     {
-        CheckGetAssetAttributePermission(id);
+        RequiredScope(
+            $"games:{id}:get",
+            "assetattributes:*:get",
+            $"assetattributes:{id}:get"
+        );
         return Ok(await _assetAttributeServices.ListAssetAttributeByGameId(id));
     }
 
     [HttpPost("{id}/asset-attributes")]
     public async Task<IActionResult> CreateAssetAttribute([FromRoute] Guid id, [FromBody] CreateAssetAttributeRequest assetAtt)
     {
-        CheckCreateAssetAttributePermission(id);
+        RequiredScope(
+            "assetattributes:create",
+            $"assetattributes:{id}:create",
+            $"games:{id}:update"
+        );
         await _assetRepo.FoundOrThrowAsync(assetAtt.AssetId, Constants.Entities.ASSET + Constants.Errors.NOT_EXIST_ERROR);
         await _attributeGroupRepo.FoundOrThrowAsync(assetAtt.AttributeGroupId, Constants.Entities.ATTRIBUTE_GROUP + Constants.Errors.NOT_EXIST_ERROR);
         var newAssAtt = new AssetAttributeEntity();
@@ -247,14 +271,22 @@ public class GamesController : BaseController
     [HttpGet("{id}/assets")]
     public async Task<IActionResult> GetAssetsByGameID(Guid id)
     {
-        CheckGetAssetPermission(id);
+        RequiredScope(
+            $"games:{id}:get",
+            "assets:*:get",
+            $"assets:{id}:get"
+        );
         return Ok(await _assetServices.ListAssetsByGameId(id));
     }
 
     [HttpPost("{id}/assets")]
-    public async Task<IActionResult> CreateAsset([FromRoute] Guid id,[FromBody] CreateAssetRequest asset)
+    public async Task<IActionResult> CreateAsset([FromRoute] Guid id, [FromBody] CreateAssetRequest asset)
     {
-        CheckCreateAssetPermission(id);
+        RequiredScope(
+            "assets:create",
+            $"assets:{id}:create",
+            $"games:{id}:update"
+        );
         await _assetTypeRepo.FoundOrThrowAsync(asset.AssetTypeId, Constants.Entities.ASSET_TYPE + Constants.Errors.NOT_EXIST_ERROR);
         var newAsset = new AssetEntity();
         Mapper.Map(asset, newAsset);
@@ -268,14 +300,22 @@ public class GamesController : BaseController
     [HttpGet("{id}/asset-types")]
     public async Task<IActionResult> GetAssTypesByGameID(Guid id)
     {
-        CheckGetAssetTypePermission(id);
+        RequiredScope(
+            $"games:{id}:get",
+            "assettypes:*:get",
+            $"assettypes:{id}:get"
+        );
         return Ok(await _assetTypeServices.ListAssTypesByGameId(id));
     }
 
     [HttpPost("{id}/asset-types")]
     public async Task<IActionResult> CreateAssetType([FromRoute] Guid id, [FromBody] CreateAssetTypeRequest assetType)
     {
-        CheckCreateAssetTypePermission(id);
+        RequiredScope(
+            "assettypes:create",
+            $"assettypes:{id}:create",
+            $"games:{id}:update"
+        );
         await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR);
         var cAssetType = new AssetTypeEntity { GameId = id };
         Mapper.Map(assetType, cAssetType);
@@ -289,7 +329,10 @@ public class GamesController : BaseController
     [HttpGet("{id}/attribute-groups")]
     public async Task<IActionResult> GetAttributeGroupsByGameID(Guid id)
     {
-        CheckGetAttributeGroupPermission(id);
+        RequiredScope(
+            "attributegroups:*:get",
+            $"attributegroups:{id}:get"
+        );
         var attGrpList = await _attributeGroupServices.ListAttributeGroupsByGameId(id);
         List<AttributeGroupResponse> attGrpListResponse = new();
         foreach (var ag in attGrpList)
@@ -303,11 +346,15 @@ public class GamesController : BaseController
     }
 
     [HttpPost("{id}/attribute-groups")]
-    public async Task<IActionResult> CreateAttributeGroup([FromRoute]Guid id, [FromBody] CreateAttributeGroupRequest attributeGroup)
+    public async Task<IActionResult> CreateAttributeGroup([FromRoute] Guid id, [FromBody] CreateAttributeGroupRequest attributeGroup)
     {
-        CheckCreateAttributeGroupPermission(id);
+        RequiredScope(
+            "attributegroups:create",
+            $"attributegroups:{id}:create",
+            $"games:{id}:update"
+        );
         await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR);
-        var attGrpEnt = new AttributeGroupEntity {GameId = id };
+        var attGrpEnt = new AttributeGroupEntity { GameId = id };
         Mapper.Map(attributeGroup, attGrpEnt);
         attGrpEnt.Effect = attributeGroup.Effect.ToString();
         await _attributeGroupServices.Create(attGrpEnt);
@@ -319,14 +366,22 @@ public class GamesController : BaseController
     [HttpGet("{id}/character-assets")]
     public async Task<IActionResult> GetCharacterAssetsByGameID(Guid id)
     {
-        CheckGetCharacterAssetPermission(id);
+        RequiredScope(
+            $"games:{id}:get",
+            "characterassets:*:get",
+            $"characterassets:{id}:get"
+        );
         return Ok(await _characterAssetServices.ListCharAssetsByGameId(id));
     }
 
     [HttpPost("{id}/character-assets")]
-    public async Task<IActionResult> CreateCharacterAsset([FromRoute]Guid id, [FromBody] CreateCharacterAssetRequest charAss)
+    public async Task<IActionResult> CreateCharacterAsset([FromRoute] Guid id, [FromBody] CreateCharacterAssetRequest charAss)
     {
-        CheckCreateCharacterAssetPermission(id);
+        RequiredScope(
+            "characterassets:create",
+            $"characterassets:{id}:create",
+            $"games:{id}:update"
+        );
         await _assetRepo.FoundOrThrowAsync(charAss.AssetsId, Constants.Entities.ASSET + Constants.Errors.NOT_EXIST_ERROR);
         await _characterRepo.FoundOrThrowAsync(charAss.CharacterId, Constants.Entities.CHARACTER + Constants.Errors.NOT_EXIST_ERROR);
         var newCharAss = new CharacterAssetEntity();
@@ -340,14 +395,22 @@ public class GamesController : BaseController
     [HttpGet("{id}/character-attributes")]
     public async Task<IActionResult> GetCharacterAttributesByGameID(Guid id)
     {
-        CheckGetCharacterAttributePermission(id);
+        RequiredScope(
+            $"games:{id}:get",
+            "characterattributes:*:get",
+            $"characterattributes:{id}:get"
+        );
         return Ok(await _characterAttributeServices.ListCharAttByGameId(id));
     }
 
     [HttpPost("{id}/character-attributes")]
-    public async Task<IActionResult> CreateCharacterAttribute([FromRoute]Guid id, [FromBody] CreateCharacterAttributeRequest charAtt)
+    public async Task<IActionResult> CreateCharacterAttribute([FromRoute] Guid id, [FromBody] CreateCharacterAttributeRequest charAtt)
     {
-        CheckCreateCharacterAttributePermission(id);
+        RequiredScope(
+            "characterattributes:create",
+            $"characterattributes:{id}:create",
+            $"games:{id}:update"
+        );
         await _characterRepo.FoundOrThrowAsync(charAtt.CharacterId, Constants.Entities.CHARACTER + Constants.Errors.NOT_EXIST_ERROR);
         await _attributeGroupRepo.FoundOrThrowAsync(charAtt.AttributeGroupId, Constants.Entities.ATTRIBUTE_GROUP + Constants.Errors.NOT_EXIST_ERROR);
         var newCharAtt = new CharacterAttributeEntity();
@@ -361,14 +424,22 @@ public class GamesController : BaseController
     [HttpGet("{id}/characters")]
     public async Task<IActionResult> GetCharactersByGameID(Guid id)
     {
-        CheckGetCharacterPermission(id);
+        RequiredScope(
+            $"games:{id}:get",
+            "characters:*:get",
+            $"characters:{id}:get"
+        );
         return Ok(await _characterServices.ListCharByGameId(id));
     }
 
     [HttpPost("{id}/characters")]
     public async Task<IActionResult> CreateCharacter([FromRoute] Guid id, [FromBody] CreateCharacterRequest character)
     {
-        CheckCreateCharacterPermission(id);
+        RequiredScope(
+            "characters:create",
+            $"characters:{id}:create",
+            $"games:{id}:update"
+        );
         await _userRepo.FoundOrThrowAsync(character.UserId, Constants.Entities.USER + Constants.Errors.NOT_EXIST_ERROR);
         await _characterTypeRepo.FoundOrThrowAsync(character.CharacterTypeId, Constants.Entities.USER + Constants.Errors.NOT_EXIST_ERROR);
         await _gameServerRepo.FoundOrThrowAsync(character.GameServerId, Constants.Entities.USER + Constants.Errors.NOT_EXIST_ERROR);
@@ -383,7 +454,11 @@ public class GamesController : BaseController
     [HttpGet("{id}/character-types")]
     public async Task<IActionResult> GetCharTypesByGameID(Guid id)
     {
-        CheckGetCharacterTypePermission(id);
+        RequiredScope(
+            $"games:{id}:get",
+            "charactertypes:*:get",
+            $"charactertypes:{id}:get"
+        );
         var ctList = await _characterTypeServices.ListCharTypesByGameId(id);
         List<CharacterTypeResponse> ctListResponse = new();
         foreach (var ct in ctList)
@@ -399,7 +474,11 @@ public class GamesController : BaseController
     [HttpPost("{id}/character-types")]
     public async Task<IActionResult> CreateCharacterType([FromRoute] Guid id, [FromBody] CreateCharacterTypeRequest charType)
     {
-        CheckCreateCharacterTypePermission(id);
+        RequiredScope(
+            "charactertypes:create",
+            $"charactertypes:{id}:create",
+            $"games:{id}:update"
+        );
         await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR);
         var newCT = new CharacterTypeEntity { GameId = id };
         Mapper.Map(charType, newCT);
@@ -414,14 +493,22 @@ public class GamesController : BaseController
     [HttpGet("{id}/game-servers")]
     public async Task<IActionResult> GetGameServersByGameID(Guid id)
     {
-        CheckGetGameServerPermission(id);
+        RequiredScope(
+            $"games:{id}:get",
+            "gameservers:*:get",
+            $"gameservers:{id}:get"
+        );
         return Ok(await _gameServerServices.ListServersByGameId(id));
     }
 
     [HttpPost("{id}/game-servers")]
     public async Task<IActionResult> CreateGameServer([FromRoute] Guid id, [FromBody] CreateGameServerRequest gameServer)
     {
-        CheckCreateGameServerPermission(id);
+        RequiredScope(
+            "gameservers:create",
+            $"gameservers:{id}:create",
+            $"games:{id}:update"
+        );
         await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR);
         var newGameServer = new GameServerEntity { GameId = id };
         Mapper.Map(gameServer, newGameServer);
@@ -435,14 +522,22 @@ public class GamesController : BaseController
     [HttpGet("{id}/level-progreses")]
     public async Task<IActionResult> GetLevelProgressesByGameID(Guid id)
     {
-        CheckGetLevelProgressPermission(id);
+        RequiredScope(
+            $"games:{id}:get",
+            "levelprogresses:*:get",
+            $"levelprogresses:{id}:get"
+        );
         return Ok(await _levelProgressServices.ListLevelProgByGameId(id));
     }
 
     [HttpPost("{id}/level-progreses")]
     public async Task<IActionResult> CreateLevelProgress([FromRoute] Guid id, [FromBody] CreateLevelProgressRequest levelProg)
     {
-        CheckCreateLevelProgressPermission(id);
+        RequiredScope(
+            "levelprogresses:create",
+            $"levelprogresses:{id}:create",
+            $"games:{id}:update"
+        );
         await _characterRepo.FoundOrThrowAsync(levelProg.CharacterId, Constants.Entities.CHARACTER + Constants.Errors.NOT_EXIST_ERROR);
         await _levelRepo.FoundOrThrowAsync(levelProg.LevelId, Constants.Entities.LEVEL + Constants.Errors.NOT_EXIST_ERROR);
         var newLevelProg = new LevelProgressEntity();
@@ -457,19 +552,28 @@ public class GamesController : BaseController
     [HttpGet("{id}/levels")]
     public async Task<IActionResult> GetLevelsByGameID(Guid id)
     {
-        CheckGetLevelPermission(id);
+        RequiredScope(
+            $"games:{id}:get",
+            "levels:*:get",
+            $"levels:{id}:get"
+        );
         return Ok(await _levelServices.ListLevelsByGameId(id));
     }
 
     [HttpPost("{id}/levels")]
-    public async Task<IActionResult> CreateLevel([FromRoute]Guid id, [FromBody] CreateLevelsRequest[] level)
+    public async Task<IActionResult> CreateLevel([FromRoute] Guid id, [FromBody] CreateLevelsRequest[] level)
     {
-        CheckCreateLevelPermission(id);
+        RequiredScope(
+            "levels:create",
+            $"levels:{id}:create",
+            $"games:{id}:update"
+        );
         List<LevelEntity> levelList = new List<LevelEntity>();
         await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + "id " + id + " " + Constants.Errors.NOT_EXIST_ERROR);
         foreach (var singleLevel in level)
         {
-            LevelEntity newLevel = new LevelEntity {
+            LevelEntity newLevel = new LevelEntity
+            {
                 GameId = id,
                 LevelNo = (await _levelRepo.WhereAsync(l => l.GameId == id)).Count() + levelList.Count(l => l.GameId == id) + 1
             };
@@ -485,14 +589,22 @@ public class GamesController : BaseController
     [HttpGet("{id}/payments")]
     public async Task<IActionResult> GetPaymentsByGameID(Guid id)
     {
-        CheckGetPaymentPermission(id);
+        RequiredScope(
+            $"games:{id}:get",
+            "payments:*:get",
+            $"payments:{id}:get"
+        );
         return Ok(await _paymentServices.ListPaymentByGameId(id));
     }
 
     [HttpPost("{id}/payments")]
-    public async Task<IActionResult> CreatePayment([FromRoute]Guid id, [FromBody] CreatePaymentRequest payment)
+    public async Task<IActionResult> CreatePayment([FromRoute] Guid id, [FromBody] CreatePaymentRequest payment)
     {
-        CheckCreatePaymentPermission(id);
+        RequiredScope(
+            "payments:create",
+            $"payments:{id}:create",
+            $"games:{id}:update"
+        );
         await _characterRepo.FoundOrThrowAsync(payment.CharacterId, Constants.Entities.CHARACTER + Constants.Errors.NOT_EXIST_ERROR);
         await _userRepo.FoundOrThrowAsync(payment.UserId, Constants.Entities.USER + Constants.Errors.NOT_EXIST_ERROR);
         await _walletRepo.FoundOrThrowAsync(payment.WalletId, Constants.Entities.WALLET + Constants.Errors.NOT_EXIST_ERROR);
@@ -507,14 +619,22 @@ public class GamesController : BaseController
     [HttpGet("{id}/transactions")]
     public async Task<IActionResult> GetTransactionsByGameID(Guid id)
     {
-        CheckGetTransactionPermission(id);
+        RequiredScope(
+            $"games:{id}:get",
+            "transactions:*:get",
+            $"transactions:{id}:get"
+        );
         return Ok(await _transactionServices.ListTransactionsByGameId(id));
     }
 
     [HttpPost("{id}/transactions")]
-    public async Task<IActionResult> CreateTransaction([FromRoute]Guid id,[FromBody] CreateTransactionRequest trans)
+    public async Task<IActionResult> CreateTransaction([FromRoute] Guid id, [FromBody] CreateTransactionRequest trans)
     {
-        CheckCreateTransactionPermission(id);
+        RequiredScope(
+            "transactions:create",
+            $"transactions:{id}:create",
+            $"games:{id}:update"
+        );
         await _walletRepo.FoundOrThrowAsync(trans.WalletId, Constants.Entities.WALLET + Constants.Errors.NOT_EXIST_ERROR);
         var newTrans = new TransactionEntity();
         Mapper.Map(trans, newTrans);
@@ -527,14 +647,22 @@ public class GamesController : BaseController
     [HttpGet("{id}/users")]
     public async Task<IActionResult> GetUsersByGameID(Guid id)
     {
-        CheckGetUserPermission(id);
+        RequiredScope(
+            $"games:{id}:get",
+            "users:*:get",
+            $"users:{id}:get"
+        );
         return Ok(await _gameUserServices.ListUsersByGameId(id));
     }
 
     [HttpPost("{id}/users")]
     public async Task<IActionResult> CreateUser([FromRoute] Guid id, [FromBody] CreateUserRequest cUser)
     {
-        CheckCreateUserPermission(id);
+        RequiredScope(
+            "users:create",
+            $"users:{id}:create",
+            $"games:{id}:update"
+        );
         var user = new UserEntity();
         Mapper.Map(cUser, user);
         await _userServices.Create(user);
@@ -547,16 +675,24 @@ public class GamesController : BaseController
     [HttpGet("{id}/wallet-categories")]
     public async Task<IActionResult> GetWalCatsByGameID(Guid id)
     {
-        CheckGetWalletCategoryPermission(id);
+        RequiredScope(
+            $"games:{id}:get",
+            "walletcategories:*:get",
+            $"walletcategories:{id}:get"
+        );
         return Ok(await _walletCategoryServices.ListWalCatsByGameId(id));
     }
 
     [HttpPost("{id}/wallet-categories")]
-    public async Task<IActionResult> CreateWalletCategory([FromRoute]Guid id, [FromBody] CreateWalletCategoryRequest walCat)
+    public async Task<IActionResult> CreateWalletCategory([FromRoute] Guid id, [FromBody] CreateWalletCategoryRequest walCat)
     {
-        CheckCreateWalletCategoryPermission(id);
+        RequiredScope(
+            "walletcategories:create",
+            $"walletcategories:{id}:create",
+            $"games:{id}:update"
+        );
         await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR);
-        var newWalCat = new WalletCategoryEntity {GameId = id};
+        var newWalCat = new WalletCategoryEntity { GameId = id };
         Mapper.Map(walCat, newWalCat);
         await _walletCategoryServices.Create(newWalCat);
         await UpdateGameRecord(id);
@@ -567,14 +703,22 @@ public class GamesController : BaseController
     [HttpGet("{id}/wallets")]
     public async Task<IActionResult> GetWalletsByGameID(Guid id)
     {
-        CheckGetWalletPermission(id);
+        RequiredScope(
+            "wallets:*:get",
+            $"wallets:{id}:get",
+            $"games:{id}:get"
+        );
         return Ok(await _walletServices.ListWalletsByGameId(id));
     }
 
     [HttpPost("{id}/wallets")]
-    public async Task<IActionResult> CreateWallet([FromRoute]Guid id, [FromBody] CreateWalletRequest wallet)
+    public async Task<IActionResult> CreateWallet([FromRoute] Guid id, [FromBody] CreateWalletRequest wallet)
     {
-        CheckCreateWalletPermission(id);
+        RequiredScope(
+            "wallets:create",
+            $"wallets:{id}:create",
+            $"games:{id}:update"
+        );
         await _walletCategoryRepo.FoundOrThrowAsync(wallet.WalletCategoryId, Constants.Entities.WALLET_CATEGORY + Constants.Errors.NOT_EXIST_ERROR);
         await _characterRepo.FoundOrThrowAsync(wallet.CharacterId, Constants.Entities.CHARACTER + Constants.Errors.NOT_EXIST_ERROR);
         var newWallet = new WalletEntity();
@@ -587,13 +731,15 @@ public class GamesController : BaseController
     [HttpGet("{id}/count-record")]
     public async Task<IActionResult> CountRecordsByGameId(Guid id)
     {
-        CheckGetGamePermission(id);
         return Ok(await _gameServices.CountRecord(id));
     }
 
     [HttpPost]
     public async Task<IActionResult> CreateGame([FromBody] CreateGameRequest newGame)
     {
+        RequiredScope(
+            $"games:create"
+        );
         var gameEntity = new GameEntity();
         Mapper.Map(newGame, gameEntity);
         await _gameServices.Create(gameEntity);
@@ -621,7 +767,7 @@ public class GamesController : BaseController
             $"games:{gameId}:get",
             $"games:{gameId}:update",
             $"games:{gameId}:delete",
-        } ;
+        };
         var reqData = new Dictionary<string, object>
         {
             { "scope", scope },
@@ -632,7 +778,10 @@ public class GamesController : BaseController
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateGame(Guid id, [FromBody] UpdateGameRequest game)
     {
-        CheckUpdateGamePermission(id);
+        RequiredScope(
+            "games:*:update",
+            $"games:{id}:update"
+        );
         var updateGame = await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR);
         Mapper.Map(game, updateGame);
         await _gameServices.Update(updateGame);
@@ -642,7 +791,10 @@ public class GamesController : BaseController
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteGame(Guid id)
     {
-        CheckDeleteGamePermission(id);
+        RequiredScope(
+            "games:*:delete",
+            $"games:{id}:delete"
+        );
         await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR);
         await _gameServices.Delete(id);
         return NoContent();
