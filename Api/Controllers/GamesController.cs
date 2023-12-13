@@ -333,20 +333,6 @@ public class GamesController : BaseController
         return Ok(updateGame);
     }
 
-    [HttpPut("{id}/upgrade-plan")]
-    public async Task<IActionResult> UpgradeGame(Guid id, [FromBody] UpgradePlanRequest req)
-    {
-        CheckUpdateGamePermission(id);
-        var updateGame = await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR);
-        if (req.GamePlan <= updateGame.GamePlan)
-        {
-            throw new BadRequestException("Cannot downgrade plan");
-        }
-        updateGame.GamePlan = req.GamePlan;
-        await _gameServices.Update(updateGame);
-        return Ok(updateGame);
-    }
-
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteGame(Guid id)
     {

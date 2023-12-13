@@ -10,7 +10,7 @@ using WebApiLayer.UserFeatures.Response;
 
 namespace WebApiLayer.Controllers;
 
-[Route(Constants.Http.API_VERSION + "/gms/attribute-groups")]
+[Route(Constants.Http.API_VERSION + "/gms/games/{gameId}/attribute-groups")]
 public class AttributeGroupController : BaseController
 {
     private readonly IAttributeGroupServices _attributeServices;

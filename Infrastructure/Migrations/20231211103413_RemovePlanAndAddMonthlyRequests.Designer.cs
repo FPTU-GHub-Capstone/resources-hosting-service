@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RepositoryLayer.Contexts;
 
@@ -11,9 +12,10 @@ using RepositoryLayer.Contexts;
 namespace RepositoryLayer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231211103413_RemovePlanAndAddMonthlyRequests")]
+    partial class RemovePlanAndAddMonthlyRequests
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +23,21 @@ namespace RepositoryLayer.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
+            modelBuilder.Entity("AttributeGroupEntityGameEntity", b =>
+                {
+                    b.Property<Guid>("AttributeGroupsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("GamesId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("AttributeGroupsId", "GamesId");
+
+                    b.HasIndex("GamesId");
+
+                    b.ToTable("AttributeGroupEntityGameEntity");
+                });
 
             modelBuilder.Entity("DomainLayer.Entities.ActivityEntity", b =>
                 {
@@ -223,9 +240,6 @@ namespace RepositoryLayer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("GameId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("datetime2");
 
@@ -236,8 +250,6 @@ namespace RepositoryLayer.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("DeletedAt");
-
-                    b.HasIndex("GameId");
 
                     b.ToTable("AttributeGroup");
                 });
@@ -425,10 +437,7 @@ namespace RepositoryLayer.Migrations
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("MonthlyReadUnits")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MonthlyWriteUnits")
+                    b.Property<int>("MonthlyRequests")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -807,6 +816,21 @@ namespace RepositoryLayer.Migrations
                     b.ToTable("Wallet");
                 });
 
+            modelBuilder.Entity("AttributeGroupEntityGameEntity", b =>
+                {
+                    b.HasOne("DomainLayer.Entities.AttributeGroupEntity", null)
+                        .WithMany()
+                        .HasForeignKey("AttributeGroupsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DomainLayer.Entities.GameEntity", null)
+                        .WithMany()
+                        .HasForeignKey("GamesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("DomainLayer.Entities.ActivityEntity", b =>
                 {
                     b.HasOne("DomainLayer.Entities.ActivityTypeEntity", "ActivityType")
@@ -887,17 +911,6 @@ namespace RepositoryLayer.Migrations
                 {
                     b.HasOne("DomainLayer.Entities.GameEntity", "Game")
                         .WithMany()
-                        .HasForeignKey("GameId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Game");
-                });
-
-            modelBuilder.Entity("DomainLayer.Entities.AttributeGroupEntity", b =>
-                {
-                    b.HasOne("DomainLayer.Entities.GameEntity", "Game")
-                        .WithMany("AttributeGroups")
                         .HasForeignKey("GameId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1117,8 +1130,6 @@ namespace RepositoryLayer.Migrations
             modelBuilder.Entity("DomainLayer.Entities.GameEntity", b =>
                 {
                     b.Navigation("ActivityTypes");
-
-                    b.Navigation("AttributeGroups");
                 });
 
             modelBuilder.Entity("DomainLayer.Entities.GameServerEntity", b =>

@@ -10,7 +10,8 @@ public class GameEntity : BaseEntity
     public string? Logo { get; set; }
     public string? Link { get; set; }
     public string? Banner { get; set; }
-    public GamePlan GamePlan { get; set; }
+    public int MonthlyWriteUnits { get; set; } = 0;
+    public int MonthlyReadUnits{ get; set; } = 0;
     public bool IsActive { get; set; } = true; 
 
     // 1 Game - M Activity Type
@@ -18,12 +19,4 @@ public class GameEntity : BaseEntity
     [JsonIgnore]
     // 1 Game - M Attribute Group
     public virtual ICollection<AttributeGroupEntity>? AttributeGroups { get; set; }
-}
-
-
-public enum GamePlan
-{
-    Basic,
-    Standard,
-    Enterprise
 }
