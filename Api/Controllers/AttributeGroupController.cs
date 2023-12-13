@@ -24,10 +24,7 @@ public class AttributeGroupController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetAttributeGroups()
     {
-        if (!CurrentScp.Contains("attributegroups:*:get"))
-        {
-            throw new ForbiddenException();
-        }
+        RequiredScope("attributegroups:*:get");
         var attributes = await _attributeServices.List();
         List<AttributeGroupResponse> attGrpList = new();
         foreach (var attribute in attributes)

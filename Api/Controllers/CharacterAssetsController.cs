@@ -23,10 +23,7 @@ public class CharacterAssetsController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetCharacterAssets([FromQuery] Guid? characterId)
     {
-        if (!CurrentScp.Contains("characterassets:*:get"))
-        {
-            throw new ForbiddenException();
-        }
+        RequiredScope("characterassets:*:get");
         return Ok(await _characterAssetServices.List(characterId));
     }
 

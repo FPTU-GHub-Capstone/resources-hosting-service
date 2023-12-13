@@ -22,10 +22,7 @@ public class AssetTypesController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetAssetTypes()
     {
-        if (!CurrentScp.Contains("assettypes:*:get"))
-        {
-            throw new ForbiddenException();
-        }
+        RequiredScope("assettypes:*:get");
         return Ok(await _assetTypeServices.List());
     }
 

@@ -22,10 +22,7 @@ public class TransactionsController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetTransactions()
     {
-        if (!CurrentScp.Contains("transactions:*:get"))
-        {
-            throw new ForbiddenException();
-        }
+        RequiredScope("transactions:*:get");
         return Ok(await _transactionServices.List());
     }
 

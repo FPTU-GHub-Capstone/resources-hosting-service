@@ -23,10 +23,7 @@ public class CharacterTypesController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetCharacterTypes()
     {
-        if (!CurrentScp.Contains("charactertypes:*:get"))
-        {
-            throw new ForbiddenException();
-        }
+        RequiredScope("charactertypes:*:get");
         var ctList = await _characterTypeServices.List();
         List<CharacterTypeResponse> ctListResponse = new();
         foreach (var ct in ctList)

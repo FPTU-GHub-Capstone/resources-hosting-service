@@ -29,10 +29,7 @@ public class PaymentsController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetPayments()
     {
-        if (!CurrentScp.Contains("payments:*:get"))
-        {
-            throw new ForbiddenException();
-        }
+        RequiredScope("payments:*:get");
         return Ok(await _paymentServices.List());
     }
 

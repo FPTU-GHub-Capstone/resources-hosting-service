@@ -22,10 +22,7 @@ public class ActivityTypesController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetActivityTypes()
     {
-        if (!CurrentScp.Contains("activitytypes:*:get"))
-        {
-            throw new ForbiddenException();
-        }
+        RequiredScope("activitytypes:*:get");
         return Ok(await _activityTypeServices.List());
     }
 

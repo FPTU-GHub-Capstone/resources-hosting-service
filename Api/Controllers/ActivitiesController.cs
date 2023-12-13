@@ -23,10 +23,7 @@ public class ActivitiesController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetActivitíes()
     {
-        if (!CurrentScp.Contains("activities:*:get"))
-        {
-            throw new ForbiddenException();
-        }
+        RequiredScope("activities:*:get");
         return Ok(await _activityServices.List());
     }
 

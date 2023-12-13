@@ -54,6 +54,19 @@ public abstract class BaseController : ControllerBase
         var stringData = await response.Content.ReadAsStringAsync();
         return JsonConvert.DeserializeObject<T>(stringData); ;
     }
+
+    protected void RequiredScope(params string[] scope)
+    {
+        foreach (var scp in scope)
+        {
+            if (CurrentScp.Contains(scp))
+            {
+                return;
+            }
+        }
+        throw new ForbiddenException();
+    }
+
     #region Activity Permission
     protected void CheckGetActivityPermission(Guid gameId)
     {

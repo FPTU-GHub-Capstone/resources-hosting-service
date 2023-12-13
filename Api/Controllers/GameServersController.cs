@@ -22,10 +22,7 @@ public class GameServersController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetGameServers()
     {
-        if (!CurrentScp.Contains("gameservers:*:get"))
-        {
-            throw new ForbiddenException();
-        }
+        RequiredScope("gameservers:*:get");
         return Ok(await _gameServerServices.List());
     }
 

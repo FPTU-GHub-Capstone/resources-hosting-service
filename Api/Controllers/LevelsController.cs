@@ -23,16 +23,9 @@ public class LevelsController : BaseController
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetLevels([FromQuery] Guid[]? idList)
+    public async Task<IActionResult> GetLevels()
     {
-        if (!CurrentScp.Contains("levels:*:get"))
-        {
-            throw new ForbiddenException();
-        }
-        if (idList != null && idList.Count() > 0)
-        {
-            return Ok(await _levelServices.List(idList));
-        }
+        RequiredScope("levels:*:get");
         return Ok(await _levelServices.List());
     }
 

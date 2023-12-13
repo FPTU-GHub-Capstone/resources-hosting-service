@@ -31,10 +31,7 @@ public class UsersController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetUsers([FromQuery] string? email)
     { 
-        if (!CurrentScp.Contains("users:*:get"))
-        {
-            throw new ForbiddenException();
-        }
+        RequiredScope("users:*:get");
         return Ok(await _userServices.List(email));
     }
 

@@ -32,10 +32,7 @@ public class CharactersController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetCharacters()
     {
-        if (!CurrentScp.Contains("characters:*:get"))
-        {
-            throw new ForbiddenException();
-        }
+        RequiredScope("characters:*:get");
         return Ok(await _characterServices.List());
     }
 

@@ -28,10 +28,7 @@ public class WalletsController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetWallets()
     {
-        if (!CurrentScp.Contains("wallets:*:get"))
-        {
-            throw new ForbiddenException();
-        }
+        RequiredScope("wallets:*:get");
         return Ok(await _walletServices.List());
     }
 

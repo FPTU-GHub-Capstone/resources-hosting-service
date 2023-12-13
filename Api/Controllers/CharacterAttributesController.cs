@@ -23,10 +23,7 @@ public class CharacterAtributesController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetCharacterAttributes()
     {
-        if (!CurrentScp.Contains("characterattributes:*:get"))
-        {
-            throw new ForbiddenException();
-        }
+        RequiredScope("characterattributes:*:get");
         return Ok(await _charAttServices.List());
     }
 

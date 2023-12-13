@@ -22,10 +22,7 @@ public class LevelProgressesController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetLevelProgresses()
     {
-        if (!CurrentScp.Contains("levelprogresses:*:get"))
-        {
-            throw new ForbiddenException();
-        }
+        RequiredScope("levelprogresses:*:get");
         return Ok(await _levelProgressServices.List());
     }
 
