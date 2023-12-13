@@ -57,6 +57,7 @@ public abstract class BaseController : ControllerBase
     #region Activity Permission
     protected void CheckGetActivityPermission(Guid gameId)
     {
+
         if (!CurrentScp.Contains("activities:*:get") && !CurrentScp.Contains($"activities:{gameId}:get"))
         {
             throw new ForbiddenException();
@@ -64,7 +65,8 @@ public abstract class BaseController : ControllerBase
     }
     protected void CheckCreateActivityPermission(Guid gameId)
     {
-        if (!CurrentScp.Contains("activities:*:create") && !CurrentScp.Contains($"activities:{gameId}:create"))
+        if (!CurrentScp.Contains("activities:create") && !CurrentScp.Contains($"activities:{gameId}:create")
+            && !CurrentScp.Contains($"games:{gameId}:update"))
         {
             throw new ForbiddenException();
         }
@@ -95,7 +97,8 @@ public abstract class BaseController : ControllerBase
     }
     protected void CheckCreateActivityTypePermission(Guid gameId)
     {
-        if (!CurrentScp.Contains("activitytypes:*:create") && !CurrentScp.Contains($"activitytypes:{gameId}:create"))
+        if (!CurrentScp.Contains("activitytypes:create") && !CurrentScp.Contains($"activitytypes:{gameId}:create")
+            && !CurrentScp.Contains($"games:{gameId}:update"))
         {
             throw new ForbiddenException();
         }
@@ -125,7 +128,8 @@ public abstract class BaseController : ControllerBase
     }
     protected void CheckCreateAssetAttributePermission(Guid gameId)
     {
-        if (!CurrentScp.Contains("assetattributes:*:create") && !CurrentScp.Contains($"assetattributes:{gameId}:create"))
+        if (!CurrentScp.Contains("assetattributes:create") && !CurrentScp.Contains($"assetattributes:{gameId}:create")
+            && !CurrentScp.Contains($"games:{gameId}:update"))
         {
             throw new ForbiddenException();
         }
@@ -156,7 +160,8 @@ public abstract class BaseController : ControllerBase
     }
     protected void CheckCreateAssetPermission(Guid gameId)
     {
-        if (!CurrentScp.Contains("assets:*:create") && !CurrentScp.Contains($"assets:{gameId}:create"))
+        if (!CurrentScp.Contains("assets:create") && !CurrentScp.Contains($"assets:{gameId}:create")
+            && !CurrentScp.Contains($"games:{gameId}:update"))
         {
             throw new ForbiddenException();
         }
@@ -187,7 +192,8 @@ public abstract class BaseController : ControllerBase
     }
     protected void CheckCreateAssetTypePermission(Guid gameId)
     {
-        if (!CurrentScp.Contains("assettypes:*:create") && !CurrentScp.Contains($"assettypes:{gameId}:create"))
+        if (!CurrentScp.Contains("assettypes:create") && !CurrentScp.Contains($"assettypes:{gameId}:create")
+            && !CurrentScp.Contains($"games:{gameId}:update"))
         {
             throw new ForbiddenException();
         }
@@ -218,7 +224,8 @@ public abstract class BaseController : ControllerBase
     }
     protected void CheckCreateAttributeGroupPermission(Guid gameId)
     {
-        if (!CurrentScp.Contains("attributegroups:*:create") && !CurrentScp.Contains($"attributegroups:{gameId}:create"))
+        if (!CurrentScp.Contains("attributegroups:create") && !CurrentScp.Contains($"attributegroups:{gameId}:create")
+            && !CurrentScp.Contains($"games:{gameId}:update"))
         {
             throw new ForbiddenException();
         }
@@ -249,7 +256,8 @@ public abstract class BaseController : ControllerBase
     }
     protected void CheckCreateCharacterAssetPermission(Guid gameId)
     {
-        if (!CurrentScp.Contains("characterassets:*:create") && !CurrentScp.Contains($"characterassets:{gameId}:create"))
+        if (!CurrentScp.Contains("characterassets:create") && !CurrentScp.Contains($"characterassets:{gameId}:create")
+            && !CurrentScp.Contains($"games:{gameId}:update"))
         {
             throw new ForbiddenException();
         }
@@ -280,7 +288,8 @@ public abstract class BaseController : ControllerBase
     }
     protected void CheckCreateCharacterAttributePermission(Guid gameId)
     {
-        if (!CurrentScp.Contains("characterattributes:*:create") && !CurrentScp.Contains($"characterattributes:{gameId}:create"))
+        if (!CurrentScp.Contains("characterattributes:create") && !CurrentScp.Contains($"characterattributes:{gameId}:create")
+            && !CurrentScp.Contains($"games:{gameId}:update"))
         {
             throw new ForbiddenException();
         }
@@ -311,7 +320,8 @@ public abstract class BaseController : ControllerBase
     }
     protected void CheckCreateCharacterPermission(Guid gameId)
     {
-        if (!CurrentScp.Contains("characters:*:create") && !CurrentScp.Contains($"characters:{gameId}:create"))
+        if (!CurrentScp.Contains("characters:create") && !CurrentScp.Contains($"characters:{gameId}:create")
+            && !CurrentScp.Contains($"games:{gameId}:update"))
         {
             throw new ForbiddenException();
         }
@@ -342,7 +352,8 @@ public abstract class BaseController : ControllerBase
     }
     protected void CheckCreateCharacterTypePermission(Guid gameId)
     {
-        if (!CurrentScp.Contains("charactertypes:*:create") && !CurrentScp.Contains($"charactertypes:{gameId}:create"))
+        if (!CurrentScp.Contains("charactertypes:create") && !CurrentScp.Contains($"charactertypes:{gameId}:create")
+            && !CurrentScp.Contains($"games:{gameId}:update"))
         {
             throw new ForbiddenException();
         }
@@ -398,7 +409,8 @@ public abstract class BaseController : ControllerBase
     }
     protected void CheckCreateGameServerPermission(Guid gameId)
     {
-        if (!CurrentScp.Contains("gameservers:*:create") && !CurrentScp.Contains($"gameservers:{gameId}:create"))
+        if (!CurrentScp.Contains("gameservers:create") && !CurrentScp.Contains($"gameservers:{gameId}:create")
+            && !CurrentScp.Contains($"games:{gameId}:update"))
         {
             throw new ForbiddenException();
         }
@@ -429,7 +441,8 @@ public abstract class BaseController : ControllerBase
     }
     protected void CheckCreateLevelProgressPermission(Guid gameId)
     {
-        if (!CurrentScp.Contains("levelprogresses:*:create") && !CurrentScp.Contains($"levelprogresses:{gameId}:create"))
+        if (!CurrentScp.Contains("levelprogresses:create") && !CurrentScp.Contains($"levelprogresses:{gameId}:create")
+            && !CurrentScp.Contains($"games:{gameId}:update"))
         {
             throw new ForbiddenException();
         }
@@ -460,7 +473,8 @@ public abstract class BaseController : ControllerBase
     }
     protected void CheckCreateLevelPermission(Guid gameId)
     {
-        if (!CurrentScp.Contains("levels:*:create") && !CurrentScp.Contains($"levels:{gameId}:create"))
+        if (!CurrentScp.Contains("levels:create") && !CurrentScp.Contains($"levels:{gameId}:create")
+            && !CurrentScp.Contains($"games:{gameId}:update"))
         {
             throw new ForbiddenException();
         }
@@ -491,7 +505,8 @@ public abstract class BaseController : ControllerBase
     }
     protected void CheckCreatePaymentPermission(Guid gameId)
     {
-        if (!CurrentScp.Contains("payments:*:create") && !CurrentScp.Contains($"payments:{gameId}:create"))
+        if (!CurrentScp.Contains("payments:create") && !CurrentScp.Contains($"payments:{gameId}:create")
+            && !CurrentScp.Contains($"games:{gameId}:update"))
         {
             throw new ForbiddenException();
         }
@@ -522,7 +537,8 @@ public abstract class BaseController : ControllerBase
     }
     protected void CheckCreateTransactionPermission(Guid gameId)
     {
-        if (!CurrentScp.Contains("transactions:*:create") && !CurrentScp.Contains($"transactions:{gameId}:create"))
+        if (!CurrentScp.Contains("transactions:create") && !CurrentScp.Contains($"transactions:{gameId}:create")
+            && !CurrentScp.Contains($"games:{gameId}:update"))
         {
             throw new ForbiddenException();
         }
@@ -553,7 +569,8 @@ public abstract class BaseController : ControllerBase
     }
     protected void CheckCreateUserPermission(Guid gameId)
     {
-        if (!CurrentScp.Contains("users:*:create") && !CurrentScp.Contains($"users:{gameId}:create"))
+        if (!CurrentScp.Contains("users:create") && !CurrentScp.Contains($"users:{gameId}:create")
+            && !CurrentScp.Contains($"games:{gameId}:update"))
         {
             throw new ForbiddenException();
         }
@@ -584,7 +601,8 @@ public abstract class BaseController : ControllerBase
     }
     protected void CheckCreateWalletCategoryPermission(Guid gameId)
     {
-        if (!CurrentScp.Contains("walletcategories:*:create") && !CurrentScp.Contains($"walletcategories:{gameId}:create"))
+        if (!CurrentScp.Contains("walletcategories:create") && !CurrentScp.Contains($"walletcategories:{gameId}:create")
+            && !CurrentScp.Contains($"games:{gameId}:update"))
         {
             throw new ForbiddenException();
         }
@@ -615,7 +633,8 @@ public abstract class BaseController : ControllerBase
     }
     protected void CheckCreateWalletPermission(Guid gameId)
     {
-        if (!CurrentScp.Contains("wallets:*:create") && !CurrentScp.Contains($"wallets:{gameId}:create"))
+        if (!CurrentScp.Contains("wallets:create") && !CurrentScp.Contains($"wallets:{gameId}:create")
+            && !CurrentScp.Contains($"games:{gameId}:update"))
         {
             throw new ForbiddenException();
         }

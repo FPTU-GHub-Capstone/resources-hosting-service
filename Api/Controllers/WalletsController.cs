@@ -1,6 +1,7 @@
 ﻿using AutoWrapper.Filters;
 using DomainLayer.Constants;
 using DomainLayer.Entities;
+using DomainLayer.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using RepositoryLayer.Repositories;
 using ServiceLayer.Business;
@@ -27,29 +28,17 @@ public class WalletsController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetWallets()
     {
-        
-        if (CurrentScp.Contains("wallets:*:get"))
+        if (!CurrentScp.Contains("wallets:*:get"))
         {
-            return Ok(await _walletServices.List());
+            throw new ForbiddenException();
         }
-        return NoContent();
+        return Ok(await _walletServices.List());
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetWallet(Guid id)
     {
         return Ok(await _walletServices.GetById(id));
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> CreateWallet([FromBody] CreateWalletRequest wallet)
-    {
-        await _walletCatRepo.FoundOrThrowAsync(wallet.WalletCategoryId, Constants.Entities.WALLET_CATEGORY + Constants.Errors.NOT_EXIST_ERROR);
-        await _characterRepo.FoundOrThrowAsync(wallet.CharacterId, Constants.Entities.CHARACTER + Constants.Errors.NOT_EXIST_ERROR);
-        var newWallet = new WalletEntity();
-        Mapper.Map(wallet, newWallet);
-        await _walletServices.Create(newWallet);
-        return CreatedAtAction(nameof(GetWallet), new { id = newWallet.Id }, newWallet);
     }
 
     [HttpPut("{id}")]

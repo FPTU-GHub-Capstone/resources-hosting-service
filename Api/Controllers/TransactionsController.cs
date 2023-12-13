@@ -1,5 +1,6 @@
 ﻿using DomainLayer.Constants;
 using DomainLayer.Entities;
+using DomainLayer.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using RepositoryLayer.Repositories;
 using ServiceLayer.Business;
@@ -13,38 +14,25 @@ public class TransactionsController : BaseController
 {
     private readonly ITransactionServices _transactionServices;
     private readonly IGenericRepository<TransactionEntity> _transactionRepo;
-    private readonly IGenericRepository<WalletEntity> _walletRepo;
-    public TransactionsController(ITransactionServices transactionServices, IGenericRepository<TransactionEntity> transactionRepo
-        , IGenericRepository<WalletEntity> walletRepo)
+    public TransactionsController(ITransactionServices transactionServices, IGenericRepository<TransactionEntity> transactionRepo)
     {
         _transactionServices = transactionServices;
         _transactionRepo = transactionRepo;
-        _walletRepo = walletRepo;
     }
     [HttpGet]
     public async Task<IActionResult> GetTransactions()
     {
-        if (CurrentScp.Contains("transactions:*:get"))
+        if (!CurrentScp.Contains("transactions:*:get"))
         {
-            return Ok(await _transactionServices.List());
+            throw new ForbiddenException();
         }
-        return NoContent();
+        return Ok(await _transactionServices.List());
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetTransaction(Guid id)
     {
         return Ok(await _transactionServices.GetById(id));
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> CreateTransaction([FromBody] CreateTransactionRequest trans)
-    {
-        await _walletRepo.FoundOrThrowAsync(trans.WalletId, Constants.Entities.WALLET + Constants.Errors.NOT_EXIST_ERROR);
-        var newTrans = new TransactionEntity();
-        Mapper.Map(trans, newTrans);
-        await _transactionServices.Create(newTrans);
-        return CreatedAtAction(nameof(GetTransaction), new { id = newTrans.Id }, newTrans);
     }
 
     [HttpPut("{id}")]

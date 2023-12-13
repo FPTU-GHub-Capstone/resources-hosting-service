@@ -1,9 +1,9 @@
 ﻿using DomainLayer.Constants;
 using DomainLayer.Entities;
+using DomainLayer.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using RepositoryLayer.Repositories;
 using ServiceLayer.Business;
-using System.Runtime.ConstrainedExecution;
 using WebApiLayer.UserFeatures.Requests;
 
 namespace WebApiLayer.Controllers;
@@ -31,11 +31,11 @@ public class UsersController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetUsers([FromQuery] string? email)
     { 
-        if (CurrentScp.Contains("users:*:get"))
+        if (!CurrentScp.Contains("users:*:get"))
         {
-            return Ok(await _userServices.List(email));
+            throw new ForbiddenException();
         }
-        return NoContent();
+        return Ok(await _userServices.List(email));
     }
 
     [HttpGet("{id}")]
@@ -60,15 +60,6 @@ public class UsersController : BaseController
     public async Task<IActionResult> GetPaymentByUserID(Guid id)
     {
         return Ok(await _paymentServices.ListPaymentByUserId(id));
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> CreateUser([FromBody] CreateUserRequest cUser)
-    {
-        var user = new UserEntity();
-        Mapper.Map(cUser, user);
-        await _userServices.Create(user);
-        return CreatedAtAction(nameof(GetUser), new { id = user.Id }, user);
     }
 
     [HttpPost("{id}/add-game")]

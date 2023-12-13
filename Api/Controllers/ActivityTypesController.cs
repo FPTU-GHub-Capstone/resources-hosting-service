@@ -14,41 +14,25 @@ public class ActivityTypesController : BaseController
 {
     private readonly IActivityTypeServices _activityTypeServices;
     private readonly IGenericRepository<ActivityTypeEntity> _activityTypeRepo;
-    private readonly IGenericRepository<GameEntity> _gameRepo;
-    private readonly IGenericRepository<CharacterEntity> _characterRepo;
-    public ActivityTypesController(IActivityTypeServices activityTypeServices, IGenericRepository<ActivityTypeEntity> activityTypeRepo
-        , IGenericRepository<GameEntity> gameRepo, IGenericRepository<CharacterEntity> characterRepo)
+    public ActivityTypesController(IActivityTypeServices activityTypeServices, IGenericRepository<ActivityTypeEntity> activityTypeRepo)
     {
         _activityTypeServices = activityTypeServices;
         _activityTypeRepo = activityTypeRepo;
-        _gameRepo = gameRepo;
-        _characterRepo = characterRepo;
     }
     [HttpGet]
     public async Task<IActionResult> GetActivityTypes()
     {
-        if (CurrentScp.Contains("activitytypes:*:get"))
+        if (!CurrentScp.Contains("activitytypes:*:get"))
         {
-            return Ok(await _activityTypeServices.List());
+            throw new ForbiddenException();
         }
-        return NoContent();
+        return Ok(await _activityTypeServices.List());
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetActivityType(Guid id)
     {
         return Ok(await _activityTypeServices.GetById(id));
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> CreateActivityType([FromBody] CreateActivityTypeRequest activityType)
-    {
-        await _gameRepo.FoundOrThrowAsync(activityType.GameId, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR);
-        await _characterRepo.FoundOrThrowAsync(activityType.CharacterId, Constants.Entities.CHARACTER + Constants.Errors.NOT_EXIST_ERROR);
-        var newActivityType = new ActivityTypeEntity();
-        Mapper.Map(activityType, newActivityType);
-        await _activityTypeServices.Create(newActivityType);
-        return CreatedAtAction(nameof(GetActivityType), new { id = newActivityType.Id }, newActivityType);
     }
 
     [HttpPut("{id}")]

@@ -12,9 +12,10 @@ public class GameEntity : BaseEntity
     public string? Banner { get; set; }
     public int MonthlyWriteUnits { get; set; } = 0;
     public int MonthlyReadUnits{ get; set; } = 0;
-    public bool IsActive { get; set; } = true; 
+    public bool IsActive { get; set; } = true;
 
     // 1 Game - M Activity Type
+    [JsonIgnore]
     public virtual ICollection<ActivityTypeEntity>? ActivityTypes { get; set; }
     [JsonIgnore]
     // 1 Game - M Attribute Group

@@ -14,5 +14,5 @@ public class LevelEntity : BaseEntity
     public GameEntity Game { get; set; }
     [JsonIgnore]
     // 1 Level Progress - 1 Level 
-    public LevelProgressEntity LevelProgress { get; set; }
+    public virtual ICollection<LevelProgressEntity>? LevelProgress { get; set; }
 }

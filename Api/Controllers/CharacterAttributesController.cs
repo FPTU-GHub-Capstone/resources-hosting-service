@@ -1,5 +1,6 @@
 ﻿using DomainLayer.Constants;
 using DomainLayer.Entities;
+using DomainLayer.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using RepositoryLayer.Repositories;
 using ServiceLayer.Business;
@@ -13,25 +14,20 @@ public class CharacterAtributesController : BaseController
 {
     private readonly ICharacterAttributeServices _charAttServices;
     private readonly IGenericRepository<CharacterAttributeEntity> _charAttRepo;
-    private readonly IGenericRepository<CharacterEntity> _charRepo;
-    private readonly IGenericRepository<AttributeGroupEntity> _attGrpRepo;
-    public CharacterAtributesController(ICharacterAttributeServices charAttServices, IGenericRepository<CharacterAttributeEntity> charAttRepo
-        , IGenericRepository<CharacterEntity> charRepo, IGenericRepository<AttributeGroupEntity> attGrpRepo)
+    public CharacterAtributesController(ICharacterAttributeServices charAttServices, IGenericRepository<CharacterAttributeEntity> charAttRepo)
     {
         _charAttServices = charAttServices;
         _charAttRepo = charAttRepo;
-        _charRepo = charRepo;
-        _attGrpRepo = attGrpRepo;
     }
 
     [HttpGet]
     public async Task<IActionResult> GetCharacterAttributes()
     {
-        if (CurrentScp.Contains("characterattributes:*:get"))
+        if (!CurrentScp.Contains("characterattributes:*:get"))
         {
-            return Ok(await _charAttServices.List());
+            throw new ForbiddenException();
         }
-        return NoContent();
+        return Ok(await _charAttServices.List());
     }
 
     [HttpGet("{id}")]
@@ -39,17 +35,6 @@ public class CharacterAtributesController : BaseController
     {
         var charAtt = await _charAttServices.GetById(id);
         return Ok(charAtt);
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> CreateCharacterAttribute([FromBody] CreateCharacterAttributeRequest charAtt)
-    {
-        await _charRepo.FoundOrThrowAsync(charAtt.CharacterId, Constants.Entities.CHARACTER + Constants.Errors.NOT_EXIST_ERROR);
-        await _attGrpRepo.FoundOrThrowAsync(charAtt.AttributeGroupId, Constants.Entities.ATTRIBUTE_GROUP + Constants.Errors.NOT_EXIST_ERROR);
-        var newCharAtt = new CharacterAttributeEntity();
-        Mapper.Map(charAtt, newCharAtt);
-        await _charAttServices.Create(newCharAtt);
-        return CreatedAtAction(nameof(GetCharacterAttribute), new { id = newCharAtt.Id }, newCharAtt);
     }
 
     [HttpPut("{id}")]

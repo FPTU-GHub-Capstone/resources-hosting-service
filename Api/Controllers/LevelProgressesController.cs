@@ -1,5 +1,6 @@
 ﻿using DomainLayer.Constants;
 using DomainLayer.Entities;
+using DomainLayer.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using RepositoryLayer.Repositories;
 using ServiceLayer.Business;
@@ -12,42 +13,26 @@ public class LevelProgressesController : BaseController
 {
     private readonly ILevelProgressServices _levelProgressServices;
     private readonly IGenericRepository<LevelProgressEntity> _levelProgressRepo;
-    private readonly IGenericRepository<CharacterEntity> _characterRepo;
-    private readonly IGenericRepository<CharacterEntity> _levelRepo;
-    public LevelProgressesController(ILevelProgressServices levelProgressServices, IGenericRepository<LevelProgressEntity> levelProgressRepo
-        , IGenericRepository<CharacterEntity> characterRepo, IGenericRepository<CharacterEntity> levelRepo)
+    public LevelProgressesController(ILevelProgressServices levelProgressServices, IGenericRepository<LevelProgressEntity> levelProgressRepo)
     {
         _levelProgressServices = levelProgressServices;
         _levelProgressRepo = levelProgressRepo;
-        _characterRepo = characterRepo;
-        _levelRepo = levelRepo;
     }
 
     [HttpGet]
     public async Task<IActionResult> GetLevelProgresses()
     {
-        if (CurrentScp.Contains("levelprogresses:*:get"))
+        if (!CurrentScp.Contains("levelprogresses:*:get"))
         {
-            return Ok(await _levelProgressServices.List());
+            throw new ForbiddenException();
         }
-        return NoContent();
+        return Ok(await _levelProgressServices.List());
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetLevelProgress(Guid id)
     {
         return Ok(await _levelProgressServices.GetById(id));
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> CreateLevelProgress([FromBody] CreateLevelProgressRequest levelProg)
-    {
-        await _characterRepo.FoundOrThrowAsync(levelProg.CharacterId, Constants.Entities.CHARACTER + Constants.Errors.NOT_EXIST_ERROR);
-        await _levelRepo.FoundOrThrowAsync(levelProg.LevelId, Constants.Entities.LEVEL + Constants.Errors.NOT_EXIST_ERROR);
-        var newLevelProg = new LevelProgressEntity();
-        Mapper.Map(levelProg, newLevelProg);
-        await _levelProgressServices.Create(newLevelProg);
-        return CreatedAtAction(nameof(GetLevelProgress), new { id = newLevelProg.Id }, newLevelProg);
     }
 
     [HttpPut("{id}")]

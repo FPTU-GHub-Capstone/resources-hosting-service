@@ -1,5 +1,6 @@
 ﻿using DomainLayer.Constants;
 using DomainLayer.Entities;
+using DomainLayer.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using RepositoryLayer.Repositories;
 using ServiceLayer.Business;
@@ -12,38 +13,26 @@ public class GameServersController : BaseController
 {
     private readonly IGameServerServices _gameServerServices;
     private readonly IGenericRepository<GameServerEntity> _gameServerRepo;
-    private readonly IGenericRepository<GameEntity> _gameRepo;
-    public GameServersController(IGameServerServices gameServerServices, IGenericRepository<GameServerEntity> gameServerRepo, IGenericRepository<GameEntity> gameRepo)
+    public GameServersController(IGameServerServices gameServerServices, IGenericRepository<GameServerEntity> gameServerRepo)
     {
         _gameServerServices = gameServerServices;
         _gameServerRepo = gameServerRepo;
-        _gameRepo = gameRepo;
     }
 
     [HttpGet]
     public async Task<IActionResult> GetGameServers()
     {
-        if (CurrentScp.Contains("gameservers:*:get"))
+        if (!CurrentScp.Contains("gameservers:*:get"))
         {
-            return Ok(await _gameServerServices.List());
+            throw new ForbiddenException();
         }
-        return NoContent();
+        return Ok(await _gameServerServices.List());
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetGameServer(Guid id)
     {
         return Ok(await _gameServerServices.GetById(id));
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> CreateGameServer([FromBody] CreateGameServerRequest gameServer)
-    {
-        await _gameRepo.FoundOrThrowAsync(gameServer.GameId, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR);
-        var newGameServer = new GameServerEntity();
-        Mapper.Map(gameServer, newGameServer);
-        await _gameServerServices.Create(newGameServer);
-        return CreatedAtAction(nameof(GetGameServer), new { id = newGameServer.Id }, newGameServer);
     }
 
     [HttpPut("{id}")]

@@ -15,7 +15,5 @@ namespace WebApiLayer.UserFeatures.Requests
         public string Description { get; set; }
         [Required]
         public JsonObject BaseProperties { get; set; } //JSON
-        [Required]
-        public Guid GameId { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using DomainLayer.Constants;
 using DomainLayer.Entities;
+using DomainLayer.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using RepositoryLayer.Repositories;
 using ServiceLayer.Business;
@@ -12,22 +13,20 @@ public class AssetTypesController : BaseController
 {
     private readonly IAssetTypeServices _assetTypeServices;
     private readonly IGenericRepository<AssetTypeEntity> _assetTypeRepo;
-    private readonly IGenericRepository<GameEntity> _gameRepo;
-    public AssetTypesController(IAssetTypeServices assetTypeServices, IGenericRepository<AssetTypeEntity> assetTypeRepo, IGenericRepository<GameEntity> gameRepo)
+    public AssetTypesController(IAssetTypeServices assetTypeServices, IGenericRepository<AssetTypeEntity> assetTypeRepo)
     {
         _assetTypeServices = assetTypeServices;
         _assetTypeRepo = assetTypeRepo;
-        _gameRepo = gameRepo;
     }
 
     [HttpGet]
     public async Task<IActionResult> GetAssetTypes()
     {
-        if (CurrentScp.Contains("assettypes:*:get"))
+        if (!CurrentScp.Contains("assettypes:*:get"))
         {
-            return Ok(await _assetTypeServices.List());
+            throw new ForbiddenException();
         }
-        return NoContent();
+        return Ok(await _assetTypeServices.List());
     }
 
     [HttpGet("{id}")]
@@ -35,16 +34,6 @@ public class AssetTypesController : BaseController
     {
         var assetType = await _assetTypeServices.GetById(id);
         return Ok(assetType);
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> CreateAssetType([FromBody] CreateAssetTypeRequest assetType)
-    {
-        await _gameRepo.FoundOrThrowAsync(assetType.GameId, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR);
-        var cAssetType = new AssetTypeEntity();
-        Mapper.Map(assetType, cAssetType);
-        await _assetTypeServices.Create(cAssetType);
-        return CreatedAtAction(nameof(GetAssetType), new { id = cAssetType.Id }, cAssetType);
     }
 
     [HttpPut("{id}")]

@@ -1,5 +1,6 @@
 ﻿using DomainLayer.Constants;
 using DomainLayer.Entities;
+using DomainLayer.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using RepositoryLayer.Repositories;
 using ServiceLayer.Business;
@@ -24,15 +25,15 @@ public class LevelsController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetLevels([FromQuery] Guid[]? idList)
     {
-        if (CurrentScp.Contains("levels:*:get"))
+        if (!CurrentScp.Contains("levels:*:get"))
         {
-            if (idList != null && idList.Count() > 0)
-            {
-                return Ok(await _levelServices.List(idList));
-            }
-            return Ok(await _levelServices.List());
+            throw new ForbiddenException();
         }
-        return NoContent();
+        if (idList != null && idList.Count() > 0)
+        {
+            return Ok(await _levelServices.List(idList));
+        }
+        return Ok(await _levelServices.List());
     }
 
     [HttpGet("{id}")]
@@ -40,22 +41,6 @@ public class LevelsController : BaseController
     {
         var level = await _levelServices.GetById(id);
         return Ok(level);
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> CreateLevel([FromBody] CreateLevelsRequest[] level)
-    {
-        List<LevelEntity> levelList = new List<LevelEntity>();
-        foreach (var singleLevel in level)
-        {
-            await _gameRepo.FoundOrThrowAsync(singleLevel.GameId, Constants.Entities.GAME +"id " + singleLevel.GameId + " " + Constants.Errors.NOT_EXIST_ERROR);
-            LevelEntity newLevel = new LevelEntity();
-            newLevel.LevelNo = (await _levelRepo.WhereAsync(l => l.GameId == singleLevel.GameId)).Count() + levelList.Count(l=>l.GameId == singleLevel.GameId) + 1;
-            Mapper.Map(singleLevel, newLevel);
-            levelList.Add(newLevel);
-        }
-        await _levelServices.Create(levelList);
-        return CreatedAtAction(nameof(GetLevels), new { ids = levelList.Select(l => l.Id).ToList() }, levelList.ToList());
     }
 
     [HttpPut("{id}")]

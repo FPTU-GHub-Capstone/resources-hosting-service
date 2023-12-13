@@ -9,8 +9,6 @@ namespace WebApiLayer.UserFeatures.Requests
         [Required]
         public string Name { get; set; }
         [Required]
-        public Guid GameId { get; set; }
-        [Required]
         public Guid CharacterId { get; set; }
     }
 }

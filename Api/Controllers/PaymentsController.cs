@@ -1,5 +1,6 @@
 ﻿using DomainLayer.Constants;
 using DomainLayer.Entities;
+using DomainLayer.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using RepositoryLayer.Repositories;
 using ServiceLayer.Business;
@@ -28,29 +29,17 @@ public class PaymentsController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetPayments()
     {
-        if (CurrentScp.Contains("payments:*:get"))
+        if (!CurrentScp.Contains("payments:*:get"))
         {
-            return Ok(await _paymentServices.List());
+            throw new ForbiddenException();
         }
-        return NoContent();
+        return Ok(await _paymentServices.List());
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetPayment(Guid id)
     {
         return Ok(await _paymentServices.List());
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> CreatePayment([FromBody] CreatePaymentRequest payment)
-    {
-        await _characterRepo.FoundOrThrowAsync(payment.CharacterId, Constants.Entities.CHARACTER + Constants.Errors.NOT_EXIST_ERROR);
-        await _userRepo.FoundOrThrowAsync(payment.UserId, Constants.Entities.USER + Constants.Errors.NOT_EXIST_ERROR);
-        await _walletRepo.FoundOrThrowAsync(payment.WalletId, Constants.Entities.WALLET + Constants.Errors.NOT_EXIST_ERROR);
-        var newPayment = new PaymentEntity();
-        Mapper.Map(payment, newPayment);
-        await _paymentServices.Create(newPayment);
-        return CreatedAtAction(nameof(GetPayment), new { id = newPayment.Id }, newPayment);
     }
 
     [HttpPut("{id}")]

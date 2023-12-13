@@ -12,7 +12,5 @@ namespace WebApiLayer.UserFeatures.Requests
         public string Location { get; set; }
         [Required]
         public string ArtifactUrl { get; set; }
-        [Required]
-        public Guid GameId { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace DomainLayer.Entities;
 
@@ -17,5 +18,6 @@ public class CharacterEntity : BaseEntity
     public Guid GameServerId { get; set; }
     public GameServerEntity GameServer { get; set; }
     //1 Character - M CharacterAsset
+    [JsonIgnore]
     public virtual ICollection<CharacterAssetEntity>? CharacterAssets { get; set; }
 }

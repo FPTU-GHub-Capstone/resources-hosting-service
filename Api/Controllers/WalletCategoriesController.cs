@@ -1,5 +1,6 @@
 ﻿using DomainLayer.Constants;
 using DomainLayer.Entities;
+using DomainLayer.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using RepositoryLayer.Repositories;
 using ServiceLayer.Business;
@@ -24,27 +25,17 @@ public class WalletCategoriesController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetWalletCategories()
     {
-        if (CurrentScp.Contains("walletcategories:*:get"))
+        if (!CurrentScp.Contains("walletcategories:*:get"))
         {
-            return Ok(await _walletCategoryServices.List());
+            throw new ForbiddenException();
         }
-        return NoContent();
+        return Ok(await _walletCategoryServices.List());
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetWalletCategory(Guid id)
     {
         return Ok(await _walletCategoryServices.GetById(id));
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> CreateWalletCategory([FromBody] CreateWalletCategoryRequest walCat)
-    {
-        await _gameRepo.FoundOrThrowAsync(walCat.GameId, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR);
-        var newWalCat = new WalletCategoryEntity();
-        Mapper.Map(walCat, newWalCat);
-        await _walletCategoryServices.Create(newWalCat);
-        return CreatedAtAction(nameof(GetWalletCategory), new { id = newWalCat.Id }, newWalCat);
     }
 
     [HttpPut("{id}")]

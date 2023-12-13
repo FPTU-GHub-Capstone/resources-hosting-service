@@ -13,6 +13,4 @@ public class CreateAttributeGroupRequest : IMapTo<AttributeGroupEntity>
     public string Name { get; set; }
     [Required]
     public JsonObject Effect { get; set; }
-    [Required]
-    public Guid GameId { get; set; }
 }
