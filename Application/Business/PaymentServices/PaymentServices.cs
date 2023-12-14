@@ -24,6 +24,12 @@ public class PaymentServices : IPaymentServices
     {
         return await _paymentRepo.ListAsync();
     }
+
+    public async Task<PaymentEntity> GetById(Guid id)
+    {
+        return await _paymentRepo.FoundOrThrowAsync(id,
+            Constants.Entities.PAYMENT + Constants.Errors.NOT_EXIST_ERROR); ;
+    }
     public async Task<ICollection<PaymentEntity>> ListPaymentByUserId(Guid id)
     {
         return await _paymentRepo.WhereAsync(c => c.UserId == id);

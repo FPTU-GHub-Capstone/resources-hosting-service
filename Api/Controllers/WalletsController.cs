@@ -31,27 +31,4 @@ public class WalletsController : BaseController
         RequiredScope("wallets:*:get");
         return Ok(await _walletServices.List());
     }
-
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetWallet(Guid id)
-    {
-        return Ok(await _walletServices.GetById(id));
-    }
-
-    [HttpPut("{id}")]
-    public async Task<IActionResult> Put(Guid id, [FromBody] UpdateWalletRequest wallet)
-    {
-        var updateWallet = await _walletRepo.FoundOrThrowAsync(id, Constants.Entities.WALLET + Constants.Errors.NOT_EXIST_ERROR);
-        Mapper.Map(wallet, updateWallet);
-        await _walletServices.Update(updateWallet);
-        return Ok(updateWallet);
-    }
-
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(Guid id)
-    {
-        await _walletRepo.FoundOrThrowAsync(id, Constants.Entities.WALLET + Constants.Errors.NOT_EXIST_ERROR);
-        await _walletServices.Delete(id);
-        return NoContent();
-    }
 }

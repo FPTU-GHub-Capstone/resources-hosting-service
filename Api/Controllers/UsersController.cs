@@ -15,17 +15,12 @@ public class UsersController : BaseController
     private readonly ICharacterServices _characterServices;
     private readonly IGameUserServices _gameUserServices;
     private readonly IPaymentServices _paymentServices;
-    private readonly IGenericRepository<UserEntity> _userRepo;
-    private readonly IGenericRepository<GameUserEntity> _gameUserRepo;
-    public UsersController(IUserServices userServices, IGenericRepository<UserEntity> userRepo
-        , IGameUserServices gameUserServices, IPaymentServices paymentServices
-        , IGenericRepository<GameUserEntity> gameUserRepo, ICharacterServices characterServices)
+    public UsersController(IUserServices userServices, IGameUserServices gameUserServices
+        , IPaymentServices paymentServices, ICharacterServices characterServices)
     {
         _userServices = userServices;
-        _userRepo = userRepo;
         _gameUserServices = gameUserServices;
         _paymentServices = paymentServices;
-        _gameUserRepo = gameUserRepo;
         _characterServices = characterServices;
     }
     [HttpGet]
@@ -33,12 +28,6 @@ public class UsersController : BaseController
     { 
         RequiredScope("users:*:get");
         return Ok(await _userServices.List(email));
-    }
-
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetUser(Guid id)
-    {
-        return Ok(await _userServices.GetById(id));
     }
 
     [HttpGet("{id}/characters")]
@@ -57,41 +46,5 @@ public class UsersController : BaseController
     public async Task<IActionResult> GetPaymentByUserID(Guid id)
     {
         return Ok(await _paymentServices.ListPaymentByUserId(id));
-    }
-
-    [HttpPost("{id}/add-game")]
-    public async Task<IActionResult> CreateGameUser(Guid id, [FromQuery] Guid GameId)
-    {
-        var gameUser = new GameUserEntity {
-            UserId = id,
-            GameId = GameId
-        };
-        await _gameUserServices.Create(gameUser);
-        return CreatedAtAction(nameof(GetUser), new {id = id}, gameUser);
-    }
-
-    [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateUser(Guid id, [FromBody] UpdateUserRequest user)
-    {
-        var updateUser = await _userRepo.FoundOrThrowAsync(id, Constants.Entities.USER + Constants.Errors.NOT_EXIST_ERROR);
-        Mapper.Map(user, updateUser);
-        await _userServices.Update(updateUser);
-        return Ok(updateUser);
-    }
-
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteUser(Guid id)
-    {
-        await _userRepo.FoundOrThrowAsync(id, Constants.Entities.USER + Constants.Errors.NOT_EXIST_ERROR);
-        await _userServices.Delete(id);
-        return NoContent();
-    }
-
-    [HttpDelete("{id}/delete-game")]
-    public async Task<IActionResult> DeleteGameUser(Guid id)
-    {
-        await _gameUserRepo.FoundOrThrowAsync(id, Constants.Errors.NOT_EXIST_ERROR);
-        await _gameUserServices.Delete(id);
-        return NoContent();
     }
 }
