@@ -15,11 +15,9 @@ namespace WebApiLayer.Controllers;
 public class AttributeGroupController : BaseController
 {
     private readonly IAttributeGroupServices _attributeServices;
-    private readonly IGenericRepository<AttributeGroupEntity> _attributeRepo;
-    public AttributeGroupController(IAttributeGroupServices attributeServices, IGenericRepository<AttributeGroupEntity> attributeRepo)
+    public AttributeGroupController(IAttributeGroupServices attributeServices)
     {
         _attributeServices = attributeServices;
-        _attributeRepo = attributeRepo;
     }
     [HttpGet]
     public async Task<IActionResult> GetAttributeGroups()
@@ -35,29 +33,5 @@ public class AttributeGroupController : BaseController
             attGrpList.Add(attGrp);
         }
         return Ok(attGrpList);
-    }
-
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetAttributeGroup(Guid id)
-    {
-        var attribute = await _attributeServices.GetById(id);
-        return Ok(attribute);
-    }
-
-    [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateAttributeGroup(Guid id, [FromBody] UpdateAttributeGroupRequest attributeGroup)
-    {
-        var attGrpEnt = await _attributeRepo.FoundOrThrowAsync(id, Constants.Entities.ATTRIBUTE_GROUP + Constants.Errors.NOT_EXIST_ERROR);
-        Mapper.Map(attributeGroup, attGrpEnt);
-        await _attributeServices.Update(attGrpEnt);
-        return Ok(attGrpEnt);
-    }
-
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteAttributeGroup(Guid id)
-    {
-        await _attributeRepo.FoundOrThrowAsync(id, Constants.Entities.ATTRIBUTE_GROUP + Constants.Errors.NOT_EXIST_ERROR);
-        await _attributeServices.Delete(id);
-        return NoContent();
     }
 }

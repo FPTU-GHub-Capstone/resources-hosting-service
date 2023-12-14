@@ -14,40 +14,14 @@ namespace WebApiLayer.Controllers;
 public class CharacterAssetsController : BaseController
 {
     private readonly ICharacterAssetServices _characterAssetServices;
-    private readonly IGenericRepository<CharacterAssetEntity> _characterAssetRepo;
-    public CharacterAssetsController(ICharacterAssetServices characterAssetServices, IGenericRepository<CharacterAssetEntity> characterAssetRepo)
+    public CharacterAssetsController(ICharacterAssetServices characterAssetServices)
     {
         _characterAssetServices = characterAssetServices;
-        _characterAssetRepo = characterAssetRepo;
     }
     [HttpGet]
     public async Task<IActionResult> GetCharacterAssets([FromQuery] Guid? characterId)
     {
         RequiredScope("characterassets:*:get");
         return Ok(await _characterAssetServices.List(characterId));
-    }
-
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetCharacterAsset(Guid id)
-    {
-        var character = await _characterAssetServices.GetById(id);
-        return Ok(character);
-    }
-
-    [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateCharacterAsset(Guid id, [FromBody] UpdateCharacterAssetRequest charAss)
-    {
-        var updateCharAss = await _characterAssetRepo.FoundOrThrowAsync(id, Constants.Entities.CHARACTER_ASSET + Constants.Errors.NOT_EXIST_ERROR);
-        Mapper.Map(charAss, updateCharAss);
-        await _characterAssetServices.Update(updateCharAss);
-        return Ok(updateCharAss);
-    }
-
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteCharacterAsset(Guid id)
-    {
-        await _characterAssetRepo.FoundOrThrowAsync(id, Constants.Entities.CHARACTER_ASSET + Constants.Errors.NOT_EXIST_ERROR);
-        await _characterAssetServices.Delete(id);
-        return NoContent();
     }
 }

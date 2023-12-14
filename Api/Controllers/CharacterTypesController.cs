@@ -35,28 +35,4 @@ public class CharacterTypesController : BaseController
         }
         return Ok(ctListResponse);
     }
-
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetCharacterType(Guid id)
-    {
-        var ct = await _characterTypeServices.GetById(id);
-        return Ok(ct);
-    }
-
-    [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateCharacterType(Guid id, [FromBody] UpdateCharacterTypeRequest charType)
-    {
-        var ct = await _characterTypeRepo.FoundOrThrowAsync(id, Constants.Entities.CHARACTER_TYPE + Constants.Errors.NOT_EXIST_ERROR);
-        Mapper.Map(charType, ct);
-        await _characterTypeServices.Update(ct);
-        return Ok(ct);
-    }
-
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteCharacterType(Guid id)
-    {
-        await _characterTypeRepo.FoundOrThrowAsync(id, Constants.Entities.CHARACTER_TYPE + Constants.Errors.NOT_EXIST_ERROR);
-        await _characterTypeServices.Delete(id);
-        return NoContent();
-    }
 }

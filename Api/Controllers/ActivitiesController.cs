@@ -14,39 +14,14 @@ namespace WebApiLayer.Controllers;
 public class ActivitiesController : BaseController
 {
     private readonly IActivityServices _activityServices;
-    private readonly IGenericRepository<ActivityEntity> _activityRepo;
-    public ActivitiesController(IActivityServices activityServices, IGenericRepository<ActivityEntity> activityRepo)
+    public ActivitiesController(IActivityServices activityServices)
     {
         _activityServices = activityServices;
-        _activityRepo = activityRepo;
     }
     [HttpGet]
     public async Task<IActionResult> GetActivitíes()
     {
         RequiredScope("activities:*:get");
         return Ok(await _activityServices.List());
-    }
-
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetActivity(Guid id)
-    {
-        return Ok(await _activityServices.Search(id));
-    }
-
-    [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateActivity(Guid id, [FromBody] UpdateActivityRequest act)
-    {
-        var updateAct = await _activityRepo.FoundOrThrowAsync(id, Constants.Entities.ACTIVITY + Constants.Errors.NOT_EXIST_ERROR);
-        Mapper.Map(act, updateAct);
-        await _activityServices.Update(updateAct);
-        return Ok(updateAct);
-    }
-
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteActivity(Guid id)
-    {
-        await _activityRepo.FoundOrThrowAsync(id, Constants.Entities.ACTIVITY + Constants.Errors.NOT_EXIST_ERROR);
-        await _activityServices.Delete(id);
-        return NoContent();
     }
 }
