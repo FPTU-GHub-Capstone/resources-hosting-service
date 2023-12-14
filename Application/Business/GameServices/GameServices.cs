@@ -8,11 +8,42 @@ namespace ServiceLayer.Business;
 
 public class GameServices : IGameServices
 {
-    public readonly IGenericRepository<GameEntity> _gameRepo;
+    private readonly IGenericRepository<GameEntity> _gameRepo;
+    private readonly IActivityServices _activityServices;
+    private readonly IActivityTypeServices _activityTypeServices;
+    private readonly IAssetServices _assetServices;
+    private readonly IAssetTypeServices _assetTypeServices;
+    private readonly ICharacterAssetServices _characterAssetServices;
+    private readonly ICharacterServices _characterServices;
+    private readonly ICharacterTypeServices _characterTypeServices;
+    private readonly IGameServerServices _gameServerServices;
+    private readonly ILevelProgressServices _levelProgressServices;
+    private readonly ILevelServices _levelServices;
+    private readonly ITransactionServices _transactionServices;
+    private readonly IWalletCategoryServices _walletCategoryServices;
+    private readonly IWalletServices _walletServices;
 
-    public GameServices(IGenericRepository<GameEntity> gameRepo)
+    public GameServices(IGenericRepository<GameEntity> gameRepo, 
+        IActivityServices activityServices, IActivityTypeServices activityTypeServices
+        , IAssetServices assetServices, IAssetTypeServices assetTypeServices
+        , ICharacterServices characterServices, ICharacterTypeServices characterTypeServices
+        , IGameServerServices gameServerServices, ILevelProgressServices levelProgressServices
+        , ILevelServices levelServices, ITransactionServices transactionServices
+        , IWalletCategoryServices walletCategoryServices, IWalletServices walletServices)
     {
         _gameRepo = gameRepo;
+        _activityServices = activityServices;
+        _activityTypeServices = activityTypeServices;
+        _assetTypeServices = assetTypeServices;
+        _assetServices = assetServices;
+        _characterServices = characterServices;
+        _characterTypeServices = characterTypeServices;
+        _gameServerServices = gameServerServices;
+        _levelProgressServices = levelProgressServices;
+        _levelServices = levelServices;
+        _transactionServices = transactionServices;
+        _walletCategoryServices = walletCategoryServices;
+        _walletServices = walletServices;
     }
     public async Task<ICollection<GameEntity>> List()
     {
@@ -35,6 +66,21 @@ public class GameServices : IGameServices
             }
         }
         return result;
+    }
+    public async Task<int> CountRecord(Guid id)
+    {
+        return (await _activityServices.ListActivitiesByGameId(id)).Count()
+            + (await _activityTypeServices.ListActTypesByGameId(id)).Count()
+            + (await _assetTypeServices.ListAssTypesByGameId(id)).Count()
+            + (await _assetServices.ListAssetsByGameId(id)).Count()
+            + (await _characterServices.ListCharByGameId(id)).Count()
+            + (await _characterTypeServices.ListCharTypesByGameId(id)).Count()
+            + (await _gameServerServices.ListServersByGameId(id)).Count()
+            + (await _levelServices.ListLevelsByGameId(id)).Count()
+            + (await _levelProgressServices.ListLevelProgByGameId(id)).Count()
+            + (await _transactionServices.ListTransactionsByGameId(id)).Count()
+            + (await _walletCategoryServices.ListWalCatsByGameId(id)).Count()
+            + (await _walletServices.ListWalletsByGameId(id)).Count();
     }
     public async Task Create(GameEntity game)
     {

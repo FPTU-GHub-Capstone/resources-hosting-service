@@ -6,8 +6,8 @@ namespace ServiceLayer.Business;
 
 public class AttributeGroupServices : IAttributeGroupServices
 {
-    public readonly IGenericRepository<AttributeGroupEntity> _attributeRepo;
-    public AttributeGroupServices(IGenericRepository<AttributeGroupEntity> attributeRepo)
+    private readonly IGenericRepository<AttributeGroupEntity> _attributeRepo;
+    public AttributeGroupServices(IGenericRepository<AttributeGroupEntity> attributeRepo, IGameServices gameService)
     {
         _attributeRepo = attributeRepo;
     }
@@ -18,6 +18,11 @@ public class AttributeGroupServices : IAttributeGroupServices
     public async Task<AttributeGroupEntity> GetById(Guid attributeGroupid)
     {
         return await _attributeRepo.FoundOrThrowAsync(attributeGroupid, Constants.Entities.ATTRIBUTE_GROUP + Constants.Errors.NOT_EXIST_ERROR);
+    }
+
+    public async Task<ICollection<AttributeGroupEntity>> ListAttributeGroupsByGameId(Guid id)
+    {
+        return await _attributeRepo.WhereAsync(x => x.GameId.Equals(id));
     }
     public async Task Create(AttributeGroupEntity attributeGroup){
         await _attributeRepo.CreateAsync(attributeGroup);

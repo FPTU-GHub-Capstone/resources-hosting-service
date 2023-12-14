@@ -2,6 +2,7 @@
 using DomainLayer.Entities;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Nodes;
 using WebApiLayer.Mappings;
 
 namespace WebApiLayer.UserFeatures.Requests
@@ -10,6 +11,6 @@ namespace WebApiLayer.UserFeatures.Requests
     {
         public string? Name { get; set; }
         public string? Description { get; set; }
-        public string? BaseProperties { get; set; }
+        public JsonObject? BaseProperties { get; set; }
     }
 }

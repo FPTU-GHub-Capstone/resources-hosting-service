@@ -55,27 +55,15 @@ public abstract class BaseController : ControllerBase
         return JsonConvert.DeserializeObject<T>(stringData); ;
     }
 
-    protected void CheckGetGamePermission(Guid gameId)
+    protected void RequiredScope(params string[] scope)
     {
-        if (!CurrentScp.Contains("games:*:get") && !CurrentScp.Contains($"games:{gameId}:get"))
+        foreach (var scp in scope)
         {
-            throw new ForbiddenException();
+            if (CurrentScp.Contains(scp))
+            {
+                return;
+            }
         }
-    }
-
-    protected void CheckUpdateGamePermission(Guid gameId)
-    {
-        if (!CurrentScp.Contains("games:*:update") && !CurrentScp.Contains($"games:{gameId}:update"))
-        {
-            throw new ForbiddenException();
-        }
-    }
-
-    protected void CheckDeleteGamePermission(Guid gameId)
-    {
-        if (!CurrentScp.Contains("games:*:delete") && !CurrentScp.Contains($"games:{gameId}:delete"))
-        {
-            throw new ForbiddenException();
-        }
+        throw new ForbiddenException();
     }
 }

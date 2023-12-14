@@ -2,6 +2,7 @@
 using DomainLayer.Entities;
 using DomainLayer.Exceptions;
 using RepositoryLayer.Repositories;
+using System.Security.Cryptography.X509Certificates;
 
 namespace ServiceLayer.Business;
 
@@ -9,10 +10,15 @@ public class LevelProgressServices : ILevelProgressServices
 {
     private readonly IGenericRepository<LevelProgressEntity> _levelProgressRepo;
     private readonly IGenericRepository<LevelEntity> _levelRepo;
-    public LevelProgressServices(IGenericRepository<LevelProgressEntity> levelProgressRepo, IGenericRepository<LevelEntity> levelRepo)
+    private readonly ILevelServices _levelServices;
+    private readonly ICharacterServices _characterServices;
+    public LevelProgressServices(IGenericRepository<LevelProgressEntity> levelProgressRepo, IGenericRepository<LevelEntity> levelRepo
+        , ILevelServices levelServices, ICharacterServices characterServices)
     {
         _levelProgressRepo = levelProgressRepo;
         _levelRepo = levelRepo;
+        _levelServices = levelServices;
+        _characterServices = characterServices;
     }
     public async Task<ICollection<LevelProgressEntity>> List()
     {
@@ -27,6 +33,13 @@ public class LevelProgressServices : ILevelProgressServices
     {
         var levelProgresses =  await _levelProgressRepo.WhereAsync(lP => lP.CharacterId.Equals(charId), "Level");
         return levelProgresses;
+    }
+
+    public async Task<ICollection<LevelProgressEntity>> ListLevelProgByGameId(Guid gameId)
+    {
+        var levelIds = (await _levelServices.ListLevelsByGameId(gameId)).Select(x => x.Id);
+        var characterIds = (await _characterServices.ListCharByGameId(gameId)).Select(x => x.Id);
+        return await _levelProgressRepo.WhereAsync(x => levelIds.Contains(x.LevelId) || characterIds.Contains(x.CharacterId));
     }
     public async Task Create(LevelProgressEntity levelProgress)
     {

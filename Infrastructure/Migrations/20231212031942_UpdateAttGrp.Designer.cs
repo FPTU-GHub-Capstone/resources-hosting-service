@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RepositoryLayer.Contexts;
 
@@ -11,9 +12,10 @@ using RepositoryLayer.Contexts;
 namespace RepositoryLayer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231212031942_UpdateAttGrp")]
+    partial class UpdateAttGrp
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -413,6 +415,9 @@ namespace RepositoryLayer.Migrations
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("GamePlan")
+                        .HasColumnType("int");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -424,12 +429,6 @@ namespace RepositoryLayer.Migrations
 
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("MonthlyReadUnits")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MonthlyWriteUnits")
-                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -586,7 +585,8 @@ namespace RepositoryLayer.Migrations
 
                     b.HasIndex("DeletedAt");
 
-                    b.HasIndex("LevelId");
+                    b.HasIndex("LevelId")
+                        .IsUnique();
 
                     b.ToTable("LevelProgress");
                 });
@@ -1030,8 +1030,8 @@ namespace RepositoryLayer.Migrations
                         .IsRequired();
 
                     b.HasOne("DomainLayer.Entities.LevelEntity", "Level")
-                        .WithMany("LevelProgress")
-                        .HasForeignKey("LevelId")
+                        .WithOne("LevelProgress")
+                        .HasForeignKey("DomainLayer.Entities.LevelProgressEntity", "LevelId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
@@ -1127,7 +1127,8 @@ namespace RepositoryLayer.Migrations
 
             modelBuilder.Entity("DomainLayer.Entities.LevelEntity", b =>
                 {
-                    b.Navigation("LevelProgress");
+                    b.Navigation("LevelProgress")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("DomainLayer.Entities.TransactionEntity", b =>

@@ -1,4 +1,5 @@
-﻿using DomainLayer.Constants;
+﻿using AutoWrapper.Filters;
+using DomainLayer.Constants;
 using DomainLayer.Entities;
 using DomainLayer.Exceptions;
 using RepositoryLayer.Repositories;
@@ -7,11 +8,16 @@ namespace ServiceLayer.Business;
 
 public class CharacterAssetServices : ICharacterAssetServices
 {
-    public readonly IGenericRepository<CharacterAssetEntity> _characterAssetRepo;
-
-    public CharacterAssetServices(IGenericRepository<CharacterAssetEntity> characterAssetRepo)
+    private readonly IGenericRepository<CharacterAssetEntity> _characterAssetRepo;
+    private readonly ICharacterServices _characterServices;
+    private readonly IAssetServices _assetServices;
+   
+    public CharacterAssetServices(IGenericRepository<CharacterAssetEntity> characterAssetRepo, ICharacterServices characterService
+        , IAssetServices assetServices)
     {
         _characterAssetRepo = characterAssetRepo;
+        _characterServices = characterService;
+        _assetServices = assetServices;
     }
     public async Task<ICollection<CharacterAssetEntity>> List(Guid? characterId)
     {
@@ -30,6 +36,13 @@ public class CharacterAssetServices : ICharacterAssetServices
     public async Task<ICollection<CharacterAssetEntity>> ListCharAssetsByCharId(Guid id)
     {
         return await _characterAssetRepo.WhereAsync(cA => cA.CharacterId.Equals(id));
+    }
+
+    public async Task<ICollection<CharacterAssetEntity>> ListCharAssetsByGameId(Guid id)
+    {
+        var characterIds = (await _characterServices.ListCharByGameId(id)).Select(x => x.Id);
+        var assetIds = (await _assetServices.ListAssetsByGameId(id)).Select(x => x.Id);
+        return await _characterAssetRepo.WhereAsync(x => characterIds.Contains(x.CharacterId) || assetIds.Contains(x.AssetsId));
     }
     public async Task Create(CharacterAssetEntity characterAsset)
     {

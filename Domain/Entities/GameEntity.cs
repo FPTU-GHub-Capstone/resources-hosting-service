@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace DomainLayer.Entities;
 
@@ -11,10 +12,12 @@ public class GameEntity : BaseEntity
     public string? Banner { get; set; }
     public int MonthlyWriteUnits { get; set; } = 0;
     public int MonthlyReadUnits{ get; set; } = 0;
-    public bool IsActive { get; set; } = true; 
+    public bool IsActive { get; set; } = true;
 
     // 1 Game - M Activity Type
+    [JsonIgnore]
     public virtual ICollection<ActivityTypeEntity>? ActivityTypes { get; set; }
-    // M Game - M Attribute Group
+    [JsonIgnore]
+    // 1 Game - M Attribute Group
     public virtual ICollection<AttributeGroupEntity>? AttributeGroups { get; set; }
 }

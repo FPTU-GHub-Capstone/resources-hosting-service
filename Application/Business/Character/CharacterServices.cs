@@ -7,11 +7,18 @@ namespace ServiceLayer.Business;
 
 public class CharacterServices : ICharacterServices
 {
-    public readonly IGenericRepository<CharacterEntity> _characterRepo;
+    private readonly IGenericRepository<CharacterEntity> _characterRepo;
+    private readonly IGameServerServices _gameServerService;
+    private readonly ICharacterTypeServices _characterTypeService;
+    private readonly IGameUserServices _gameUserService;
 
-    public CharacterServices(IGenericRepository<CharacterEntity> characterRepo)
+    public CharacterServices(IGenericRepository<CharacterEntity> characterRepo, IGameServerServices gameServerService
+        , ICharacterTypeServices characterTypeService, IGameUserServices gameUserService)
     {
         _characterRepo = characterRepo;
+        _gameServerService = gameServerService;
+        _characterTypeService = characterTypeService;
+        _gameUserService = gameUserService;
     }
     public async Task<ICollection<CharacterEntity>> List()
     {
@@ -25,6 +32,16 @@ public class CharacterServices : ICharacterServices
     public async Task<ICollection<CharacterEntity>> ListCharByUserId(Guid id)
     {
         return await _characterRepo.WhereAsync(c => c.UserId == id);
+    }
+
+    public async Task<ICollection<CharacterEntity>> ListCharByGameId(Guid id)
+    {
+        var gameServerIds = (await _gameServerService.ListServersByGameId(id)).Select(gs => gs.Id);
+        var characterTypeIds = (await _characterTypeService.ListCharTypesByGameId(id)).Select(ct => ct.Id);
+        var userIds = (await _gameUserService.ListUsersByGameId(id)).Select(u => u.Id);
+        return await _characterRepo.WhereAsync(c => gameServerIds.Contains(c.GameServerId) 
+                    || characterTypeIds.Contains(c.CharacterTypeId)
+                    || userIds.Contains(c.UserId));
     }
     public async Task Create(CharacterEntity character)
     {

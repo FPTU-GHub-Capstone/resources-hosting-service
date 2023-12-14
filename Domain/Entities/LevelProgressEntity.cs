@@ -11,7 +11,7 @@ public class LevelProgressEntity : BaseEntity
     //1 Character - M Level Progress
     public Guid CharacterId { get; set; }
     public CharacterEntity Character { get; set; }
-    //1 Level - 1 Level Progress
+    //1 Level - M Level Progress
     public Guid LevelId { get; set; }
     public LevelEntity Level { get; set; }
 

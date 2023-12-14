@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace DomainLayer.Entities;
 
@@ -11,5 +12,6 @@ public class TransactionEntity : BaseEntity
     public Guid WalletId { get; set; }
     public WalletEntity Wallet { get; set; }
     // 1 Transaction - 1 or M Activity
+    [JsonIgnore]
     public virtual ICollection<ActivityEntity>? Activities { get; set; }
 }

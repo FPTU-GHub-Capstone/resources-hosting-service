@@ -7,11 +7,16 @@ namespace ServiceLayer.Business;
 
 public class AssetAttributeServices : IAssetAttributeServices
 {
-    public readonly IGenericRepository<AssetAttributeEntity> _assetAttributeRepo;
+    private readonly IGenericRepository<AssetAttributeEntity> _assetAttributeRepo;
+    private readonly IAssetServices _assetServices;
+    private readonly IAttributeGroupServices _attributeGroupServices;
 
-    public AssetAttributeServices(IGenericRepository<AssetAttributeEntity> assetAttributeRepo)
+    public AssetAttributeServices(IGenericRepository<AssetAttributeEntity> assetAttributeRepo, IAssetServices assetService
+        , IAttributeGroupServices attributeGroupService)
     {
         _assetAttributeRepo = assetAttributeRepo;
+        _assetServices = assetService;
+        _attributeGroupServices = attributeGroupService;
     }
     public async Task<ICollection<AssetAttributeEntity>> List()
     {
@@ -20,6 +25,13 @@ public class AssetAttributeServices : IAssetAttributeServices
     public async Task<AssetAttributeEntity> GetById(Guid assetAttributeId)
     {
         return await _assetAttributeRepo.FoundOrThrowAsync(assetAttributeId, Constants.Entities.ASSET_ATTRIBUTE + Constants.Errors.NOT_EXIST_ERROR);
+    }
+    public async Task<ICollection<AssetAttributeEntity>> ListAssetAttributeByGameId(Guid id)
+    {
+        var assetIds = (await _assetServices.ListAssetsByGameId(id)).Select(x => x.Id);
+        var attributeIds = (await _attributeGroupServices.ListAttributeGroupsByGameId(id)).Select(x => x.Id);
+        return await _assetAttributeRepo.WhereAsync(a=> attributeIds.Contains(a.AttributeGroupId) 
+                                            || assetIds.Contains(a.AssetId));
     }
     public async Task Create(AssetAttributeEntity assetAttribute)
     {

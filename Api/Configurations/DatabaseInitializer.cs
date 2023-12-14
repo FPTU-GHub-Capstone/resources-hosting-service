@@ -12,10 +12,10 @@ public static class DatabaseInitializer
     public static async Task InitializeAsync(ApplicationDbContext dbContext)
     {
         dbContext.Database.EnsureCreated();
-
-        await dbContext.MockAttributeGroup();
+        
         await dbContext.MockUser();
         await dbContext.MockGame();
+        await dbContext.MockAttributeGroup();
         await dbContext.MockGameUser();
         await dbContext.MockGameServer();
         await dbContext.MockAssetType();
@@ -41,6 +41,7 @@ public static class DatabaseInitializer
 
         dynamic attGrp = SeedingServices.LoadJson("ATTRIBUTE_GROUP_MOCK_DATA.json");
 
+        var games = dbContext.Games.ToList();
         int attGrpsLength = attGrp.Count;
         for (int i = 0; i < 20; i++)
         {
@@ -50,6 +51,7 @@ public static class DatabaseInitializer
                 {
                     Name = mockAttGrp.Name,
                     Effect = mockAttGrp.Effect,
+                    GameId = games[_rand.Next(games.Count)].Id,
                     CreatedAt = DateTime.Now,
                     ModifiedAt = DateTime.Now
                 });

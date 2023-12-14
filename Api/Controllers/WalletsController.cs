@@ -1,6 +1,7 @@
 ﻿using AutoWrapper.Filters;
 using DomainLayer.Constants;
 using DomainLayer.Entities;
+using DomainLayer.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using RepositoryLayer.Repositories;
 using ServiceLayer.Business;
@@ -27,40 +28,7 @@ public class WalletsController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetWallets()
     {
+        RequiredScope("wallets:*:get");
         return Ok(await _walletServices.List());
-    }
-
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetWallet(Guid id)
-    {
-        return Ok(await _walletServices.GetById(id));
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> CreateWallet([FromBody] CreateWalletRequest wallet)
-    {
-        await _walletCatRepo.FoundOrThrowAsync(wallet.WalletCategoryId, Constants.Entities.WALLET_CATEGORY + Constants.Errors.NOT_EXIST_ERROR);
-        await _characterRepo.FoundOrThrowAsync(wallet.CharacterId, Constants.Entities.CHARACTER + Constants.Errors.NOT_EXIST_ERROR);
-        var newWallet = new WalletEntity();
-        Mapper.Map(wallet, newWallet);
-        await _walletServices.Create(newWallet);
-        return CreatedAtAction(nameof(GetWallet), new { id = newWallet.Id }, newWallet);
-    }
-
-    [HttpPut("{id}")]
-    public async Task<IActionResult> Put(Guid id, [FromBody] UpdateWalletRequest wallet)
-    {
-        var updateWallet = await _walletRepo.FoundOrThrowAsync(id, Constants.Entities.WALLET + Constants.Errors.NOT_EXIST_ERROR);
-        Mapper.Map(wallet, updateWallet);
-        await _walletServices.Update(updateWallet);
-        return Ok(updateWallet);
-    }
-
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(Guid id)
-    {
-        await _walletRepo.FoundOrThrowAsync(id, Constants.Entities.WALLET + Constants.Errors.NOT_EXIST_ERROR);
-        await _walletServices.Delete(id);
-        return NoContent();
     }
 }

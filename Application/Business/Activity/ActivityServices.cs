@@ -6,11 +6,13 @@ namespace ServiceLayer.Business;
 
 public class ActivityServices : IActivityServices
 {
-    public readonly IGenericRepository<ActivityEntity> _activityRepo;
+    private readonly IGenericRepository<ActivityEntity> _activityRepo;
+    private readonly IActivityTypeServices _activityTypeServices;
     
-    public ActivityServices(IGenericRepository<ActivityEntity> activityRepo)
+    public ActivityServices(IGenericRepository<ActivityEntity> activityRepo, IActivityTypeServices activityTypeService)
     {
         _activityRepo = activityRepo;
+        _activityTypeServices = activityTypeService;
     }
     public async Task<ICollection<ActivityEntity>> List() {
         return await _activityRepo.ListAsync();
@@ -18,6 +20,12 @@ public class ActivityServices : IActivityServices
     public async Task<ActivityEntity> Search(Guid activityId)
     {
         return await _activityRepo.FoundOrThrowAsync(activityId, Constants.Entities.ACTIVITY + Constants.Errors.NOT_EXIST_ERROR);
+    }
+
+    public async Task<ICollection<ActivityEntity>> ListActivitiesByGameId(Guid gameId)
+    {
+        var activityTypeIds = (await _activityTypeServices.ListActTypesByGameId(gameId)).Select(x=>x.Id);
+        return await _activityRepo.WhereAsync(a => activityTypeIds.Contains(a.ActivityTypeId));
     }
     public async Task Create(ActivityEntity activity)
     {

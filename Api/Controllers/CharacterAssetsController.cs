@@ -1,9 +1,12 @@
 ﻿using DomainLayer.Constants;
 using DomainLayer.Entities;
+using DomainLayer.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using RepositoryLayer.Repositories;
 using ServiceLayer.Business;
+using System.Text.Json.Nodes;
 using WebApiLayer.UserFeatures.Requests;
+using WebApiLayer.UserFeatures.Response;
 
 namespace WebApiLayer.Controllers;
 
@@ -11,56 +14,14 @@ namespace WebApiLayer.Controllers;
 public class CharacterAssetsController : BaseController
 {
     private readonly ICharacterAssetServices _characterAssetServices;
-    private readonly IGenericRepository<CharacterAssetEntity> _characterAssetRepo;
-    private readonly IGenericRepository<AssetEntity> _assetRepo;
-    private readonly IGenericRepository<CharacterEntity> _characterRepo;
-    public CharacterAssetsController(ICharacterAssetServices characterAssetServices, IGenericRepository<CharacterAssetEntity> characterAssetRepo
-        , IGenericRepository<AssetEntity> assetRepo, IGenericRepository<CharacterEntity> characterRepo)
+    public CharacterAssetsController(ICharacterAssetServices characterAssetServices)
     {
         _characterAssetServices = characterAssetServices;
-        _characterAssetRepo = characterAssetRepo;
-        _assetRepo = assetRepo;
-        _characterRepo = characterRepo;
     }
     [HttpGet]
     public async Task<IActionResult> GetCharacterAssets([FromQuery] Guid? characterId)
     {
-        var cList = await _characterAssetServices.List(characterId);
-        return Ok(cList);
-    }
-
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetCharacterAsset(Guid id)
-    {
-        var character = await _characterAssetServices.GetById(id);
-        return Ok(character);
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> CreateCharacterAsset([FromBody] CreateCharacterAssetRequest charAss)
-    {
-        await _assetRepo.FoundOrThrowAsync(charAss.AssetsId, Constants.Entities.ASSET + Constants.Errors.NOT_EXIST_ERROR);
-        await _characterRepo.FoundOrThrowAsync(charAss.CharacterId, Constants.Entities.CHARACTER + Constants.Errors.NOT_EXIST_ERROR);
-        var newCharAss = new CharacterAssetEntity();
-        Mapper.Map(charAss, newCharAss);
-        await _characterAssetServices.Create(newCharAss);
-        return CreatedAtAction(nameof(GetCharacterAsset), new { id = newCharAss.Id }, newCharAss);
-    }
-
-    [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateCharacterAsset(Guid id, [FromBody] UpdateCharacterAssetRequest charAss)
-    {
-        var updateCharAss = await _characterAssetRepo.FoundOrThrowAsync(id, Constants.Entities.CHARACTER_ASSET + Constants.Errors.NOT_EXIST_ERROR);
-        Mapper.Map(charAss, updateCharAss);
-        await _characterAssetServices.Update(updateCharAss);
-        return Ok(updateCharAss);
-    }
-
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteCharacterAsset(Guid id)
-    {
-        await _characterAssetRepo.FoundOrThrowAsync(id, Constants.Entities.CHARACTER_ASSET + Constants.Errors.NOT_EXIST_ERROR);
-        await _characterAssetServices.Delete(id);
-        return NoContent();
+        RequiredScope("characterassets:*:get");
+        return Ok(await _characterAssetServices.List(characterId));
     }
 }

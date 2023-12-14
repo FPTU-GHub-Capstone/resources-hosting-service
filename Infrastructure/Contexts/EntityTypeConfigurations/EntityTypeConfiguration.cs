@@ -104,17 +104,16 @@ public class EntityTypeConfiguration :
     //Level Entity
     public void Configure(EntityTypeBuilder<LevelEntity> builder)
     {
-        //1 Level - 1 Level Progress
-        builder
-            .HasOne(l => l.LevelProgress)
-            .WithOne(pId => pId.Level)
-            .HasForeignKey<LevelProgressEntity>(id => id.LevelId)
-            .OnDelete(DeleteBehavior.NoAction);
+
     }
     //Level Progress
     public void Configure(EntityTypeBuilder<LevelProgressEntity> builder)
     {
-
+        builder
+            .HasOne(l => l.Level)
+            .WithMany(l => l.LevelProgress)
+            .HasForeignKey(id => id.LevelId)
+            .OnDelete(DeleteBehavior.NoAction);
     }
     //Payment Entity
     public void Configure(EntityTypeBuilder<PaymentEntity> builder)

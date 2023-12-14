@@ -2,16 +2,22 @@
 using DomainLayer.Entities;
 using DomainLayer.Exceptions;
 using RepositoryLayer.Repositories;
+using System.Threading.Tasks;
 
 namespace ServiceLayer.Business;
 
 public class CharacterAttributeServices : ICharacterAttributeServices
 {
-    public readonly IGenericRepository<CharacterAttributeEntity> _characterAttributeRepo;
+    private readonly IGenericRepository<CharacterAttributeEntity> _characterAttributeRepo;
+    private readonly ICharacterServices _characterServices;
+    private readonly IAttributeGroupServices _attributeGroupServices;
 
-    public CharacterAttributeServices(IGenericRepository<CharacterAttributeEntity> characterAttributeRepo)
+    public CharacterAttributeServices(IGenericRepository<CharacterAttributeEntity> characterAttributeRepo, ICharacterServices characterServices
+        , IAttributeGroupServices attributeGroupServices)
     {
         _characterAttributeRepo = characterAttributeRepo;
+        _characterServices = characterServices;
+        _attributeGroupServices = attributeGroupServices;
     }
     public async Task<ICollection<CharacterAttributeEntity>> List()
     {
@@ -26,6 +32,14 @@ public class CharacterAttributeServices : ICharacterAttributeServices
     public async Task<ICollection<CharacterAttributeEntity>> ListCharAttByCharId(Guid id)
     {
         return await _characterAttributeRepo.WhereAsync(cA => cA.CharacterId.Equals(id));
+    }
+
+    public async Task<ICollection<CharacterAttributeEntity>> ListCharAttByGameId(Guid id)
+    {
+        var characterIds = (await _characterServices.ListCharByGameId(id)).Select(x => x.Id);
+        var attributeGroupIds = (await _attributeGroupServices.ListAttributeGroupsByGameId(id)).Select(x => x.Id);
+        return await _characterAttributeRepo.WhereAsync(c=>characterIds.Contains(c.CharacterId) 
+            || attributeGroupIds.Contains(c.AttributeGroupId));
     }
     public async Task Create(CharacterAttributeEntity characterAttribute)
     {
