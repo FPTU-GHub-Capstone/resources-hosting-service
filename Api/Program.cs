@@ -37,6 +37,7 @@ if (app.Environment.IsDevelopment())
     await app.Services.DbInitializer();
 }
 
+app.UseMiddleware<CorsMiddleware>();
 app.UseLoggingInterceptor();
 app.UseCors(Constants.Http.CORS);
 app.UseAutoWrapper();
