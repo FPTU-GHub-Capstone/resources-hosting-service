@@ -183,6 +183,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> GetActivitiesByGameID([FromRoute] Guid id)
     {
         RequiredScope(
+            "games:*:get",
             $"games:{id}:get", 
             "activities:*:get", 
             $"activities:{id}:get"
@@ -938,7 +939,7 @@ public class GamesController : BaseController
 
     #endregion
     #region Level Progresses
-    [HttpGet("{id}/level-progreses")]
+    [HttpGet("{id}/level-progresses")]
     public async Task<IActionResult> GetLevelProgressesByGameID([FromRoute] Guid id)
     {
         RequiredScope(
@@ -949,7 +950,7 @@ public class GamesController : BaseController
         return Ok(await _levelProgressServices.ListLevelProgByGameId(id));
     }
 
-    [HttpPost("{id}/level-progreses")]
+    [HttpPost("{id}/level-progresses")]
     public async Task<IActionResult> CreateLevelProgress([FromRoute] Guid id, [FromBody] CreateLevelProgressRequest levelProg)
     {
         RequiredScope(
@@ -966,7 +967,7 @@ public class GamesController : BaseController
         return CreatedAtAction(nameof(GetLevelProgress), new { id = id, levelProgressId = newLevelProg.Id }, newLevelProg);
     }
 
-    [HttpGet("{id}/level-progreses/{levelProgressId}")]
+    [HttpGet("{id}/level-progresses/{levelProgressId}")]
     public async Task<IActionResult> GetLevelProgress([FromRoute] Guid id, [FromRoute] Guid levelProgressId)
     {
         RequiredScope(
@@ -977,7 +978,7 @@ public class GamesController : BaseController
         return Ok(await _levelProgressServices.GetById(levelProgressId));
     }
 
-    [HttpPut("{id}/level-progreses/{levelProgressId}")]
+    [HttpPut("{id}/level-progresses/{levelProgressId}")]
     public async Task<IActionResult> UpdateLevelProgress([FromRoute] Guid id, [FromRoute] Guid levelProgressId, [FromBody] UpdateLevelProgressRequest levelProg)
     {
         RequiredScope(
@@ -991,7 +992,7 @@ public class GamesController : BaseController
         return Ok(updateLevelProg);
     }
 
-    [HttpDelete("{id}/level-progreses/{levelProgressId}")]
+    [HttpDelete("{id}/level-progresses/{levelProgressId}")]
     public async Task<IActionResult> DeleteLevelProgress([FromRoute] Guid id, [FromRoute] Guid levelProgressId)
     {
         RequiredScope(
@@ -1220,7 +1221,7 @@ public class GamesController : BaseController
     {
         RequiredScope(
             $"games:{id}:get",
-            "users:*:get",
+            // "users:*:get",
             $"users:{id}:get"
         );
         return Ok(await _gameUserServices.ListUsersByGameId(id));
@@ -1298,8 +1299,8 @@ public class GamesController : BaseController
     public async Task<IActionResult> DeleteGameUser([FromRoute] Guid id, [FromRoute] Guid userId)
     {
         RequiredScope(
-            "users:*:delete",
-            $"users:{id}:delete"
+            "games:*:update",
+            $"games:{id}:update"
         );
         var gameUser = await _gameUserRepo.FirstOrDefaultAsync(gu => gu.UserId == userId && gu.GameId == id);
         if(gameUser != null)
@@ -1451,7 +1452,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> CreateGame([FromBody] CreateGameRequest newGame)
     {
         RequiredScope(
-            $"games:create"
+            "games:create"
         );
         var gameEntity = new GameEntity();
         Mapper.Map(newGame, gameEntity);
@@ -1464,9 +1465,10 @@ public class GamesController : BaseController
 
     private async Task UpdateUserScope(string gameId)
     {
-        var enpoint = $"{_client.BaseAddress}/users/{CurrentUid}/add-scope";
+        var endpoint = $"{_client.BaseAddress}/users/{CurrentUid}/add-scope";
+        Console.WriteLine(endpoint);
         var jsonData = BuildJsonUpdateScopeReqBody(gameId);
-        using (var request = new HttpRequestMessage(HttpMethod.Put, enpoint))
+        using (var request = new HttpRequestMessage(HttpMethod.Put, endpoint))
         {
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", CurrentToken);
             request.Content = new StringContent(jsonData, Encoding.UTF8, Constants.Http.JSON_CONTENT_TYPE);
