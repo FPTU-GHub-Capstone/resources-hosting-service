@@ -199,6 +199,7 @@ public class GamesController : BaseController
             "activities:create",
             $"activities:{id}:create",
             $"games:{id}:update"
+            //games:*:update
         );
         await _activityTypeRepo.FoundOrThrowAsync(act.ActivityTypeId, Constants.Entities.ACTIVITY_TYPE + Constants.Errors.NOT_EXIST_ERROR);
         await _transactionRepo.FoundOrThrowAsync(act.TransactionId, Constants.Entities.TRANSACTION + Constants.Errors.NOT_EXIST_ERROR);
@@ -1295,6 +1296,15 @@ public class GamesController : BaseController
         var user = new UserEntity();
         Mapper.Map(cUser, user);
         await _userServices.Create(user);
+        #region Add User to Game
+        await UpdateWriteGameRecord(id);
+        var gameUser = new GameUserEntity
+        {
+            UserId = user.Id,
+            GameId = id
+        };
+        await _gameUserServices.Create(gameUser);
+        #endregion
         await UpdateWriteGameRecord(id);
         return CreatedAtAction(nameof(GetUser), new { id = id, userId = user.Id }, user);
     }
