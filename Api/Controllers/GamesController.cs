@@ -188,7 +188,7 @@ public class GamesController : BaseController
             "activities:*:get", 
             $"activities:{id}:get"
         );
-        await UpdateReadGameRecord(id);
+        await UpdateWriteGameRecord(id);
         return Ok(await _activityServices.ListActivitiesByGameId(id));
     }
 
@@ -219,7 +219,7 @@ public class GamesController : BaseController
             "activities:*:get",
             $"activities:{id}:get"
         );
-        await UpdateReadGameRecord(id);
+        await UpdateWriteGameRecord(id);
         return Ok(await _activityServices.Search(activityId));
     }
 
@@ -262,7 +262,7 @@ public class GamesController : BaseController
             "activitytypes:*:get",
             $"activitytypes:{id}:get"
         );
-        await UpdateReadGameRecord(id);
+        await UpdateWriteGameRecord(id);
         return Ok(await _activityTypeServices.ListActTypesByGameId(id));
     }
 
@@ -292,7 +292,7 @@ public class GamesController : BaseController
             "activitytypes:*:get",
             $"activitytypes:{id}:get"
         );
-        await UpdateReadGameRecord(id);
+        await UpdateWriteGameRecord(id);
         return Ok(await _activityTypeServices.GetById(activityTypeId));
     }
 
@@ -335,7 +335,7 @@ public class GamesController : BaseController
             "assetattributes:*:get",
             $"assetattributes:{id}:get"
         );
-        await UpdateReadGameRecord(id);
+        await UpdateWriteGameRecord(id);
         return Ok(await _assetAttributeServices.ListAssetAttributeByGameId(id));
     }
 
@@ -365,7 +365,7 @@ public class GamesController : BaseController
             "assetattributes:*:get",
             $"assetattributes:{id}:get"
         );
-        await UpdateReadGameRecord(id);
+        await UpdateWriteGameRecord(id);
         return Ok(await _assetAttributeServices.GetById(assetAttributeId));
     }
 
@@ -408,7 +408,7 @@ public class GamesController : BaseController
             "assets:*:get",
             $"assets:{id}:get"
         );
-        await UpdateReadGameRecord(id);
+        await UpdateWriteGameRecord(id);
         return Ok(await _assetServices.ListAssetsByGameId(id));
     }
 
@@ -437,7 +437,7 @@ public class GamesController : BaseController
             "assets:*:get",
             $"assets:{id}:get"
         );
-        await UpdateReadGameRecord(id);
+        await UpdateWriteGameRecord(id);
         return Ok(await _assetServices.GetById(assetId));
     }
 
@@ -481,7 +481,7 @@ public class GamesController : BaseController
             "assettypes:*:get",
             $"assettypes:{id}:get"
         );
-        await UpdateReadGameRecord(id);
+        await UpdateWriteGameRecord(id);
         return Ok(await _assetTypeServices.ListAssTypesByGameId(id));
     }
 
@@ -510,7 +510,7 @@ public class GamesController : BaseController
             "assettypes:*:get",
             $"assettypes:{id}:get"
         );
-        await UpdateReadGameRecord(id);
+        await UpdateWriteGameRecord(id);
         return Ok(await _assetTypeServices.GetById(assetTypeId));
     }
 
@@ -563,7 +563,7 @@ public class GamesController : BaseController
             agResponse.Effect = JsonObject.Parse(ag.Effect);
             attGrpListResponse.Add(agResponse);
         }
-        await UpdateReadGameRecord(id);
+        await UpdateWriteGameRecord(id);
         return Ok(attGrpListResponse);
     }
 
@@ -597,7 +597,7 @@ public class GamesController : BaseController
         var agResponse = new AttributeGroupResponse();
         Mapper.Map(attribute, agResponse);
         agResponse.Effect = JsonObject.Parse(attribute.Effect);
-        await UpdateReadGameRecord(id);
+        await UpdateWriteGameRecord(id);
         return Ok(agResponse);
     }
 
@@ -640,7 +640,7 @@ public class GamesController : BaseController
             "characterassets:*:get",
             $"characterassets:{id}:get"
         );
-        await UpdateReadGameRecord(id);
+        await UpdateWriteGameRecord(id);
         return Ok(await _characterAssetServices.ListCharAssetsByGameId(id));
     }
 
@@ -670,7 +670,7 @@ public class GamesController : BaseController
             "characterassets:*:get",
             $"characterassets:{id}:get"
         );
-        await UpdateReadGameRecord(id);
+        await UpdateWriteGameRecord(id);
         return Ok(await _characterAssetServices.GetById(characterAssetId));
     }
 
@@ -713,7 +713,7 @@ public class GamesController : BaseController
             "characterattributes:*:get",
             $"characterattributes:{id}:get"
         );
-        await UpdateReadGameRecord(id);
+        await UpdateWriteGameRecord(id);
         return Ok(await _characterAttributeServices.ListCharAttByGameId(id));
     }
 
@@ -743,7 +743,7 @@ public class GamesController : BaseController
             "characterattributes:*:get",
             $"characterattributes:{id}:get"
         );
-        await UpdateReadGameRecord(id);
+        await UpdateWriteGameRecord(id);
         return Ok(await _characterAttributeServices.GetById(characterAttributeId));
     }
 
@@ -786,7 +786,7 @@ public class GamesController : BaseController
             "characters:*:get",
             $"characters:{id}:get"
         );
-        await UpdateReadGameRecord(id);
+        await UpdateWriteGameRecord(id);
         return Ok(await _characterServices.ListCharByGameId(id));
     }
 
@@ -817,7 +817,7 @@ public class GamesController : BaseController
             "characters:*:get",
             $"characters:{id}:get"
         );
-        await UpdateReadGameRecord(id);
+        await UpdateWriteGameRecord(id);
         return Ok(await _characterServices.GetById(characterId));
     }
 
@@ -869,7 +869,7 @@ public class GamesController : BaseController
             ctResponse.BaseProperties = JsonObject.Parse(ct.BaseProperties);
             ctListResponse.Add(ctResponse);
         }
-        await UpdateReadGameRecord(id);
+        await UpdateWriteGameRecord(id);
         return Ok(ctListResponse);
     }
 
@@ -903,7 +903,7 @@ public class GamesController : BaseController
         var ctResponse = new CharacterTypeResponse();
         Mapper.Map(ct, ctResponse);
         ctResponse.BaseProperties = JsonObject.Parse(ct.BaseProperties);
-        await UpdateReadGameRecord(id);
+        await UpdateWriteGameRecord(id);
         return Ok(ctResponse);
     }
 
@@ -946,7 +946,7 @@ public class GamesController : BaseController
             "gameservers:*:get",
             $"gameservers:{id}:get"
         );
-        await UpdateReadGameRecord(id);
+        await UpdateWriteGameRecord(id);
         return Ok(await _gameServerServices.ListServersByGameId(id));
     }
 
@@ -975,7 +975,7 @@ public class GamesController : BaseController
             "gameservers:*:get",
             $"gameservers:{id}:get"
         );
-        await UpdateReadGameRecord(id);
+        await UpdateWriteGameRecord(id);
         return Ok(await _gameServerServices.GetById(gameServerId));
     }
 
@@ -1019,7 +1019,7 @@ public class GamesController : BaseController
             "levelprogresses:*:get",
             $"levelprogresses:{id}:get"
         );
-        await UpdateReadGameRecord(id);
+        await UpdateWriteGameRecord(id);
         return Ok(await _levelProgressServices.ListLevelProgByGameId(id));
     }
 
@@ -1049,7 +1049,7 @@ public class GamesController : BaseController
             "levelprogresses:*:get",
             $"levelprogresses:{id}:get"
         );
-        await UpdateReadGameRecord(id);
+        await UpdateWriteGameRecord(id);
         return Ok(await _levelProgressServices.GetById(levelProgressId));
     }
 
@@ -1092,7 +1092,7 @@ public class GamesController : BaseController
             "levels:*:get",
             $"levels:{id}:get"
         );
-        await UpdateReadGameRecord(id);
+        await UpdateWriteGameRecord(id);
         return Ok(await _levelServices.ListLevelsByGameId(id));
     }
 
@@ -1130,7 +1130,7 @@ public class GamesController : BaseController
            "levels:*:get",
            $"levels:{id}:get"
         );
-        await UpdateReadGameRecord(id);
+        await UpdateWriteGameRecord(id);
         return Ok(await _levelServices.GetById(levelId));
     }
 
@@ -1173,7 +1173,7 @@ public class GamesController : BaseController
             "payments:*:get",
             $"payments:{id}:get"
         );
-        await UpdateReadGameRecord(id);
+        await UpdateWriteGameRecord(id);
         return Ok(await _paymentServices.ListPaymentByGameId(id));
     }
 
@@ -1204,7 +1204,7 @@ public class GamesController : BaseController
            "payments:*:get",
            $"payments:{id}:get"
         );
-        await UpdateReadGameRecord(id);
+        await UpdateWriteGameRecord(id);
         return Ok(await _paymentServices.GetById(paymentId));
     }
 
@@ -1247,7 +1247,7 @@ public class GamesController : BaseController
             "transactions:*:get",
             $"transactions:{id}:get"
         );
-        await UpdateReadGameRecord(id);
+        await UpdateWriteGameRecord(id);
         return Ok(await _transactionServices.ListTransactionsByGameId(id));
     }
 
@@ -1276,7 +1276,7 @@ public class GamesController : BaseController
             "transactions:*:get",
             $"transactions:{id}:get"
         );
-        await UpdateReadGameRecord(id);
+        await UpdateWriteGameRecord(id);
         return Ok(await _transactionServices.GetById(transactionId));
     }
 
@@ -1319,7 +1319,7 @@ public class GamesController : BaseController
              "users:*:get",
             $"users:{id}:get"
         );
-        await UpdateReadGameRecord(id);
+        await UpdateWriteGameRecord(id);
         return Ok(await _gameUserServices.ListUsersByGameId(id));
     }
 
@@ -1356,7 +1356,7 @@ public class GamesController : BaseController
            "users:*:get",
            $"users:{id}:get"
        );
-        await UpdateReadGameRecord(id);
+        await UpdateWriteGameRecord(id);
         return Ok(await _userServices.GetById(userId));
     }
 
@@ -1417,7 +1417,7 @@ public class GamesController : BaseController
             "walletcategories:*:get",
             $"walletcategories:{id}:get"
         );
-        await UpdateReadGameRecord(id);
+        await UpdateWriteGameRecord(id);
         return Ok(await _walletCategoryServices.ListWalCatsByGameId(id));
     }
 
@@ -1446,7 +1446,7 @@ public class GamesController : BaseController
             "walletcategories:*:get",
             $"walletcategories:{id}:get"
         );
-        await UpdateReadGameRecord(id);
+        await UpdateWriteGameRecord(id);
         return Ok(await _walletCategoryServices.GetById(walletCategoryId));
     }
 
@@ -1489,7 +1489,7 @@ public class GamesController : BaseController
             $"wallets:{id}:get",
             $"games:{id}:get"
         );
-        await UpdateReadGameRecord(id);
+        await UpdateWriteGameRecord(id);
         return Ok(await _walletServices.ListWalletsByGameId(id));
     }
 
@@ -1519,7 +1519,7 @@ public class GamesController : BaseController
             $"wallets:{id}:get",
             $"games:{id}:get"
         );
-        await UpdateReadGameRecord(id);
+        await UpdateWriteGameRecord(id);
         return Ok(await _walletServices.GetById(walletId));
     }
 
@@ -1553,6 +1553,7 @@ public class GamesController : BaseController
     }
     #endregion
 
+    //Not using
     [HttpGet("{id}/count-record")]
     public async Task<IActionResult> CountRecordsByGameId([FromRoute] Guid id)
     {
@@ -1560,7 +1561,7 @@ public class GamesController : BaseController
             "games:*:get",
             $"games:{id}:get"
         );
-        await UpdateReadGameRecord(id);
+        await UpdateWriteGameRecord(id);
         return Ok(await _gameServices.CountRecord(id));
     }
 
