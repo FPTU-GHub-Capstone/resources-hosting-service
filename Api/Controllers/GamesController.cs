@@ -1334,6 +1334,15 @@ public class GamesController : BaseController
         var user = new UserEntity();
         Mapper.Map(cUser, user);
         await _userServices.Create(user);
+        #region Add User to Game
+        await UpdateWriteGameRecord(id);
+        var gameUser = new GameUserEntity
+        {
+            UserId = user.Id,
+            GameId = id
+        };
+        await _gameUserServices.Create(gameUser);
+        #endregion
         await UpdateWriteGameRecord(id);
         return CreatedAtAction(nameof(GetUser), new { id = id, userId = user.Id }, user);
     }
