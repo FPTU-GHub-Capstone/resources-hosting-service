@@ -83,16 +83,15 @@ public class GameServices : IGameServices
             + (await _walletServices.ListWalletsByGameId(id)).Count();
     }
 
-    public async Task<ICollection<GameEntity>> ResetRecord()
+    public async Task ResetRecord(Guid[] gameIds)
     {
-        var gameList = await _gameRepo.ListAsync();
+        var gameList = (await _gameRepo.ListAsync()).Where(x=> gameIds.Contains(x.Id)).ToList();
         foreach(var game in gameList)
         {
             game.MonthlyReadUnits = 0;
             game.MonthlyWriteUnits = 0;
             await _gameRepo.UpdateAsync(game);
         }
-        return gameList;
     }
     public async Task Create(GameEntity game)
     {

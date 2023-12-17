@@ -1633,12 +1633,11 @@ public class GamesController : BaseController
     }
 
     [HttpPut("reset-record")]
-    public async Task<IActionResult> ResetRecord()
+    public async Task<IActionResult> ResetRecord([FromQuery] Guid[] ids)
     {
-        RequiredScope(
-            "games:*:update"
-        );
-        return Ok(await _gameServices.ResetRecord());
+        RequiredScope("games:*:resetrecords");
+        await _gameServices.ResetRecord(ids);
+        return NoContent();
     }
     [NonAction]
     public async Task UpdateWriteGameRecord(Guid id, int? record = 1)
