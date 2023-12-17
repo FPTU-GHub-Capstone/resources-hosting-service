@@ -199,7 +199,6 @@ public class GamesController : BaseController
             "activities:create",
             $"activities:{id}:create",
             $"games:{id}:update"
-            //games:*:update
         );
         await _activityTypeRepo.FoundOrThrowAsync(act.ActivityTypeId, Constants.Entities.ACTIVITY_TYPE + Constants.Errors.NOT_EXIST_ERROR);
         await _transactionRepo.FoundOrThrowAsync(act.TransactionId, Constants.Entities.TRANSACTION + Constants.Errors.NOT_EXIST_ERROR);
@@ -212,9 +211,10 @@ public class GamesController : BaseController
     }
 
     [HttpGet("{id}/activities/{activityId}")]
-    public async Task<IActionResult> GetActivity([FromRoute]Guid id, [FromRoute]Guid activityId)
+    public async Task<IActionResult> GetActivity([FromRoute] Guid id, [FromRoute] Guid activityId)
     {
         RequiredScope(
+            "games:*:get",
             $"games:{id}:get",
             "activities:*:get",
             $"activities:{id}:get"
@@ -242,6 +242,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> DeleteActivity([FromRoute] Guid id, [FromRoute] Guid activityId)
     {
         RequiredScope(
+            "games:*:delete",
            $"activities:*:delete",
            $"activities:{id}:delete"
         );
@@ -256,6 +257,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> GetActTypesByGameID([FromRoute] Guid id)
     {
         RequiredScope(
+            "games:*:get",
             $"games:{id}:get",
             "activitytypes:*:get",
             $"activitytypes:{id}:get"
@@ -285,6 +287,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> GetActivityType([FromRoute] Guid id, [FromRoute] Guid activityTypeId)
     {
         RequiredScope(
+            "games:*:get",
             $"games:{id}:get",
             "activitytypes:*:get",
             $"activitytypes:{id}:get"
@@ -312,6 +315,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> DeleteActivityType([FromRoute] Guid id, [FromRoute] Guid activityTypeId)
     {
         RequiredScope(
+            "games:*:delete",
             "activitytypes:*:delete",
             $"activitytypes:{id}:delete"
         );
@@ -326,6 +330,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> GetAssetAttributesByGameID([FromRoute] Guid id)
     {
         RequiredScope(
+            "games:*:get",
             $"games:{id}:get",
             "assetattributes:*:get",
             $"assetattributes:{id}:get"
@@ -350,11 +355,12 @@ public class GamesController : BaseController
         await UpdateWriteGameRecord(id);
         return CreatedAtAction(nameof(GetAssetAttribute), new { id = id, assetattributeid = newAssAtt.Id }, newAssAtt);
     }
-    
+
     [HttpGet("{id}/asset-attributes/{assetAttributeId}")]
     public async Task<IActionResult> GetAssetAttribute([FromRoute] Guid id, [FromRoute] Guid assetAttributeId)
     {
         RequiredScope(
+            "games:*:get",
             $"games:{id}:get",
             "assetattributes:*:get",
             $"assetattributes:{id}:get"
@@ -382,6 +388,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> DeleteAssetAttribute([FromRoute] Guid id, [FromRoute] Guid assetAttributeId)
     {
         RequiredScope(
+            "games:*:delete",
             "assetattributes:*:delete",
             $"assetattributes:{id}:delete"
         );
@@ -396,6 +403,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> GetAssetsByGameID([FromRoute] Guid id)
     {
         RequiredScope(
+            "games:*:get",
             $"games:{id}:get",
             "assets:*:get",
             $"assets:{id}:get"
@@ -424,6 +432,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> GetAsset([FromRoute] Guid id, [FromRoute] Guid assetId)
     {
         RequiredScope(
+            "games:*:get",
             $"games:{id}:get",
             "assets:*:get",
             $"assets:{id}:get"
@@ -451,6 +460,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> DeleteAsset([FromRoute] Guid id, [FromRoute] Guid assetId)
     {
         RequiredScope(
+            "games:*:delete",
             "assets:*:delete",
             $"assets:{id}:delete"
         );
@@ -466,6 +476,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> GetAssTypesByGameID([FromRoute] Guid id)
     {
         RequiredScope(
+            "games:*:get",
             $"games:{id}:get",
             "assettypes:*:get",
             $"assettypes:{id}:get"
@@ -494,6 +505,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> GetAssetType([FromRoute] Guid id, [FromRoute] Guid assetTypeId)
     {
         RequiredScope(
+            "games:*:get",
             $"games:{id}:get",
             "assettypes:*:get",
             $"assettypes:{id}:get"
@@ -521,6 +533,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> DeleteAssetType([FromRoute] Guid id, [FromRoute] Guid assetTypeId)
     {
         RequiredScope(
+            "games:*:delete",
             "assettypes:*:delete",
             $"assettypes:{id}:delete"
         );
@@ -536,6 +549,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> GetAttributeGroupsByGameID([FromRoute] Guid id)
     {
         RequiredScope(
+            "games:*:get",
             $"games:{id}:get",
             "attributegroups:*:get",
             $"attributegroups:{id}:get"
@@ -574,6 +588,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> GetAttributeGroup([FromRoute] Guid id, [FromRoute] Guid attributeGroupId)
     {
         RequiredScope(
+            "games:*:get",
            $"games:{id}:get",
            "attributegroups:*:get",
            $"attributegroups:{id}:get"
@@ -605,6 +620,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> DeleteAttributeGroup([FromRoute] Guid id, [FromRoute] Guid attributeGroupId)
     {
         RequiredScope(
+            "games:*:delete",
             "attributegroups:*:delete",
             $"attributegroups:{id}:delete"
         );
@@ -619,6 +635,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> GetCharacterAssetsByGameID([FromRoute] Guid id)
     {
         RequiredScope(
+            "games:*:get",
             $"games:{id}:get",
             "characterassets:*:get",
             $"characterassets:{id}:get"
@@ -648,6 +665,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> GetCharacterAsset([FromRoute] Guid id, [FromRoute] Guid characterAssetId)
     {
         RequiredScope(
+            "games:*:get",
             $"games:{id}:get",
             "characterassets:*:get",
             $"characterassets:{id}:get"
@@ -675,6 +693,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> DeleteCharacterAsset([FromRoute] Guid id, [FromRoute] Guid characterAssetId)
     {
         RequiredScope(
+            "games:*:delete",
             "characterassets:*:delete",
             $"characterassets:{id}:delete"
         );
@@ -689,6 +708,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> GetCharacterAttributesByGameID([FromRoute] Guid id)
     {
         RequiredScope(
+            "games:*:get",
             $"games:{id}:get",
             "characterattributes:*:get",
             $"characterattributes:{id}:get"
@@ -718,6 +738,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> GetCharacterAttribute([FromRoute] Guid id, [FromRoute] Guid characterAttributeId)
     {
         RequiredScope(
+            "games:*:get",
             $"games:{id}:get",
             "characterattributes:*:get",
             $"characterattributes:{id}:get"
@@ -745,6 +766,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> DeleteCharacterAttribute([FromRoute] Guid id, [FromRoute] Guid characterAttributeId)
     {
         RequiredScope(
+            "games:*:delete",
             "characterattributes:*:delete",
             $"characterattributes:{id}:delete"
         );
@@ -759,6 +781,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> GetCharactersByGameID([FromRoute] Guid id)
     {
         RequiredScope(
+            "games:*:get",
             $"games:{id}:get",
             "characters:*:get",
             $"characters:{id}:get"
@@ -767,7 +790,6 @@ public class GamesController : BaseController
         return Ok(await _characterServices.ListCharByGameId(id));
     }
 
-    [AllowAnonymous]
     [HttpPost("{id}/characters")]
     public async Task<IActionResult> CreateCharacter([FromRoute] Guid id, [FromBody] CreateCharacterRequest character)
     {
@@ -790,6 +812,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> GetCharacter([FromRoute] Guid id, [FromRoute] Guid characterId)
     {
         RequiredScope(
+            "games:*:get",
             $"games:{id}:get",
             "characters:*:get",
             $"characters:{id}:get"
@@ -817,6 +840,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> DeleteCharacter([FromRoute] Guid id, [FromRoute] Guid characterId)
     {
         RequiredScope(
+            "games:*:delete",
             "characters:*:delete",
             $"characters:{id}:delete"
         );
@@ -831,6 +855,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> GetCharTypesByGameID([FromRoute] Guid id)
     {
         RequiredScope(
+            "games:*:get",
             $"games:{id}:get",
             "charactertypes:*:get",
             $"charactertypes:{id}:get"
@@ -869,6 +894,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> GetCharacterType([FromRoute] Guid id, [FromRoute] Guid characterTypeId)
     {
         RequiredScope(
+            "games:*:get",
             $"games:{id}:get",
             "charactertypes:*:get",
             $"charactertypes:{id}:get"
@@ -900,6 +926,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> DeleteCharacterType([FromRoute] Guid id, [FromRoute] Guid characterTypeId)
     {
         RequiredScope(
+            "games:*:delete",
             "charactertypes:*:delete",
             $"charactertypes:{id}:delete"
         );
@@ -914,6 +941,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> GetGameServersByGameID([FromRoute] Guid id)
     {
         RequiredScope(
+            "games:*:get",
             $"games:{id}:get",
             "gameservers:*:get",
             $"gameservers:{id}:get"
@@ -942,6 +970,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> GetGameServer([FromRoute] Guid id, [FromRoute] Guid gameServerId)
     {
         RequiredScope(
+            "games:*:get",
             $"games:{id}:get",
             "gameservers:*:get",
             $"gameservers:{id}:get"
@@ -969,6 +998,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> DeleteGameServer([FromRoute] Guid id, [FromRoute] Guid gameServerId)
     {
         RequiredScope(
+            "games:*:delete",
             "gameservers:*:delete",
             $"gameservers:{id}:delete"
         );
@@ -984,6 +1014,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> GetLevelProgressesByGameID([FromRoute] Guid id)
     {
         RequiredScope(
+            "games:*:get",
             $"games:{id}:get",
             "levelprogresses:*:get",
             $"levelprogresses:{id}:get"
@@ -1013,6 +1044,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> GetLevelProgress([FromRoute] Guid id, [FromRoute] Guid levelProgressId)
     {
         RequiredScope(
+            "games:*:get",
             $"games:{id}:get",
             "levelprogresses:*:get",
             $"levelprogresses:{id}:get"
@@ -1040,6 +1072,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> DeleteLevelProgress([FromRoute] Guid id, [FromRoute] Guid levelProgressId)
     {
         RequiredScope(
+            "games:*:delete",
             "levelprogresses:*:delete",
             $"levelprogresses:{id}:delete"
         );
@@ -1054,6 +1087,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> GetLevelsByGameID([FromRoute] Guid id)
     {
         RequiredScope(
+            "games:*:get",
             $"games:{id}:get",
             "levels:*:get",
             $"levels:{id}:get"
@@ -1062,7 +1096,6 @@ public class GamesController : BaseController
         return Ok(await _levelServices.ListLevelsByGameId(id));
     }
 
-    [AllowAnonymous]
     [HttpPost("{id}/levels")]
     public async Task<IActionResult> CreateLevel([FromRoute] Guid id, [FromBody] CreateLevelsRequest[] level)
     {
@@ -1088,11 +1121,11 @@ public class GamesController : BaseController
         return Created(Constants.Http.API_VERSION + "/gms/levels", levelList);
     }
 
-    [AllowAnonymous]
     [HttpGet("{id}/levels/{levelId}")]
     public async Task<IActionResult> GetLevel([FromRoute] Guid id, [FromRoute] Guid levelId)
     {
         RequiredScope(
+           "games:*:get",
            $"games:{id}:get",
            "levels:*:get",
            $"levels:{id}:get"
@@ -1101,7 +1134,6 @@ public class GamesController : BaseController
         return Ok(await _levelServices.GetById(levelId));
     }
 
-    [AllowAnonymous]
     [HttpPut("{id}/levels/{levelId}")]
     public async Task<IActionResult> UpdateLevel([FromRoute] Guid id, [FromRoute] Guid levelId, [FromBody] UpdateLevelsRequest level)
     {
@@ -1117,11 +1149,11 @@ public class GamesController : BaseController
         return Ok(updateLevel);
     }
 
-    [AllowAnonymous]
     [HttpDelete("{id}/levels/{levelId}")]
     public async Task<IActionResult> DeleteLevel([FromRoute] Guid id, [FromRoute] Guid levelId)
     {
         RequiredScope(
+            "games:*:delete",
             "levels:*:delete",
             $"levels:{id}:delete"
         );
@@ -1136,6 +1168,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> GetPaymentsByGameID([FromRoute] Guid id)
     {
         RequiredScope(
+            "games:*:get",
             $"games:{id}:get",
             "payments:*:get",
             $"payments:{id}:get"
@@ -1166,6 +1199,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> GetPayment([FromRoute] Guid id, [FromRoute] Guid paymentId)
     {
         RequiredScope(
+            "games:*:get",
            $"games:{id}:get",
            "payments:*:get",
            $"payments:{id}:get"
@@ -1193,6 +1227,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> DeletePayment([FromRoute] Guid id, [FromRoute] Guid paymentId)
     {
         RequiredScope(
+            "games:*:delete",
             "payments:*:delete",
             $"payments:{id}:delete"
         );
@@ -1207,6 +1242,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> GetTransactionsByGameID([FromRoute] Guid id)
     {
         RequiredScope(
+            "games:*:get",
             $"games:{id}:get",
             "transactions:*:get",
             $"transactions:{id}:get"
@@ -1235,6 +1271,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> GetTransaction([FromRoute] Guid id, [FromRoute] Guid transactionId)
     {
         RequiredScope(
+            "games:*:get",
             $"games:{id}:get",
             "transactions:*:get",
             $"transactions:{id}:get"
@@ -1262,6 +1299,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> DeleteTransaction([FromRoute] Guid id, [FromRoute] Guid transactionId)
     {
         RequiredScope(
+            "games:*:delete",
             "transactions:*:delete",
             $"transactions:{id}:delete"
         );
@@ -1313,6 +1351,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> GetUser([FromRoute] Guid id, [FromRoute] Guid userId)
     {
         RequiredScope(
+            "games:*:get",
            $"games:{id}:get",
            "users:*:get",
            $"users:{id}:get"
@@ -1340,6 +1379,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> DeleteUser([FromRoute] Guid id, [FromRoute] Guid userId)
     {
         RequiredScope(
+            "games:*:delete",
             "users:*:delete",
             $"users:{id}:delete"
         );
@@ -1353,11 +1393,12 @@ public class GamesController : BaseController
     public async Task<IActionResult> DeleteGameUser([FromRoute] Guid id, [FromRoute] Guid userId)
     {
         RequiredScope(
-            "games:*:update",
-            $"games:{id}:update"
+            "games:*:delete",
+            "users:*:delete",
+            $"users:{id}:delete"
         );
         var gameUser = await _gameUserRepo.FirstOrDefaultAsync(gu => gu.UserId == userId && gu.GameId == id);
-        if(gameUser != null)
+        if (gameUser != null)
         {
             await _gameUserServices.Delete(gameUser.Id);
             return NoContent();
@@ -1371,6 +1412,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> GetWalCatsByGameID([FromRoute] Guid id)
     {
         RequiredScope(
+            "games:*:get",
             $"games:{id}:get",
             "walletcategories:*:get",
             $"walletcategories:{id}:get"
@@ -1399,6 +1441,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> GetWalletCategory([FromRoute] Guid id, [FromRoute] Guid walletCategoryId)
     {
         RequiredScope(
+            "games:*:get",
             $"games:{id}:get",
             "walletcategories:*:get",
             $"walletcategories:{id}:get"
@@ -1426,6 +1469,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> DeleteWalletCategory([FromRoute] Guid id, [FromRoute] Guid walletCategoryId)
     {
         RequiredScope(
+            "games:*:delete",
             "walletcategories:*:delete",
             $"walletcategories:{id}:delete"
         );
@@ -1440,6 +1484,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> GetWalletsByGameID([FromRoute] Guid id)
     {
         RequiredScope(
+            "games:*:get",
             "wallets:*:get",
             $"wallets:{id}:get",
             $"games:{id}:get"
@@ -1469,6 +1514,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> GetWallet([FromRoute] Guid id, [FromRoute] Guid walletId)
     {
         RequiredScope(
+            "games:*:get",
             "wallets:*:get",
             $"wallets:{id}:get",
             $"games:{id}:get"
@@ -1496,6 +1542,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> DeleteWallet([FromRoute] Guid id, [FromRoute] Guid walletId)
     {
         RequiredScope(
+            "games:*:delete",
             "wallets:*:delete",
             $"wallets:{id}:delete"
         );
@@ -1507,8 +1554,13 @@ public class GamesController : BaseController
     #endregion
 
     [HttpGet("{id}/count-record")]
-    public async Task<IActionResult> CountRecordsByGameId(Guid id)
+    public async Task<IActionResult> CountRecordsByGameId([FromRoute] Guid id)
     {
+        RequiredScope(
+            "games:*:get",
+            $"games:{id}:get"
+        );
+        await UpdateReadGameRecord(id);
         return Ok(await _gameServices.CountRecord(id));
     }
 
@@ -1555,7 +1607,7 @@ public class GamesController : BaseController
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateGame(Guid id, [FromBody] UpdateGameRequest game)
+    public async Task<IActionResult> UpdateGame([FromRoute] Guid id, [FromBody] UpdateGameRequest game)
     {
         RequiredScope(
             "games:*:update",
@@ -1564,11 +1616,12 @@ public class GamesController : BaseController
         var updateGame = await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR);
         Mapper.Map(game, updateGame);
         await _gameServices.Update(updateGame);
+        await UpdateWriteGameRecord(id);
         return Ok(updateGame);
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteGame(Guid id)
+    public async Task<IActionResult> DeleteGame([FromRoute] Guid id)
     {
         RequiredScope(
             "games:*:delete",
@@ -1579,6 +1632,14 @@ public class GamesController : BaseController
         return NoContent();
     }
 
+    [HttpPut("reset-record")]
+    public async Task<IActionResult> ResetRecord()
+    {
+        RequiredScope(
+            "games:*:update"
+        );
+        return Ok(await _gameServices.ResetRecord());
+    }
     [NonAction]
     public async Task UpdateWriteGameRecord(Guid id, int? record = 1)
     {

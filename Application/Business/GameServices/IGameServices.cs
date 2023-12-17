@@ -8,6 +8,7 @@ public interface IGameServices
     Task<ICollection<GameEntity>> List(Guid[] gameIds);
     Task<int> CountRecord(Guid id);
     Task Create(GameEntity game);
+    Task<ICollection<GameEntity>> ResetRecord();
     Task Update(GameEntity game);
     Task Delete(Guid gameId);
 }
