@@ -9,6 +9,7 @@ public interface IGameServices
     Task<int> CountRecord(Guid id);
     Task ResetRecord(Guid[] gameIds);
     Task UpdateStatus(Guid[] gameIds);
+    Task UpdateStatus(Guid[] gameIds, bool isActive);
     Task Create(GameEntity game);
     Task Update(GameEntity game);
     Task Delete(Guid gameId);

@@ -102,6 +102,15 @@ public class GameServices : IGameServices
             game.IsActive = !game.IsActive;
         }
     }
+
+    public async Task UpdateStatus(Guid[] gameIds, bool isActive)
+    {
+        var gameList = (await _gameRepo.ListAsync()).Where(x => gameIds.Contains(x.Id)).ToList();
+        foreach (var game in gameList)
+        {
+            game.IsActive = isActive;
+        }
+    }
     public async Task Create(GameEntity game)
     {
         var gameCheck = await _gameRepo.FirstOrDefaultAsync(
