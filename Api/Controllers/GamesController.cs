@@ -1062,13 +1062,13 @@ public class GamesController : BaseController
         await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR);
         var newCT = new CharacterTypeEntity { GameId = id };
         Mapper.Map(charType, newCT);
-        newCT.BaseProperties = charType.BaseProperties.ToString();
+        newCT.BaseProperties = charType.BaseProperties.ToString().Replace("\r\n ","");
         await _characterTypeServices.Create(newCT);
         var ctResponse = new CharacterTypeResponse();
         Mapper.Map(newCT, ctResponse);
         ctResponse.BaseProperties = JsonObject.Parse(newCT.BaseProperties);
         await UpdateWriteGameRecord(id);
-        return CreatedAtAction(nameof(GetCharacterType), new { id = id, charactertypeid = newCT.Id }, newCT);
+        return CreatedAtAction(nameof(GetCharacterType), new { id = id, charactertypeid = newCT.Id }, ctResponse);
     }
 
     [HttpGet("{id}/character-types/{characterTypeId}")]
