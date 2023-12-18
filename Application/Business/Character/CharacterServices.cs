@@ -40,8 +40,7 @@ public class CharacterServices : ICharacterServices
         var characterTypeIds = (await _characterTypeService.ListCharTypesByGameId(id)).Select(ct => ct.Id);
         var userIds = (await _gameUserService.ListUsersByGameId(id)).Select(u => u.Id);
         return await _characterRepo.WhereAsync(c => gameServerIds.Contains(c.GameServerId) 
-                    || characterTypeIds.Contains(c.CharacterTypeId)
-                    || userIds.Contains(c.UserId));
+                    || characterTypeIds.Contains(c.CharacterTypeId));
     }
     public async Task Create(CharacterEntity character)
     {
@@ -60,7 +59,9 @@ public class CharacterServices : ICharacterServices
     public async Task CheckForDuplicateCharacter(CharacterEntity character)
     {
         var cCheck = await _characterRepo.FirstOrDefaultAsync(
-            c => c.UserId.Equals(character.UserId) && c.GameServerId.Equals(character.GameServerId));
+            c => c.UserId.Equals(character.UserId) 
+            && c.CharacterTypeId.Equals(character.CharacterTypeId)
+            && c.GameServerId.Equals(character.GameServerId));
         if (cCheck is not null)
         {
             if (character.Id == Guid.Empty || character.Id != cCheck.Id)

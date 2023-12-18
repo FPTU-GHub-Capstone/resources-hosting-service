@@ -781,15 +781,19 @@ public class GamesController : BaseController
         return Ok(await _characterServices.ListCharByGameId(id));
     }
 
+    [AllowAnonymous]
     [HttpPost("{id}/characters")]
     public async Task<IActionResult> CreateCharacter([FromRoute] Guid id, [FromBody] CreateCharacterRequest character)
     {
-        RequiredScope(
-            "characters:create",
-            $"characters:{id}:create",
-            $"games:{id}:update"
-        );
-        await _userRepo.FoundOrThrowAsync(character.UserId, Constants.Entities.USER + Constants.Errors.NOT_EXIST_ERROR);
+        //RequiredScope(
+        //    "characters:create",
+        //    $"characters:{id}:create",
+        //    $"games:{id}:update"
+        //);
+        if (character.UserId != null)
+        {
+            await _userRepo.FoundOrThrowAsync((Guid)character.UserId, Constants.Entities.USER + Constants.Errors.NOT_EXIST_ERROR);
+        }
         await _characterTypeRepo.FoundOrThrowAsync(character.CharacterTypeId, Constants.Entities.CHARACTER_TYPE + Constants.Errors.NOT_EXIST_ERROR);
         await _gameServerRepo.FoundOrThrowAsync(character.GameServerId, Constants.Entities.GAME_SERVER + Constants.Errors.NOT_EXIST_ERROR);
         var newC = new CharacterEntity();
