@@ -3,12 +3,10 @@ using DomainLayer.Entities;
 using DomainLayer.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.FileSystemGlobbing.Internal;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using RepositoryLayer.Repositories;
 using ServiceLayer.Business;
-using System;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json.Nodes;
@@ -185,10 +183,13 @@ public class GamesController : BaseController
     {
         RequiredScope(
             "games:*:get",
-            $"games:{id}:get", 
-            "activities:*:get", 
+            $"games:{id}:get",
+            "activities:*:get",
             $"activities:{id}:get"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id,Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false){
+            throw new BadRequestException("Pay to continue");
+        }
         return Ok(await _activityServices.ListActivitiesByGameId(id));
     }
 
@@ -200,6 +201,10 @@ public class GamesController : BaseController
             $"activities:{id}:create",
             $"games:{id}:update"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         await _activityTypeRepo.FoundOrThrowAsync(act.ActivityTypeId, Constants.Entities.ACTIVITY_TYPE + Constants.Errors.NOT_EXIST_ERROR);
         await _transactionRepo.FoundOrThrowAsync(act.TransactionId, Constants.Entities.TRANSACTION + Constants.Errors.NOT_EXIST_ERROR);
         await _characterRepo.FoundOrThrowAsync(act.CharacterId, Constants.Entities.CHARACTER + Constants.Errors.NOT_EXIST_ERROR);
@@ -219,6 +224,10 @@ public class GamesController : BaseController
             "activities:*:get",
             $"activities:{id}:get"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         return Ok(await _activityServices.Search(activityId));
     }
 
@@ -230,6 +239,10 @@ public class GamesController : BaseController
            $"activities:{id}:update",
            $"games:{id}:update"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         var updateAct = await _activityRepo.FoundOrThrowAsync(activityId, Constants.Entities.ACTIVITY + Constants.Errors.NOT_EXIST_ERROR);
         Mapper.Map(act, updateAct);
         await _activityServices.Update(updateAct);
@@ -246,6 +259,10 @@ public class GamesController : BaseController
            $"activities:*:delete",
            $"activities:{id}:delete"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         await _activityRepo.FoundOrThrowAsync(activityId, Constants.Entities.ACTIVITY + Constants.Errors.NOT_EXIST_ERROR);
         await _activityServices.Delete(activityId);
         await UpdateWriteGameRecord(id);
@@ -262,6 +279,10 @@ public class GamesController : BaseController
             "activitytypes:*:get",
             $"activitytypes:{id}:get"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         return Ok(await _activityTypeServices.ListActTypesByGameId(id));
     }
 
@@ -273,6 +294,10 @@ public class GamesController : BaseController
            $"activitytypes:{id}:create",
            $"games:{id}:update"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR);
         await _characterRepo.FoundOrThrowAsync(activityType.CharacterId, Constants.Entities.CHARACTER + Constants.Errors.NOT_EXIST_ERROR);
         var newActivityType = new ActivityTypeEntity { GameId = id };
@@ -291,6 +316,10 @@ public class GamesController : BaseController
             "activitytypes:*:get",
             $"activitytypes:{id}:get"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         return Ok(await _activityTypeServices.GetById(activityTypeId));
     }
 
@@ -302,6 +331,10 @@ public class GamesController : BaseController
             $"activitytypes:{id}:update",
             $"games:{id}:update"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         var updateActivityType = await _activityTypeRepo.FoundOrThrowAsync(activityTypeId, Constants.Entities.ACTIVITY_TYPE + Constants.Errors.NOT_EXIST_ERROR);
         Mapper.Map(activityType, updateActivityType);
         await _activityTypeServices.Update(updateActivityType);
@@ -318,6 +351,10 @@ public class GamesController : BaseController
             "activitytypes:*:delete",
             $"activitytypes:{id}:delete"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         await _activityTypeRepo.FoundOrThrowAsync(activityTypeId, Constants.Entities.ACTIVITY_TYPE + Constants.Errors.NOT_EXIST_ERROR);
         await _activityTypeServices.Delete(activityTypeId);
         await UpdateWriteGameRecord(id);
@@ -334,6 +371,10 @@ public class GamesController : BaseController
             "assetattributes:*:get",
             $"assetattributes:{id}:get"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         return Ok(await _assetAttributeServices.ListAssetAttributeByGameId(id));
     }
 
@@ -345,6 +386,10 @@ public class GamesController : BaseController
             $"assetattributes:{id}:create",
             $"games:{id}:update"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         await _assetRepo.FoundOrThrowAsync(assetAtt.AssetId, Constants.Entities.ASSET + Constants.Errors.NOT_EXIST_ERROR);
         await _attributeGroupRepo.FoundOrThrowAsync(assetAtt.AttributeGroupId, Constants.Entities.ATTRIBUTE_GROUP + Constants.Errors.NOT_EXIST_ERROR);
         var newAssAtt = new AssetAttributeEntity();
@@ -363,6 +408,10 @@ public class GamesController : BaseController
             "assetattributes:*:get",
             $"assetattributes:{id}:get"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         return Ok(await _assetAttributeServices.GetById(assetAttributeId));
     }
 
@@ -374,6 +423,10 @@ public class GamesController : BaseController
             $"assetattributes:{id}:update",
             $"games:{id}:update"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         var updateAssAtt = await _assetAttributeRepo.FoundOrThrowAsync(assetAttributeId, Constants.Entities.ASSET_ATTRIBUTE + Constants.Errors.NOT_EXIST_ERROR);
         Mapper.Map(assetAtt, updateAssAtt);
         await _assetAttributeServices.Update(updateAssAtt);
@@ -390,6 +443,10 @@ public class GamesController : BaseController
             "assetattributes:*:delete",
             $"assetattributes:{id}:delete"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         await _assetAttributeRepo.FoundOrThrowAsync(assetAttributeId, Constants.Entities.ASSET_ATTRIBUTE + Constants.Errors.NOT_EXIST_ERROR);
         await _assetAttributeServices.Delete(assetAttributeId);
         await UpdateWriteGameRecord(id);
@@ -406,6 +463,10 @@ public class GamesController : BaseController
             "assets:*:get",
             $"assets:{id}:get"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         return Ok(await _assetServices.ListAssetsByGameId(id));
     }
 
@@ -417,6 +478,10 @@ public class GamesController : BaseController
             $"assets:{id}:create",
             $"games:{id}:update"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         await _assetTypeRepo.FoundOrThrowAsync(asset.AssetTypeId, Constants.Entities.ASSET_TYPE + Constants.Errors.NOT_EXIST_ERROR);
         var newAsset = new AssetEntity();
         Mapper.Map(asset, newAsset);
@@ -434,6 +499,10 @@ public class GamesController : BaseController
             "assets:*:get",
             $"assets:{id}:get"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         return Ok(await _assetServices.GetById(assetId));
     }
 
@@ -445,6 +514,10 @@ public class GamesController : BaseController
             $"assets:{id}:update",
             $"games:{id}:update"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         var updateAsset = await _assetRepo.FoundOrThrowAsync(assetId, Constants.Entities.ASSET + Constants.Errors.NOT_EXIST_ERROR);
         Mapper.Map(asset, updateAsset);
         await _assetServices.Update(updateAsset);
@@ -461,6 +534,10 @@ public class GamesController : BaseController
             "assets:*:delete",
             $"assets:{id}:delete"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         await _assetRepo.FoundOrThrowAsync(assetId, Constants.Entities.ASSET + Constants.Errors.NOT_EXIST_ERROR);
         await _assetServices.Delete(assetId);
         await UpdateWriteGameRecord(id);
@@ -478,6 +555,10 @@ public class GamesController : BaseController
             "assettypes:*:get",
             $"assettypes:{id}:get"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         return Ok(await _assetTypeServices.ListAssTypesByGameId(id));
     }
 
@@ -489,6 +570,10 @@ public class GamesController : BaseController
             $"assettypes:{id}:create",
             $"games:{id}:update"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR);
         var cAssetType = new AssetTypeEntity { GameId = id };
         Mapper.Map(assetType, cAssetType);
@@ -506,6 +591,10 @@ public class GamesController : BaseController
             "assettypes:*:get",
             $"assettypes:{id}:get"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         return Ok(await _assetTypeServices.GetById(assetTypeId));
     }
 
@@ -517,6 +606,10 @@ public class GamesController : BaseController
             $"assettypes:{id}:update",
             $"games:{id}:update"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         var uAssetType = await _assetTypeRepo.FoundOrThrowAsync(assetTypeId, Constants.Entities.ASSET_TYPE + Constants.Errors.NOT_EXIST_ERROR);
         Mapper.Map(assetType, uAssetType);
         await _assetTypeServices.Update(uAssetType);
@@ -533,6 +626,10 @@ public class GamesController : BaseController
             "assettypes:*:delete",
             $"assettypes:{id}:delete"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         await _assetTypeRepo.FoundOrThrowAsync(assetTypeId, Constants.Entities.ASSET_TYPE + Constants.Errors.NOT_EXIST_ERROR);
         await _assetTypeServices.Delete(assetTypeId);
         await UpdateWriteGameRecord(id);
@@ -550,6 +647,10 @@ public class GamesController : BaseController
             "attributegroups:*:get",
             $"attributegroups:{id}:get"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         var attGrpList = await _attributeGroupServices.ListAttributeGroupsByGameId(id);
         List<AttributeGroupResponse> attGrpListResponse = new();
         foreach (var ag in attGrpList)
@@ -570,6 +671,10 @@ public class GamesController : BaseController
             $"attributegroups:{id}:create",
             $"games:{id}:update"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR);
         var attGrpEnt = new AttributeGroupEntity { GameId = id };
         Mapper.Map(attributeGroup, attGrpEnt);
@@ -591,6 +696,10 @@ public class GamesController : BaseController
            "attributegroups:*:get",
            $"attributegroups:{id}:get"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         var attribute = await _attributeGroupServices.GetById(attributeGroupId);
         var agResponse = new AttributeGroupResponse();
         Mapper.Map(attribute, agResponse);
@@ -606,6 +715,10 @@ public class GamesController : BaseController
             $"attributegroups:{id}:update",
             $"games:{id}:update"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         var attGrpEnt = await _attributeGroupRepo.FoundOrThrowAsync(attributeGroupId, Constants.Entities.ATTRIBUTE_GROUP + Constants.Errors.NOT_EXIST_ERROR);
         Mapper.Map(attributeGroup, attGrpEnt);
         await _attributeGroupServices.Update(attGrpEnt);
@@ -622,6 +735,10 @@ public class GamesController : BaseController
             "attributegroups:*:delete",
             $"attributegroups:{id}:delete"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         await _attributeGroupRepo.FoundOrThrowAsync(attributeGroupId, Constants.Entities.ATTRIBUTE_GROUP + Constants.Errors.NOT_EXIST_ERROR);
         await _attributeGroupServices.Delete(attributeGroupId);
         await UpdateWriteGameRecord(id);
@@ -638,6 +755,10 @@ public class GamesController : BaseController
             "characterassets:*:get",
             $"characterassets:{id}:get"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         return Ok(await _characterAssetServices.ListCharAssetsByGameId(id));
     }
 
@@ -649,6 +770,10 @@ public class GamesController : BaseController
             $"characterassets:{id}:create",
             $"games:{id}:update"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         await _assetRepo.FoundOrThrowAsync(charAss.AssetsId, Constants.Entities.ASSET + Constants.Errors.NOT_EXIST_ERROR);
         await _characterRepo.FoundOrThrowAsync(charAss.CharacterId, Constants.Entities.CHARACTER + Constants.Errors.NOT_EXIST_ERROR);
         var newCharAss = new CharacterAssetEntity();
@@ -667,6 +792,10 @@ public class GamesController : BaseController
             "characterassets:*:get",
             $"characterassets:{id}:get"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         return Ok(await _characterAssetServices.GetById(characterAssetId));
     }
 
@@ -678,6 +807,10 @@ public class GamesController : BaseController
             $"characterassets:{id}:update",
             $"games:{id}:update"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         var updateCharAss = await _characterAssetRepo.FoundOrThrowAsync(characterAssetId, Constants.Entities.CHARACTER_ASSET + Constants.Errors.NOT_EXIST_ERROR);
         Mapper.Map(charAss, updateCharAss);
         await _characterAssetServices.Update(updateCharAss);
@@ -694,6 +827,10 @@ public class GamesController : BaseController
             "characterassets:*:delete",
             $"characterassets:{id}:delete"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         await _characterAssetRepo.FoundOrThrowAsync(characterAssetId, Constants.Entities.CHARACTER_ASSET + Constants.Errors.NOT_EXIST_ERROR);
         await _characterAssetServices.Delete(characterAssetId);
         await UpdateWriteGameRecord(id);
@@ -710,6 +847,10 @@ public class GamesController : BaseController
             "characterattributes:*:get",
             $"characterattributes:{id}:get"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         return Ok(await _characterAttributeServices.ListCharAttByGameId(id));
     }
 
@@ -721,6 +862,10 @@ public class GamesController : BaseController
             $"characterattributes:{id}:create",
             $"games:{id}:update"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         await _characterRepo.FoundOrThrowAsync(charAtt.CharacterId, Constants.Entities.CHARACTER + Constants.Errors.NOT_EXIST_ERROR);
         await _attributeGroupRepo.FoundOrThrowAsync(charAtt.AttributeGroupId, Constants.Entities.ATTRIBUTE_GROUP + Constants.Errors.NOT_EXIST_ERROR);
         var newCharAtt = new CharacterAttributeEntity();
@@ -739,6 +884,10 @@ public class GamesController : BaseController
             "characterattributes:*:get",
             $"characterattributes:{id}:get"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         return Ok(await _characterAttributeServices.GetById(characterAttributeId));
     }
 
@@ -750,6 +899,10 @@ public class GamesController : BaseController
             $"characterattributes:{id}:update",
             $"games:{id}:update"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         var newCharAtt = await _characterAttributeRepo.FoundOrThrowAsync(characterAttributeId, Constants.Entities.CHARACTER_ATTRIBUTE + Constants.Errors.NOT_EXIST_ERROR);
         Mapper.Map(charAtt, newCharAtt);
         await _characterAttributeServices.Update(newCharAtt);
@@ -766,6 +919,10 @@ public class GamesController : BaseController
             "characterattributes:*:delete",
             $"characterattributes:{id}:delete"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         await _characterAttributeRepo.FoundOrThrowAsync(characterAttributeId, Constants.Entities.CHARACTER_ATTRIBUTE + Constants.Errors.NOT_EXIST_ERROR);
         await _characterAttributeServices.Delete(characterAttributeId);
         await UpdateWriteGameRecord(id);
@@ -782,6 +939,10 @@ public class GamesController : BaseController
             "characters:*:get",
             $"characters:{id}:get"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         return Ok(await _characterServices.ListCharByGameId(id));
     }
 
@@ -793,6 +954,10 @@ public class GamesController : BaseController
             $"characters:{id}:create",
             $"games:{id}:update"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         await _characterTypeRepo.FoundOrThrowAsync(character.CharacterTypeId, Constants.Entities.CHARACTER_TYPE + Constants.Errors.NOT_EXIST_ERROR);
         await _gameServerRepo.FoundOrThrowAsync(character.GameServerId, Constants.Entities.GAME_SERVER + Constants.Errors.NOT_EXIST_ERROR); 
         var newC = new CharacterEntity();
@@ -812,6 +977,10 @@ public class GamesController : BaseController
             "characters:*:get",
             $"characters:{id}:get"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         return Ok(await _characterServices.GetById(characterId));
     }
 
@@ -823,6 +992,10 @@ public class GamesController : BaseController
             $"characters:{id}:update",
             $"games:{id}:update"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         var updateC = await _characterRepo.FoundOrThrowAsync(characterId, Constants.Entities.CHARACTER + Constants.Errors.NOT_EXIST_ERROR);
         Mapper.Map(character, updateC);
         await _characterServices.Update(updateC);
@@ -839,6 +1012,10 @@ public class GamesController : BaseController
             "characters:*:delete",
             $"characters:{id}:delete"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         await _characterRepo.FoundOrThrowAsync(characterId, Constants.Entities.CHARACTER + Constants.Errors.NOT_EXIST_ERROR);
         await _characterServices.Delete(characterId);
         await UpdateWriteGameRecord(id);
@@ -855,6 +1032,10 @@ public class GamesController : BaseController
             "charactertypes:*:get",
             $"charactertypes:{id}:get"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         var ctList = await _characterTypeServices.ListCharTypesByGameId(id);
         List<CharacterTypeResponse> ctListResponse = new();
         foreach (var ct in ctList)
@@ -875,6 +1056,10 @@ public class GamesController : BaseController
             $"charactertypes:{id}:create",
             $"games:{id}:update"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR);
         var newCT = new CharacterTypeEntity { GameId = id };
         Mapper.Map(charType, newCT);
@@ -896,6 +1081,10 @@ public class GamesController : BaseController
             "charactertypes:*:get",
             $"charactertypes:{id}:get"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         var ct = await _characterTypeServices.GetById(characterTypeId);
         var ctResponse = new CharacterTypeResponse();
         Mapper.Map(ct, ctResponse);
@@ -911,6 +1100,10 @@ public class GamesController : BaseController
             $"charactertypes:{id}:update",
             $"games:{id}:update"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         var ct = await _characterTypeRepo.FoundOrThrowAsync(characterTypeId, Constants.Entities.CHARACTER_TYPE + Constants.Errors.NOT_EXIST_ERROR);
         Mapper.Map(charType, ct);
         await _characterTypeServices.Update(ct);
@@ -926,6 +1119,10 @@ public class GamesController : BaseController
             "charactertypes:*:delete",
             $"charactertypes:{id}:delete"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         await _characterTypeRepo.FoundOrThrowAsync(characterTypeId, Constants.Entities.CHARACTER_TYPE + Constants.Errors.NOT_EXIST_ERROR);
         await _characterTypeServices.Delete(characterTypeId);
         await UpdateWriteGameRecord(id);
@@ -942,6 +1139,10 @@ public class GamesController : BaseController
             "gameservers:*:get",
             $"gameservers:{id}:get"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         return Ok(await _gameServerServices.ListServersByGameId(id));
     }
 
@@ -953,6 +1154,10 @@ public class GamesController : BaseController
             $"gameservers:{id}:create",
             $"games:{id}:update"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR);
         var newGameServer = new GameServerEntity { GameId = id };
         Mapper.Map(gameServer, newGameServer);
@@ -970,6 +1175,10 @@ public class GamesController : BaseController
             "gameservers:*:get",
             $"gameservers:{id}:get"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         return Ok(await _gameServerServices.GetById(gameServerId));
     }
 
@@ -981,6 +1190,10 @@ public class GamesController : BaseController
             $"gameservers:{id}:update",
             $"games:{id}:update"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         var updateGameServer = await _gameServerRepo.FoundOrThrowAsync(gameServerId, Constants.Entities.GAME_SERVER + Constants.Errors.NOT_EXIST_ERROR);
         Mapper.Map(gameServer, updateGameServer);
         await _gameServerServices.Update(updateGameServer);
@@ -997,6 +1210,10 @@ public class GamesController : BaseController
             "gameservers:*:delete",
             $"gameservers:{id}:delete"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         await _gameServerRepo.FoundOrThrowAsync(gameServerId, Constants.Entities.GAME_SERVER + Constants.Errors.NOT_EXIST_ERROR);
         await _gameServerServices.Delete(gameServerId);
         await UpdateWriteGameRecord(id);
@@ -1014,6 +1231,10 @@ public class GamesController : BaseController
             "levelprogresses:*:get",
             $"levelprogresses:{id}:get"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         return Ok(await _levelProgressServices.ListLevelProgByGameId(id));
     }
 
@@ -1025,6 +1246,10 @@ public class GamesController : BaseController
             $"levelprogresses:{id}:create",
             $"games:{id}:update"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         await _characterRepo.FoundOrThrowAsync(levelProg.CharacterId, Constants.Entities.CHARACTER + Constants.Errors.NOT_EXIST_ERROR);
         await _levelRepo.FoundOrThrowAsync(levelProg.LevelId, Constants.Entities.LEVEL + Constants.Errors.NOT_EXIST_ERROR);
         var newLevelProg = new LevelProgressEntity();
@@ -1043,6 +1268,10 @@ public class GamesController : BaseController
             "levelprogresses:*:get",
             $"levelprogresses:{id}:get"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         return Ok(await _levelProgressServices.GetById(levelProgressId));
     }
 
@@ -1054,6 +1283,10 @@ public class GamesController : BaseController
             $"levelprogresses:{id}:update",
             $"games:{id}:update"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         var updateLevelProg = await _levelProgressRepo.FoundOrThrowAsync(levelProgressId, Constants.Entities.LEVEL_PROGRESS + Constants.Errors.NOT_EXIST_ERROR);
         Mapper.Map(levelProg, updateLevelProg);
         await _levelProgressServices.Update(updateLevelProg);
@@ -1070,6 +1303,10 @@ public class GamesController : BaseController
             "levelprogresses:*:delete",
             $"levelprogresses:{id}:delete"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         await _levelProgressRepo.FoundOrThrowAsync(levelProgressId, Constants.Entities.LEVEL_PROGRESS + Constants.Errors.NOT_EXIST_ERROR);
         await _levelProgressServices.Delete(levelProgressId);
         await UpdateWriteGameRecord(id);
@@ -1086,6 +1323,10 @@ public class GamesController : BaseController
             "levels:*:get",
             $"levels:{id}:get"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         return Ok(await _levelServices.ListLevelsByGameId(id));
     }
 
@@ -1097,6 +1338,10 @@ public class GamesController : BaseController
             $"levels:{id}:create",
             $"games:{id}:update"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         List<LevelEntity> levelList = new List<LevelEntity>();
         await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + "id " + id + " " + Constants.Errors.NOT_EXIST_ERROR);
         foreach (var singleLevel in level)
@@ -1123,6 +1368,10 @@ public class GamesController : BaseController
            "levels:*:get",
            $"levels:{id}:get"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         return Ok(await _levelServices.GetById(levelId));
     }
 
@@ -1134,6 +1383,10 @@ public class GamesController : BaseController
             $"levels:{id}:update",
             $"games:{id}:update"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         var updateLevel = await _levelRepo.FoundOrThrowAsync(levelId, Constants.Entities.LEVEL + Constants.Errors.NOT_EXIST_ERROR);
         Mapper.Map(level, updateLevel);
         await _levelServices.Update(updateLevel);
@@ -1150,6 +1403,10 @@ public class GamesController : BaseController
             "levels:*:delete",
             $"levels:{id}:delete"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         var level = await _levelRepo.FoundOrThrowAsync(levelId, Constants.Entities.LEVEL + Constants.Errors.NOT_EXIST_ERROR);
         await _levelServices.Delete(level);
         await UpdateWriteGameRecord(id);
@@ -1166,6 +1423,10 @@ public class GamesController : BaseController
             "payments:*:get",
             $"payments:{id}:get"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         return Ok(await _paymentServices.ListPaymentByGameId(id));
     }
 
@@ -1177,6 +1438,10 @@ public class GamesController : BaseController
             $"payments:{id}:create",
             $"games:{id}:update"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         await _characterRepo.FoundOrThrowAsync(payment.CharacterId, Constants.Entities.CHARACTER + Constants.Errors.NOT_EXIST_ERROR);
         await _userRepo.FoundOrThrowAsync(payment.UserId, Constants.Entities.USER + Constants.Errors.NOT_EXIST_ERROR);
         await _walletRepo.FoundOrThrowAsync(payment.WalletId, Constants.Entities.WALLET + Constants.Errors.NOT_EXIST_ERROR);
@@ -1196,6 +1461,10 @@ public class GamesController : BaseController
            "payments:*:get",
            $"payments:{id}:get"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         return Ok(await _paymentServices.GetById(paymentId));
     }
 
@@ -1207,6 +1476,10 @@ public class GamesController : BaseController
             $"payments:{id}:update",
             $"games:{id}:update"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         var updatePayment = await _paymentRepo.FoundOrThrowAsync(paymentId, Constants.Entities.PAYMENT + Constants.Errors.NOT_EXIST_ERROR);
         Mapper.Map(payment, updatePayment);
         await _paymentServices.Update(updatePayment);
@@ -1223,6 +1496,10 @@ public class GamesController : BaseController
             "payments:*:delete",
             $"payments:{id}:delete"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         await _paymentRepo.FoundOrThrowAsync(paymentId, Constants.Entities.PAYMENT + Constants.Errors.NOT_EXIST_ERROR);
         await _paymentServices.Delete(paymentId);
         await UpdateWriteGameRecord(id);
@@ -1239,6 +1516,10 @@ public class GamesController : BaseController
             "transactions:*:get",
             $"transactions:{id}:get"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         return Ok(await _transactionServices.ListTransactionsByGameId(id));
     }
 
@@ -1250,6 +1531,10 @@ public class GamesController : BaseController
             $"transactions:{id}:create",
             $"games:{id}:update"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         await _walletRepo.FoundOrThrowAsync(trans.WalletId, Constants.Entities.WALLET + Constants.Errors.NOT_EXIST_ERROR);
         var newTrans = new TransactionEntity();
         Mapper.Map(trans, newTrans);
@@ -1267,6 +1552,10 @@ public class GamesController : BaseController
             "transactions:*:get",
             $"transactions:{id}:get"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         return Ok(await _transactionServices.GetById(transactionId));
     }
 
@@ -1278,6 +1567,10 @@ public class GamesController : BaseController
             $"transactions:{id}:update",
             $"games:{id}:update"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         var updateTrans = await _transactionRepo.FoundOrThrowAsync(transactionId, Constants.Entities.TRANSACTION + Constants.Errors.NOT_EXIST_ERROR);
         Mapper.Map(trans, updateTrans);
         await _transactionServices.Update(updateTrans);
@@ -1294,6 +1587,10 @@ public class GamesController : BaseController
             "transactions:*:delete",
             $"transactions:{id}:delete"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         await _transactionRepo.FoundOrThrowAsync(transactionId, Constants.Entities.TRANSACTION + Constants.Errors.NOT_EXIST_ERROR);
         await _transactionServices.Delete(transactionId);
         await UpdateWriteGameRecord(id);
@@ -1310,6 +1607,10 @@ public class GamesController : BaseController
              "users:*:get",
             $"users:{id}:get"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         return Ok(await _gameUserServices.ListUsersByGameId(id));
     }
 
@@ -1321,6 +1622,10 @@ public class GamesController : BaseController
             $"users:{id}:create",
             $"games:{id}:update"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         var user = new UserEntity();
         Mapper.Map(cUser, user);
         await _userServices.Create(user);
@@ -1346,6 +1651,10 @@ public class GamesController : BaseController
            "users:*:get",
            $"users:{id}:get"
        );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         return Ok(await _userServices.GetById(userId));
     }
 
@@ -1357,6 +1666,10 @@ public class GamesController : BaseController
             $"users:{id}:update",
             $"games:{id}:update"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         var updateUser = await _userRepo.FoundOrThrowAsync(userId, Constants.Entities.USER + Constants.Errors.NOT_EXIST_ERROR);
         Mapper.Map(user, updateUser);
         await _userServices.Update(updateUser);
@@ -1373,6 +1686,10 @@ public class GamesController : BaseController
             "users:*:delete",
             $"users:{id}:delete"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         await _userRepo.FoundOrThrowAsync(userId, Constants.Entities.USER + Constants.Errors.NOT_EXIST_ERROR);
         await _userServices.Delete(userId);
         await UpdateWriteGameRecord(id);
@@ -1390,6 +1707,10 @@ public class GamesController : BaseController
             "walletcategories:*:get",
             $"walletcategories:{id}:get"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         return Ok(await _walletCategoryServices.ListWalCatsByGameId(id));
     }
 
@@ -1401,6 +1722,10 @@ public class GamesController : BaseController
             $"walletcategories:{id}:create",
             $"games:{id}:update"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR);
         var newWalCat = new WalletCategoryEntity { GameId = id };
         Mapper.Map(walCat, newWalCat);
@@ -1418,6 +1743,10 @@ public class GamesController : BaseController
             "walletcategories:*:get",
             $"walletcategories:{id}:get"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         return Ok(await _walletCategoryServices.GetById(walletCategoryId));
     }
 
@@ -1429,6 +1758,10 @@ public class GamesController : BaseController
             $"walletcategories:{id}:update",
             $"games:{id}:update"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         var updateWalCat = await _walletCategoryRepo.FoundOrThrowAsync(walletCategoryId, Constants.Entities.WALLET + Constants.Errors.NOT_EXIST_ERROR);
         Mapper.Map(walCat, updateWalCat);
         await _walletCategoryServices.Update(updateWalCat);
@@ -1445,6 +1778,10 @@ public class GamesController : BaseController
             "walletcategories:*:delete",
             $"walletcategories:{id}:delete"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         await _walletCategoryRepo.FoundOrThrowAsync(walletCategoryId, Constants.Entities.WALLET + Constants.Errors.NOT_EXIST_ERROR);
         await _walletCategoryServices.Delete(walletCategoryId);
         await UpdateWriteGameRecord(id);
@@ -1461,6 +1798,10 @@ public class GamesController : BaseController
             $"wallets:{id}:get",
             $"games:{id}:get"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         return Ok(await _walletServices.ListWalletsByGameId(id));
     }
 
@@ -1472,6 +1813,10 @@ public class GamesController : BaseController
             $"wallets:{id}:create",
             $"games:{id}:update"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         await _walletCategoryRepo.FoundOrThrowAsync(wallet.WalletCategoryId, Constants.Entities.WALLET_CATEGORY + Constants.Errors.NOT_EXIST_ERROR);
         await _characterRepo.FoundOrThrowAsync(wallet.CharacterId, Constants.Entities.CHARACTER + Constants.Errors.NOT_EXIST_ERROR);
         var newWallet = new WalletEntity();
@@ -1490,6 +1835,10 @@ public class GamesController : BaseController
             $"wallets:{id}:get",
             $"games:{id}:get"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         return Ok(await _walletServices.GetById(walletId));
     }
 
@@ -1501,6 +1850,10 @@ public class GamesController : BaseController
             $"wallets:{id}:update",
             $"games:{id}:update"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         var updateWallet = await _walletRepo.FoundOrThrowAsync(walletId, Constants.Entities.WALLET + Constants.Errors.NOT_EXIST_ERROR);
         Mapper.Map(wallet, updateWallet);
         await _walletServices.Update(updateWallet);
@@ -1517,6 +1870,10 @@ public class GamesController : BaseController
             "wallets:*:delete",
             $"wallets:{id}:delete"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         await _walletRepo.FoundOrThrowAsync(walletId, Constants.Entities.WALLET + Constants.Errors.NOT_EXIST_ERROR);
         await _walletServices.Delete(walletId);
         await UpdateWriteGameRecord(id);
@@ -1584,6 +1941,10 @@ public class GamesController : BaseController
             "games:*:update",
             $"games:{id}:update"
         );
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         var updateGame = await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR);
         Mapper.Map(game, updateGame);
         await _gameServices.Update(updateGame);
@@ -1610,6 +1971,14 @@ public class GamesController : BaseController
         await _gameServices.ResetRecord(resetRecordRequest.ids);
         return NoContent();
     }
+
+    [HttpPut("update-status")]
+    public async Task<IActionResult> UpdateStatus([FromBody] ResetRecordRequest resetRecordRequest)
+    {
+        RequiredScope("games:*:updatestatus");
+        await _gameServices.UpdateStatus(resetRecordRequest.ids, resetRecordRequest.IsActive);
+        return NoContent();
+    }
     [NonAction]
     public async Task UpdateWriteGameRecord(Guid id, int? record = 1)
     {
@@ -1620,7 +1989,6 @@ public class GamesController : BaseController
 
     private async Task ValidateGameUser(Guid gameId, LoginRequest loginRequest)
     {
-        var game = await _gameRepo.FoundOrThrowAsync(gameId);
         var user = await _userRepo.FirstOrDefaultAsync(user => user.Username == loginRequest.Username) ?? throw new UnauthorizedAccessException();
         var gameUser = await _gameUserRepo.FirstOrDefaultAsync(gu => gu.GameId == gameId && gu.UserId == user.Id);
         if (gameUser == null)
@@ -1634,6 +2002,10 @@ public class GamesController : BaseController
     [HttpPost("{id}/login")]
     public async Task<IActionResult> Login(Guid id, LoginRequest loginRequest)
     {
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         await ValidateGameUser(id, loginRequest);
         string loginEndpoint = $"{_client.BaseAddress}/login";
         var jsonData = BuildJsonLoginReqBody(loginRequest);
@@ -1695,6 +2067,10 @@ public class GamesController : BaseController
     [HttpPost("{id}/register")]
     public async Task<IActionResult> Register(Guid id, RegisterRequest registerRequest)
     {
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         await ValidateUserNotExist(registerRequest.Username);
         string registerEndpoint = $"{_client.BaseAddress}/register";
         var jsonData = BuildJsonRegisterReqBody(registerRequest);
