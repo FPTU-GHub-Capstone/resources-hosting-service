@@ -205,14 +205,15 @@ public class GamesController : BaseController
         var newAct = new ActivityEntity();
         Mapper.Map(act, newAct);
         await _activityServices.Create(newAct);
-        await UpdateGameRecord(id);
+        await UpdateWriteGameRecord(id);
         return CreatedAtAction(nameof(GetActivity), new { id = id, activityid = newAct.Id }, newAct);
     }
 
     [HttpGet("{id}/activities/{activityId}")]
-    public async Task<IActionResult> GetActivity([FromRoute]Guid id, [FromRoute]Guid activityId)
+    public async Task<IActionResult> GetActivity([FromRoute] Guid id, [FromRoute] Guid activityId)
     {
         RequiredScope(
+            "games:*:get",
             $"games:{id}:get",
             "activities:*:get",
             $"activities:{id}:get"
@@ -231,6 +232,7 @@ public class GamesController : BaseController
         var updateAct = await _activityRepo.FoundOrThrowAsync(activityId, Constants.Entities.ACTIVITY + Constants.Errors.NOT_EXIST_ERROR);
         Mapper.Map(act, updateAct);
         await _activityServices.Update(updateAct);
+        await UpdateWriteGameRecord(id);
         return Ok(updateAct);
     }
 
@@ -238,11 +240,14 @@ public class GamesController : BaseController
     public async Task<IActionResult> DeleteActivity([FromRoute] Guid id, [FromRoute] Guid activityId)
     {
         RequiredScope(
+            "games:*:delete",
+           $"games:{id}:update",
            $"activities:*:delete",
            $"activities:{id}:delete"
         );
         await _activityRepo.FoundOrThrowAsync(activityId, Constants.Entities.ACTIVITY + Constants.Errors.NOT_EXIST_ERROR);
         await _activityServices.Delete(activityId);
+        await UpdateWriteGameRecord(id);
         return NoContent();
     }
     #endregion
@@ -251,6 +256,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> GetActTypesByGameID([FromRoute] Guid id)
     {
         RequiredScope(
+            "games:*:get",
             $"games:{id}:get",
             "activitytypes:*:get",
             $"activitytypes:{id}:get"
@@ -271,7 +277,7 @@ public class GamesController : BaseController
         var newActivityType = new ActivityTypeEntity { GameId = id };
         Mapper.Map(activityType, newActivityType);
         await _activityTypeServices.Create(newActivityType);
-        await UpdateGameRecord(id);
+        await UpdateWriteGameRecord(id);
         return CreatedAtAction(nameof(GetActivityType), new { id = id, activitytypeid = newActivityType.Id }, newActivityType);
     }
 
@@ -279,6 +285,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> GetActivityType([FromRoute] Guid id, [FromRoute] Guid activityTypeId)
     {
         RequiredScope(
+            "games:*:get",
             $"games:{id}:get",
             "activitytypes:*:get",
             $"activitytypes:{id}:get"
@@ -297,6 +304,7 @@ public class GamesController : BaseController
         var updateActivityType = await _activityTypeRepo.FoundOrThrowAsync(activityTypeId, Constants.Entities.ACTIVITY_TYPE + Constants.Errors.NOT_EXIST_ERROR);
         Mapper.Map(activityType, updateActivityType);
         await _activityTypeServices.Update(updateActivityType);
+        await UpdateWriteGameRecord(id);
         return Ok(updateActivityType);
     }
 
@@ -304,11 +312,14 @@ public class GamesController : BaseController
     public async Task<IActionResult> DeleteActivityType([FromRoute] Guid id, [FromRoute] Guid activityTypeId)
     {
         RequiredScope(
+            "games:*:delete",
+            $"games:{id}:update",
             "activitytypes:*:delete",
             $"activitytypes:{id}:delete"
         );
         await _activityTypeRepo.FoundOrThrowAsync(activityTypeId, Constants.Entities.ACTIVITY_TYPE + Constants.Errors.NOT_EXIST_ERROR);
         await _activityTypeServices.Delete(activityTypeId);
+        await UpdateWriteGameRecord(id);
         return NoContent();
     }
     #endregion
@@ -317,6 +328,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> GetAssetAttributesByGameID([FromRoute] Guid id)
     {
         RequiredScope(
+            "games:*:get",
             $"games:{id}:get",
             "assetattributes:*:get",
             $"assetattributes:{id}:get"
@@ -337,14 +349,15 @@ public class GamesController : BaseController
         var newAssAtt = new AssetAttributeEntity();
         Mapper.Map(assetAtt, newAssAtt);
         await _assetAttributeServices.Create(newAssAtt);
-        await UpdateGameRecord(id);
+        await UpdateWriteGameRecord(id);
         return CreatedAtAction(nameof(GetAssetAttribute), new { id = id, assetattributeid = newAssAtt.Id }, newAssAtt);
     }
-    
+
     [HttpGet("{id}/asset-attributes/{assetAttributeId}")]
     public async Task<IActionResult> GetAssetAttribute([FromRoute] Guid id, [FromRoute] Guid assetAttributeId)
     {
         RequiredScope(
+            "games:*:get",
             $"games:{id}:get",
             "assetattributes:*:get",
             $"assetattributes:{id}:get"
@@ -363,6 +376,7 @@ public class GamesController : BaseController
         var updateAssAtt = await _assetAttributeRepo.FoundOrThrowAsync(assetAttributeId, Constants.Entities.ASSET_ATTRIBUTE + Constants.Errors.NOT_EXIST_ERROR);
         Mapper.Map(assetAtt, updateAssAtt);
         await _assetAttributeServices.Update(updateAssAtt);
+        await UpdateWriteGameRecord(id);
         return Ok(updateAssAtt);
     }
 
@@ -370,11 +384,14 @@ public class GamesController : BaseController
     public async Task<IActionResult> DeleteAssetAttribute([FromRoute] Guid id, [FromRoute] Guid assetAttributeId)
     {
         RequiredScope(
+            "games:*:delete",
+            $"games:{id}:update",
             "assetattributes:*:delete",
             $"assetattributes:{id}:delete"
         );
         await _assetAttributeRepo.FoundOrThrowAsync(assetAttributeId, Constants.Entities.ASSET_ATTRIBUTE + Constants.Errors.NOT_EXIST_ERROR);
         await _assetAttributeServices.Delete(assetAttributeId);
+        await UpdateWriteGameRecord(id);
         return NoContent();
     }
     #endregion
@@ -383,6 +400,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> GetAssetsByGameID([FromRoute] Guid id)
     {
         RequiredScope(
+            "games:*:get",
             $"games:{id}:get",
             "assets:*:get",
             $"assets:{id}:get"
@@ -402,7 +420,7 @@ public class GamesController : BaseController
         var newAsset = new AssetEntity();
         Mapper.Map(asset, newAsset);
         await _assetServices.Create(newAsset);
-        await UpdateGameRecord(id);
+        await UpdateWriteGameRecord(id);
         return CreatedAtAction(nameof(GetAsset), new { id = id, assetid = newAsset.Id }, newAsset);
     }
 
@@ -410,6 +428,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> GetAsset([FromRoute] Guid id, [FromRoute] Guid assetId)
     {
         RequiredScope(
+            "games:*:get",
             $"games:{id}:get",
             "assets:*:get",
             $"assets:{id}:get"
@@ -428,6 +447,7 @@ public class GamesController : BaseController
         var updateAsset = await _assetRepo.FoundOrThrowAsync(assetId, Constants.Entities.ASSET + Constants.Errors.NOT_EXIST_ERROR);
         Mapper.Map(asset, updateAsset);
         await _assetServices.Update(updateAsset);
+        await UpdateWriteGameRecord(id);
         return Ok(updateAsset);
     }
 
@@ -435,11 +455,14 @@ public class GamesController : BaseController
     public async Task<IActionResult> DeleteAsset([FromRoute] Guid id, [FromRoute] Guid assetId)
     {
         RequiredScope(
+            $"games:{id}:update",
+            "games:*:delete",
             "assets:*:delete",
             $"assets:{id}:delete"
         );
         await _assetRepo.FoundOrThrowAsync(assetId, Constants.Entities.ASSET + Constants.Errors.NOT_EXIST_ERROR);
         await _assetServices.Delete(assetId);
+        await UpdateWriteGameRecord(id);
         return NoContent();
     }
     #endregion
@@ -449,6 +472,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> GetAssTypesByGameID([FromRoute] Guid id)
     {
         RequiredScope(
+            "games:*:get",
             $"games:{id}:get",
             "assettypes:*:get",
             $"assettypes:{id}:get"
@@ -468,7 +492,7 @@ public class GamesController : BaseController
         var cAssetType = new AssetTypeEntity { GameId = id };
         Mapper.Map(assetType, cAssetType);
         await _assetTypeServices.Create(cAssetType);
-        await UpdateGameRecord(id);
+        await UpdateWriteGameRecord(id);
         return CreatedAtAction(nameof(GetAssetType), new { id = id, assettypeid = cAssetType.Id }, cAssetType);
     }
 
@@ -476,12 +500,12 @@ public class GamesController : BaseController
     public async Task<IActionResult> GetAssetType([FromRoute] Guid id, [FromRoute] Guid assetTypeId)
     {
         RequiredScope(
+            "games:*:get",
             $"games:{id}:get",
             "assettypes:*:get",
             $"assettypes:{id}:get"
         );
-        var assetType = await _assetTypeServices.GetById(assetTypeId);
-        return Ok(assetType);
+        return Ok(await _assetTypeServices.GetById(assetTypeId));
     }
 
     [HttpPut("{id}/asset-types/{assetTypeId}")]
@@ -495,6 +519,7 @@ public class GamesController : BaseController
         var uAssetType = await _assetTypeRepo.FoundOrThrowAsync(assetTypeId, Constants.Entities.ASSET_TYPE + Constants.Errors.NOT_EXIST_ERROR);
         Mapper.Map(assetType, uAssetType);
         await _assetTypeServices.Update(uAssetType);
+        await UpdateWriteGameRecord(id);
         return Ok(uAssetType);
     }
 
@@ -502,11 +527,14 @@ public class GamesController : BaseController
     public async Task<IActionResult> DeleteAssetType([FromRoute] Guid id, [FromRoute] Guid assetTypeId)
     {
         RequiredScope(
+            $"games:{id}:update",
+            "games:*:delete",
             "assettypes:*:delete",
             $"assettypes:{id}:delete"
         );
         await _assetTypeRepo.FoundOrThrowAsync(assetTypeId, Constants.Entities.ASSET_TYPE + Constants.Errors.NOT_EXIST_ERROR);
         await _assetTypeServices.Delete(assetTypeId);
+        await UpdateWriteGameRecord(id);
         return NoContent();
     }
     #endregion
@@ -516,6 +544,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> GetAttributeGroupsByGameID([FromRoute] Guid id)
     {
         RequiredScope(
+            "games:*:get",
             $"games:{id}:get",
             "attributegroups:*:get",
             $"attributegroups:{id}:get"
@@ -545,7 +574,7 @@ public class GamesController : BaseController
         Mapper.Map(attributeGroup, attGrpEnt);
         attGrpEnt.Effect = attributeGroup.Effect.ToString();
         await _attributeGroupServices.Create(attGrpEnt);
-        await UpdateGameRecord(id);
+        await UpdateWriteGameRecord(id);
         return CreatedAtAction(nameof(GetAttributeGroup), new { id = id, attributegroupid = attGrpEnt.Id }, attGrpEnt);
     }
 
@@ -553,6 +582,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> GetAttributeGroup([FromRoute] Guid id, [FromRoute] Guid attributeGroupId)
     {
         RequiredScope(
+            "games:*:get",
            $"games:{id}:get",
            "attributegroups:*:get",
            $"attributegroups:{id}:get"
@@ -575,6 +605,7 @@ public class GamesController : BaseController
         var attGrpEnt = await _attributeGroupRepo.FoundOrThrowAsync(attributeGroupId, Constants.Entities.ATTRIBUTE_GROUP + Constants.Errors.NOT_EXIST_ERROR);
         Mapper.Map(attributeGroup, attGrpEnt);
         await _attributeGroupServices.Update(attGrpEnt);
+        await UpdateWriteGameRecord(id);
         return Ok(attGrpEnt);
     }
 
@@ -582,11 +613,14 @@ public class GamesController : BaseController
     public async Task<IActionResult> DeleteAttributeGroup([FromRoute] Guid id, [FromRoute] Guid attributeGroupId)
     {
         RequiredScope(
+            $"games:{id}:update",
+            "games:*:delete",
             "attributegroups:*:delete",
             $"attributegroups:{id}:delete"
         );
         await _attributeGroupRepo.FoundOrThrowAsync(attributeGroupId, Constants.Entities.ATTRIBUTE_GROUP + Constants.Errors.NOT_EXIST_ERROR);
         await _attributeGroupServices.Delete(attributeGroupId);
+        await UpdateWriteGameRecord(id);
         return NoContent();
     }
     #endregion
@@ -595,6 +629,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> GetCharacterAssetsByGameID([FromRoute] Guid id)
     {
         RequiredScope(
+            "games:*:get",
             $"games:{id}:get",
             "characterassets:*:get",
             $"characterassets:{id}:get"
@@ -615,7 +650,7 @@ public class GamesController : BaseController
         var newCharAss = new CharacterAssetEntity();
         Mapper.Map(charAss, newCharAss);
         await _characterAssetServices.Create(newCharAss);
-        await UpdateGameRecord(id);
+        await UpdateWriteGameRecord(id);
         return CreatedAtAction(nameof(GetCharacterAsset), new { id = id, characterassetid = newCharAss.Id }, newCharAss);
     }
 
@@ -623,12 +658,12 @@ public class GamesController : BaseController
     public async Task<IActionResult> GetCharacterAsset([FromRoute] Guid id, [FromRoute] Guid characterAssetId)
     {
         RequiredScope(
+            "games:*:get",
             $"games:{id}:get",
             "characterassets:*:get",
             $"characterassets:{id}:get"
         );
-        var character = await _characterAssetServices.GetById(characterAssetId);
-        return Ok(character);
+        return Ok(await _characterAssetServices.GetById(characterAssetId));
     }
 
     [HttpPut("{id}/character-assets/{characterAssetId}")]
@@ -642,6 +677,7 @@ public class GamesController : BaseController
         var updateCharAss = await _characterAssetRepo.FoundOrThrowAsync(characterAssetId, Constants.Entities.CHARACTER_ASSET + Constants.Errors.NOT_EXIST_ERROR);
         Mapper.Map(charAss, updateCharAss);
         await _characterAssetServices.Update(updateCharAss);
+        await UpdateWriteGameRecord(id);
         return Ok(updateCharAss);
     }
 
@@ -649,11 +685,14 @@ public class GamesController : BaseController
     public async Task<IActionResult> DeleteCharacterAsset([FromRoute] Guid id, [FromRoute] Guid characterAssetId)
     {
         RequiredScope(
+            $"games:{id}:update",
+            "games:*:delete",
             "characterassets:*:delete",
             $"characterassets:{id}:delete"
         );
         await _characterAssetRepo.FoundOrThrowAsync(characterAssetId, Constants.Entities.CHARACTER_ASSET + Constants.Errors.NOT_EXIST_ERROR);
         await _characterAssetServices.Delete(characterAssetId);
+        await UpdateWriteGameRecord(id);
         return NoContent();
     }
     #endregion
@@ -662,6 +701,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> GetCharacterAttributesByGameID([FromRoute] Guid id)
     {
         RequiredScope(
+            "games:*:get",
             $"games:{id}:get",
             "characterattributes:*:get",
             $"characterattributes:{id}:get"
@@ -682,7 +722,7 @@ public class GamesController : BaseController
         var newCharAtt = new CharacterAttributeEntity();
         Mapper.Map(charAtt, newCharAtt);
         await _characterAttributeServices.Create(newCharAtt);
-        await UpdateGameRecord(id);
+        await UpdateWriteGameRecord(id);
         return CreatedAtAction(nameof(GetCharacterAttribute), new { id = id, characterattributeid = newCharAtt.Id }, newCharAtt);
     }
 
@@ -690,12 +730,12 @@ public class GamesController : BaseController
     public async Task<IActionResult> GetCharacterAttribute([FromRoute] Guid id, [FromRoute] Guid characterAttributeId)
     {
         RequiredScope(
+            "games:*:get",
             $"games:{id}:get",
             "characterattributes:*:get",
             $"characterattributes:{id}:get"
         );
-        var charAtt = await _characterAttributeServices.GetById(characterAttributeId);
-        return Ok(charAtt);
+        return Ok(await _characterAttributeServices.GetById(characterAttributeId));
     }
 
     [HttpPut("{id}/character-attributes/{characterAttributeId}")]
@@ -709,6 +749,7 @@ public class GamesController : BaseController
         var newCharAtt = await _characterAttributeRepo.FoundOrThrowAsync(characterAttributeId, Constants.Entities.CHARACTER_ATTRIBUTE + Constants.Errors.NOT_EXIST_ERROR);
         Mapper.Map(charAtt, newCharAtt);
         await _characterAttributeServices.Update(newCharAtt);
+        await UpdateWriteGameRecord(id);
         return Ok(newCharAtt);
     }
 
@@ -716,11 +757,14 @@ public class GamesController : BaseController
     public async Task<IActionResult> DeleteCharacterAttribute([FromRoute] Guid id, [FromRoute] Guid characterAttributeId)
     {
         RequiredScope(
+            $"games:{id}:update",
+            "games:*:delete",
             "characterattributes:*:delete",
             $"characterattributes:{id}:delete"
         );
         await _characterAttributeRepo.FoundOrThrowAsync(characterAttributeId, Constants.Entities.CHARACTER_ATTRIBUTE + Constants.Errors.NOT_EXIST_ERROR);
         await _characterAttributeServices.Delete(characterAttributeId);
+        await UpdateWriteGameRecord(id);
         return NoContent();
     }
     #endregion
@@ -729,6 +773,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> GetCharactersByGameID([FromRoute] Guid id)
     {
         RequiredScope(
+            "games:*:get",
             $"games:{id}:get",
             "characters:*:get",
             $"characters:{id}:get"
@@ -736,7 +781,6 @@ public class GamesController : BaseController
         return Ok(await _characterServices.ListCharByGameId(id));
     }
 
-    [AllowAnonymous]
     [HttpPost("{id}/characters")]
     public async Task<IActionResult> CreateCharacter([FromRoute] Guid id, [FromBody] CreateCharacterRequest character)
     {
@@ -751,7 +795,7 @@ public class GamesController : BaseController
         var newC = new CharacterEntity();
         Mapper.Map(character, newC);
         await _characterServices.Create(newC);
-        await UpdateGameRecord(id);
+        await UpdateWriteGameRecord(id);
         return CreatedAtAction(nameof(GetCharacter), new { id = id, characterid = newC.Id }, newC);
     }
 
@@ -759,12 +803,12 @@ public class GamesController : BaseController
     public async Task<IActionResult> GetCharacter([FromRoute] Guid id, [FromRoute] Guid characterId)
     {
         RequiredScope(
+            "games:*:get",
             $"games:{id}:get",
             "characters:*:get",
             $"characters:{id}:get"
         );
-        var character = await _characterServices.GetById(characterId);
-        return Ok(character);
+        return Ok(await _characterServices.GetById(characterId));
     }
 
     [HttpPut("{id}/characters/{characterId}")]
@@ -778,6 +822,7 @@ public class GamesController : BaseController
         var updateC = await _characterRepo.FoundOrThrowAsync(characterId, Constants.Entities.CHARACTER + Constants.Errors.NOT_EXIST_ERROR);
         Mapper.Map(character, updateC);
         await _characterServices.Update(updateC);
+        await UpdateWriteGameRecord(id);
         return Ok(updateC);
     }
 
@@ -785,11 +830,14 @@ public class GamesController : BaseController
     public async Task<IActionResult> DeleteCharacter([FromRoute] Guid id, [FromRoute] Guid characterId)
     {
         RequiredScope(
+            $"games:{id}:update",
+            "games:*:delete",
             "characters:*:delete",
             $"characters:{id}:delete"
         );
         await _characterRepo.FoundOrThrowAsync(characterId, Constants.Entities.CHARACTER + Constants.Errors.NOT_EXIST_ERROR);
         await _characterServices.Delete(characterId);
+        await UpdateWriteGameRecord(id);
         return NoContent();
     }
     #endregion
@@ -798,6 +846,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> GetCharTypesByGameID([FromRoute] Guid id)
     {
         RequiredScope(
+            "games:*:get",
             $"games:{id}:get",
             "charactertypes:*:get",
             $"charactertypes:{id}:get"
@@ -827,7 +876,7 @@ public class GamesController : BaseController
         Mapper.Map(charType, newCT);
         newCT.BaseProperties = charType.BaseProperties.ToString();
         await _characterTypeServices.Create(newCT);
-        await UpdateGameRecord(id);
+        await UpdateWriteGameRecord(id);
         return CreatedAtAction(nameof(GetCharacterType), new { id = id, charactertypeid = newCT.Id }, newCT);
     }
 
@@ -835,6 +884,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> GetCharacterType([FromRoute] Guid id, [FromRoute] Guid characterTypeId)
     {
         RequiredScope(
+            "games:*:get",
             $"games:{id}:get",
             "charactertypes:*:get",
             $"charactertypes:{id}:get"
@@ -857,6 +907,7 @@ public class GamesController : BaseController
         var ct = await _characterTypeRepo.FoundOrThrowAsync(characterTypeId, Constants.Entities.CHARACTER_TYPE + Constants.Errors.NOT_EXIST_ERROR);
         Mapper.Map(charType, ct);
         await _characterTypeServices.Update(ct);
+        await UpdateWriteGameRecord(id);
         return Ok(ct);
     }
 
@@ -864,11 +915,13 @@ public class GamesController : BaseController
     public async Task<IActionResult> DeleteCharacterType([FromRoute] Guid id, [FromRoute] Guid characterTypeId)
     {
         RequiredScope(
+            $"games:{id}:update",
             "charactertypes:*:delete",
             $"charactertypes:{id}:delete"
         );
         await _characterTypeRepo.FoundOrThrowAsync(characterTypeId, Constants.Entities.CHARACTER_TYPE + Constants.Errors.NOT_EXIST_ERROR);
         await _characterTypeServices.Delete(characterTypeId);
+        await UpdateWriteGameRecord(id);
         return NoContent();
     }
     #endregion
@@ -877,6 +930,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> GetGameServersByGameID([FromRoute] Guid id)
     {
         RequiredScope(
+            "games:*:get",
             $"games:{id}:get",
             "gameservers:*:get",
             $"gameservers:{id}:get"
@@ -896,7 +950,7 @@ public class GamesController : BaseController
         var newGameServer = new GameServerEntity { GameId = id };
         Mapper.Map(gameServer, newGameServer);
         await _gameServerServices.Create(newGameServer);
-        await UpdateGameRecord(id);
+        await UpdateWriteGameRecord(id);
         return CreatedAtAction(nameof(GetGameServer), new { id = id, gameserverid = newGameServer.Id }, newGameServer);
     }
 
@@ -904,6 +958,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> GetGameServer([FromRoute] Guid id, [FromRoute] Guid gameServerId)
     {
         RequiredScope(
+            "games:*:get",
             $"games:{id}:get",
             "gameservers:*:get",
             $"gameservers:{id}:get"
@@ -922,6 +977,7 @@ public class GamesController : BaseController
         var updateGameServer = await _gameServerRepo.FoundOrThrowAsync(gameServerId, Constants.Entities.GAME_SERVER + Constants.Errors.NOT_EXIST_ERROR);
         Mapper.Map(gameServer, updateGameServer);
         await _gameServerServices.Update(updateGameServer);
+        await UpdateWriteGameRecord(id);
         return Ok(updateGameServer);
     }
 
@@ -929,11 +985,14 @@ public class GamesController : BaseController
     public async Task<IActionResult> DeleteGameServer([FromRoute] Guid id, [FromRoute] Guid gameServerId)
     {
         RequiredScope(
+            $"games:{id}:update",
+            "games:*:delete",
             "gameservers:*:delete",
             $"gameservers:{id}:delete"
         );
         await _gameServerRepo.FoundOrThrowAsync(gameServerId, Constants.Entities.GAME_SERVER + Constants.Errors.NOT_EXIST_ERROR);
         await _gameServerServices.Delete(gameServerId);
+        await UpdateWriteGameRecord(id);
         return NoContent();
     }
 
@@ -943,6 +1002,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> GetLevelProgressesByGameID([FromRoute] Guid id)
     {
         RequiredScope(
+            "games:*:get",
             $"games:{id}:get",
             "levelprogresses:*:get",
             $"levelprogresses:{id}:get"
@@ -963,7 +1023,7 @@ public class GamesController : BaseController
         var newLevelProg = new LevelProgressEntity();
         Mapper.Map(levelProg, newLevelProg);
         await _levelProgressServices.Create(newLevelProg);
-        await UpdateGameRecord(id);
+        await UpdateWriteGameRecord(id);
         return CreatedAtAction(nameof(GetLevelProgress), new { id = id, levelProgressId = newLevelProg.Id }, newLevelProg);
     }
 
@@ -971,6 +1031,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> GetLevelProgress([FromRoute] Guid id, [FromRoute] Guid levelProgressId)
     {
         RequiredScope(
+            "games:*:get",
             $"games:{id}:get",
             "levelprogresses:*:get",
             $"levelprogresses:{id}:get"
@@ -989,6 +1050,7 @@ public class GamesController : BaseController
         var updateLevelProg = await _levelProgressRepo.FoundOrThrowAsync(levelProgressId, Constants.Entities.LEVEL_PROGRESS + Constants.Errors.NOT_EXIST_ERROR);
         Mapper.Map(levelProg, updateLevelProg);
         await _levelProgressServices.Update(updateLevelProg);
+        await UpdateWriteGameRecord(id);
         return Ok(updateLevelProg);
     }
 
@@ -996,11 +1058,14 @@ public class GamesController : BaseController
     public async Task<IActionResult> DeleteLevelProgress([FromRoute] Guid id, [FromRoute] Guid levelProgressId)
     {
         RequiredScope(
+            $"games:{id}:update",
+            "games:*:delete",
             "levelprogresses:*:delete",
             $"levelprogresses:{id}:delete"
         );
         await _levelProgressRepo.FoundOrThrowAsync(levelProgressId, Constants.Entities.LEVEL_PROGRESS + Constants.Errors.NOT_EXIST_ERROR);
         await _levelProgressServices.Delete(levelProgressId);
+        await UpdateWriteGameRecord(id);
         return NoContent();
     }
     #endregion
@@ -1009,6 +1074,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> GetLevelsByGameID([FromRoute] Guid id)
     {
         RequiredScope(
+            "games:*:get",
             $"games:{id}:get",
             "levels:*:get",
             $"levels:{id}:get"
@@ -1016,7 +1082,6 @@ public class GamesController : BaseController
         return Ok(await _levelServices.ListLevelsByGameId(id));
     }
 
-    [AllowAnonymous]
     [HttpPost("{id}/levels")]
     public async Task<IActionResult> CreateLevel([FromRoute] Guid id, [FromBody] CreateLevelsRequest[] level)
     {
@@ -1038,24 +1103,22 @@ public class GamesController : BaseController
             levelList.Add(newLevel);
         }
         await _levelServices.Create(levelList);
-        await UpdateGameRecord(id, levelList.Count());
+        await UpdateWriteGameRecord(id, levelList.Count());
         return Created(Constants.Http.API_VERSION + "/gms/levels", levelList);
     }
 
-    [AllowAnonymous]
     [HttpGet("{id}/levels/{levelId}")]
     public async Task<IActionResult> GetLevel([FromRoute] Guid id, [FromRoute] Guid levelId)
     {
         RequiredScope(
+           "games:*:get",
            $"games:{id}:get",
            "levels:*:get",
            $"levels:{id}:get"
         );
-        var level = await _levelServices.GetById(levelId);
-        return Ok(level);
+        return Ok(await _levelServices.GetById(levelId));
     }
 
-    [AllowAnonymous]
     [HttpPut("{id}/levels/{levelId}")]
     public async Task<IActionResult> UpdateLevel([FromRoute] Guid id, [FromRoute] Guid levelId, [FromBody] UpdateLevelsRequest level)
     {
@@ -1067,19 +1130,22 @@ public class GamesController : BaseController
         var updateLevel = await _levelRepo.FoundOrThrowAsync(levelId, Constants.Entities.LEVEL + Constants.Errors.NOT_EXIST_ERROR);
         Mapper.Map(level, updateLevel);
         await _levelServices.Update(updateLevel);
+        await UpdateWriteGameRecord(id);
         return Ok(updateLevel);
     }
 
-    [AllowAnonymous]
     [HttpDelete("{id}/levels/{levelId}")]
     public async Task<IActionResult> DeleteLevel([FromRoute] Guid id, [FromRoute] Guid levelId)
     {
         RequiredScope(
+            $"games:{id}:update",
+            "games:*:delete",
             "levels:*:delete",
             $"levels:{id}:delete"
         );
         var level = await _levelRepo.FoundOrThrowAsync(levelId, Constants.Entities.LEVEL + Constants.Errors.NOT_EXIST_ERROR);
         await _levelServices.Delete(level);
+        await UpdateWriteGameRecord(id);
         return NoContent();
     }
     #endregion
@@ -1088,6 +1154,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> GetPaymentsByGameID([FromRoute] Guid id)
     {
         RequiredScope(
+            "games:*:get",
             $"games:{id}:get",
             "payments:*:get",
             $"payments:{id}:get"
@@ -1109,7 +1176,7 @@ public class GamesController : BaseController
         var newPayment = new PaymentEntity();
         Mapper.Map(payment, newPayment);
         await _paymentServices.Create(newPayment);
-        await UpdateGameRecord(id);
+        await UpdateWriteGameRecord(id);
         return CreatedAtAction(nameof(GetPayment), new { id = id, paymentId = newPayment.Id }, newPayment);
     }
 
@@ -1117,6 +1184,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> GetPayment([FromRoute] Guid id, [FromRoute] Guid paymentId)
     {
         RequiredScope(
+            "games:*:get",
            $"games:{id}:get",
            "payments:*:get",
            $"payments:{id}:get"
@@ -1135,6 +1203,7 @@ public class GamesController : BaseController
         var updatePayment = await _paymentRepo.FoundOrThrowAsync(paymentId, Constants.Entities.PAYMENT + Constants.Errors.NOT_EXIST_ERROR);
         Mapper.Map(payment, updatePayment);
         await _paymentServices.Update(updatePayment);
+        await UpdateWriteGameRecord(id);
         return Ok(updatePayment);
     }
 
@@ -1142,11 +1211,14 @@ public class GamesController : BaseController
     public async Task<IActionResult> DeletePayment([FromRoute] Guid id, [FromRoute] Guid paymentId)
     {
         RequiredScope(
+            $"games:{id}:update",
+            "games:*:delete",
             "payments:*:delete",
             $"payments:{id}:delete"
         );
         await _paymentRepo.FoundOrThrowAsync(paymentId, Constants.Entities.PAYMENT + Constants.Errors.NOT_EXIST_ERROR);
         await _paymentServices.Delete(paymentId);
+        await UpdateWriteGameRecord(id);
         return NoContent();
     }
     #endregion
@@ -1155,6 +1227,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> GetTransactionsByGameID([FromRoute] Guid id)
     {
         RequiredScope(
+            "games:*:get",
             $"games:{id}:get",
             "transactions:*:get",
             $"transactions:{id}:get"
@@ -1174,7 +1247,7 @@ public class GamesController : BaseController
         var newTrans = new TransactionEntity();
         Mapper.Map(trans, newTrans);
         await _transactionServices.Create(newTrans);
-        await UpdateGameRecord(id);
+        await UpdateWriteGameRecord(id);
         return CreatedAtAction(nameof(GetTransaction), new { id = id, transactionId = newTrans.Id }, newTrans);
     }
 
@@ -1182,6 +1255,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> GetTransaction([FromRoute] Guid id, [FromRoute] Guid transactionId)
     {
         RequiredScope(
+            "games:*:get",
             $"games:{id}:get",
             "transactions:*:get",
             $"transactions:{id}:get"
@@ -1200,6 +1274,7 @@ public class GamesController : BaseController
         var updateTrans = await _transactionRepo.FoundOrThrowAsync(transactionId, Constants.Entities.TRANSACTION + Constants.Errors.NOT_EXIST_ERROR);
         Mapper.Map(trans, updateTrans);
         await _transactionServices.Update(updateTrans);
+        await UpdateWriteGameRecord(id);
         return Ok(updateTrans);
     }
 
@@ -1207,11 +1282,14 @@ public class GamesController : BaseController
     public async Task<IActionResult> DeleteTransaction([FromRoute] Guid id, [FromRoute] Guid transactionId)
     {
         RequiredScope(
+            $"games:{id}:update",
+            "games:*:delete",
             "transactions:*:delete",
             $"transactions:{id}:delete"
         );
         await _transactionRepo.FoundOrThrowAsync(transactionId, Constants.Entities.TRANSACTION + Constants.Errors.NOT_EXIST_ERROR);
         await _transactionServices.Delete(transactionId);
+        await UpdateWriteGameRecord(id);
         return NoContent();
     }
     #endregion
@@ -1239,7 +1317,16 @@ public class GamesController : BaseController
         var user = new UserEntity();
         Mapper.Map(cUser, user);
         await _userServices.Create(user);
-        await UpdateGameRecord(id);
+        #region Add User to Game
+        await UpdateWriteGameRecord(id);
+        var gameUser = new GameUserEntity
+        {
+            UserId = user.Id,
+            GameId = id
+        };
+        await _gameUserServices.Create(gameUser);
+        #endregion
+        await UpdateWriteGameRecord(id);
         return CreatedAtAction(nameof(GetUser), new { id = id, userId = user.Id }, user);
     }
 
@@ -1247,6 +1334,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> GetUser([FromRoute] Guid id, [FromRoute] Guid userId)
     {
         RequiredScope(
+            "games:*:get",
            $"games:{id}:get",
            "users:*:get",
            $"users:{id}:get"
@@ -1265,6 +1353,7 @@ public class GamesController : BaseController
         var updateUser = await _userRepo.FoundOrThrowAsync(userId, Constants.Entities.USER + Constants.Errors.NOT_EXIST_ERROR);
         Mapper.Map(user, updateUser);
         await _userServices.Update(updateUser);
+        await UpdateWriteGameRecord(id);
         return Ok(updateUser);
     }
 
@@ -1272,35 +1361,24 @@ public class GamesController : BaseController
     public async Task<IActionResult> DeleteUser([FromRoute] Guid id, [FromRoute] Guid userId)
     {
         RequiredScope(
+            $"games:{id}:update",
+            "games:*:delete",
             "users:*:delete",
             $"users:{id}:delete"
         );
         await _userRepo.FoundOrThrowAsync(userId, Constants.Entities.USER + Constants.Errors.NOT_EXIST_ERROR);
         await _userServices.Delete(userId);
+        await UpdateWriteGameRecord(id);
         return NoContent();
     }
 
-    [HttpDelete("{id}/users/{userId}/delete-game")]
-    public async Task<IActionResult> DeleteGameUser([FromRoute] Guid id, [FromRoute] Guid userId)
-    {
-        RequiredScope(
-            "games:*:update",
-            $"games:{id}:update"
-        );
-        var gameUser = await _gameUserRepo.FirstOrDefaultAsync(gu => gu.UserId == userId && gu.GameId == id);
-        if(gameUser != null)
-        {
-            await _gameUserServices.Delete(gameUser.Id);
-            return NoContent();
-        }
-        return NotFound();
-    }
     #endregion
     #region Wallet Categories
     [HttpGet("{id}/wallet-categories")]
     public async Task<IActionResult> GetWalCatsByGameID([FromRoute] Guid id)
     {
         RequiredScope(
+            "games:*:get",
             $"games:{id}:get",
             "walletcategories:*:get",
             $"walletcategories:{id}:get"
@@ -1320,7 +1398,7 @@ public class GamesController : BaseController
         var newWalCat = new WalletCategoryEntity { GameId = id };
         Mapper.Map(walCat, newWalCat);
         await _walletCategoryServices.Create(newWalCat);
-        await UpdateGameRecord(id);
+        await UpdateWriteGameRecord(id);
         return CreatedAtAction(nameof(GetWalletCategory), new { id = id, walletCategoryId = newWalCat.Id }, newWalCat);
     }
 
@@ -1328,6 +1406,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> GetWalletCategory([FromRoute] Guid id, [FromRoute] Guid walletCategoryId)
     {
         RequiredScope(
+            "games:*:get",
             $"games:{id}:get",
             "walletcategories:*:get",
             $"walletcategories:{id}:get"
@@ -1346,6 +1425,7 @@ public class GamesController : BaseController
         var updateWalCat = await _walletCategoryRepo.FoundOrThrowAsync(walletCategoryId, Constants.Entities.WALLET + Constants.Errors.NOT_EXIST_ERROR);
         Mapper.Map(walCat, updateWalCat);
         await _walletCategoryServices.Update(updateWalCat);
+        await UpdateWriteGameRecord(id);
         return Ok(updateWalCat);
     }
 
@@ -1353,11 +1433,14 @@ public class GamesController : BaseController
     public async Task<IActionResult> DeleteWalletCategory([FromRoute] Guid id, [FromRoute] Guid walletCategoryId)
     {
         RequiredScope(
+            $"games:{id}:update",
+            "games:*:delete",
             "walletcategories:*:delete",
             $"walletcategories:{id}:delete"
         );
         await _walletCategoryRepo.FoundOrThrowAsync(walletCategoryId, Constants.Entities.WALLET + Constants.Errors.NOT_EXIST_ERROR);
         await _walletCategoryServices.Delete(walletCategoryId);
+        await UpdateWriteGameRecord(id);
         return NoContent();
     }
     #endregion
@@ -1366,6 +1449,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> GetWalletsByGameID([FromRoute] Guid id)
     {
         RequiredScope(
+            "games:*:get",
             "wallets:*:get",
             $"wallets:{id}:get",
             $"games:{id}:get"
@@ -1386,7 +1470,7 @@ public class GamesController : BaseController
         var newWallet = new WalletEntity();
         Mapper.Map(wallet, newWallet);
         await _walletServices.Create(newWallet);
-        await UpdateGameRecord(id);
+        await UpdateWriteGameRecord(id);
         return CreatedAtAction(nameof(GetWallet), new { id = id, walletId = newWallet.Id }, newWallet);
     }
 
@@ -1394,6 +1478,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> GetWallet([FromRoute] Guid id, [FromRoute] Guid walletId)
     {
         RequiredScope(
+            "games:*:get",
             "wallets:*:get",
             $"wallets:{id}:get",
             $"games:{id}:get"
@@ -1412,24 +1497,34 @@ public class GamesController : BaseController
         var updateWallet = await _walletRepo.FoundOrThrowAsync(walletId, Constants.Entities.WALLET + Constants.Errors.NOT_EXIST_ERROR);
         Mapper.Map(wallet, updateWallet);
         await _walletServices.Update(updateWallet);
+        await UpdateWriteGameRecord(id);
         return Ok(updateWallet);
     }
 
     [HttpDelete("{id}/wallets/{walletId}")]
-    public async Task<IActionResult> Delete([FromRoute] Guid id, [FromRoute] Guid walletId)
+    public async Task<IActionResult> DeleteWallet([FromRoute] Guid id, [FromRoute] Guid walletId)
     {
         RequiredScope(
+            $"games:{id}:update",
+            "games:*:delete",
             "wallets:*:delete",
             $"wallets:{id}:delete"
         );
         await _walletRepo.FoundOrThrowAsync(walletId, Constants.Entities.WALLET + Constants.Errors.NOT_EXIST_ERROR);
         await _walletServices.Delete(walletId);
+        await UpdateWriteGameRecord(id);
         return NoContent();
     }
     #endregion
+
+    //Not using
     [HttpGet("{id}/count-record")]
-    public async Task<IActionResult> CountRecordsByGameId(Guid id)
+    public async Task<IActionResult> CountRecordsByGameId([FromRoute] Guid id)
     {
+        RequiredScope(
+            "games:*:get",
+            $"games:{id}:get"
+        );
         return Ok(await _gameServices.CountRecord(id));
     }
 
@@ -1476,7 +1571,7 @@ public class GamesController : BaseController
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateGame(Guid id, [FromBody] UpdateGameRequest game)
+    public async Task<IActionResult> UpdateGame([FromRoute] Guid id, [FromBody] UpdateGameRequest game)
     {
         RequiredScope(
             "games:*:update",
@@ -1485,11 +1580,12 @@ public class GamesController : BaseController
         var updateGame = await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR);
         Mapper.Map(game, updateGame);
         await _gameServices.Update(updateGame);
+        await UpdateWriteGameRecord(id);
         return Ok(updateGame);
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteGame(Guid id)
+    public async Task<IActionResult> DeleteGame([FromRoute] Guid id)
     {
         RequiredScope(
             "games:*:delete",
@@ -1500,8 +1596,15 @@ public class GamesController : BaseController
         return NoContent();
     }
 
+    [HttpPut("reset-record")]
+    public async Task<IActionResult> ResetRecord([FromQuery] Guid[] ids)
+    {
+        RequiredScope("games:*:resetrecords");
+        await _gameServices.ResetRecord(ids);
+        return NoContent();
+    }
     [NonAction]
-    public async Task UpdateGameRecord(Guid id, int? record = 1)
+    public async Task UpdateWriteGameRecord(Guid id, int? record = 1)
     {
         var updateGame = await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR);
         updateGame.MonthlyWriteUnits += (int)record;
