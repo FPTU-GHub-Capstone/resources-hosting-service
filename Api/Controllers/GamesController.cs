@@ -1220,8 +1220,9 @@ public class GamesController : BaseController
     public async Task<IActionResult> GetUsersByGameID([FromRoute] Guid id)
     {
         RequiredScope(
+             "games:*:get",
             $"games:{id}:get",
-            // "users:*:get",
+             "users:*:get",
             $"users:{id}:get"
         );
         return Ok(await _gameUserServices.ListUsersByGameId(id));
@@ -1251,22 +1252,6 @@ public class GamesController : BaseController
            $"users:{id}:get"
        );
         return Ok(await _userServices.GetById(userId));
-    }
-    [HttpPost("{id}/users/{userId}/add-game")]
-    public async Task<IActionResult> CreateGameUser([FromRoute] Guid id, [FromRoute] Guid userId)
-    {
-        RequiredScope(
-            "users:create",
-            $"users:{id}:create",
-            $"games:{id}:update"
-        );
-        var gameUser = new GameUserEntity
-        {
-            UserId = userId,
-            GameId = id
-        };
-        await _gameUserServices.Create(gameUser);
-        return CreatedAtAction(nameof(GetUser), new { id = userId }, gameUser);
     }
 
     [HttpPut("{id}/users/{userId}")]
@@ -1522,4 +1507,107 @@ public class GamesController : BaseController
         updateGame.MonthlyWriteUnits += (int)record;
         await _gameServices.Update(updateGame);
     }
+
+    private async Task ValidateGameUser(Guid gameId, LoginRequest loginRequest)
+    {
+        var game = await _gameRepo.FoundOrThrowAsync(gameId);
+        var user = await _userRepo.FirstOrDefaultAsync(user => user.Username == loginRequest.Username) ?? throw new UnauthorizedAccessException();
+        var gameUser = await _gameUserRepo.FirstOrDefaultAsync(gu => gu.GameId == gameId && gu.UserId == user.Id);
+        if (gameUser == null)
+        {
+            throw new BadRequestException("User does not has this game");
+        }
+    }
+
+    #region auth
+    [AllowAnonymous]
+    [HttpPost("{id}/login")]
+    public async Task<IActionResult> Login(Guid id, LoginRequest loginRequest)
+    {
+        await ValidateGameUser(id, loginRequest);
+        string loginEndpoint = $"{_client.BaseAddress}/login";
+        var jsonData = BuildJsonLoginReqBody(loginRequest);
+        var contentData = new StringContent(jsonData, Encoding.UTF8, Constants.Http.JSON_CONTENT_TYPE);
+        var response = await _client.PostAsync(loginEndpoint, contentData);
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new UnauthorizedAccessException();
+        }
+        var result = await BuildJsonResponse<IdpLoginResponse>(response);
+        return CreatedAtAction(nameof(Login), result);
+    }
+
+    private string BuildJsonLoginReqBody(LoginRequest loginRequest)
+    {
+        var reqData = new Dictionary<string, string>
+        {
+            { "username", loginRequest.Username },
+            { "password", loginRequest.Password }
+        };
+        return JsonConvert.SerializeObject(reqData);
+    }
+
+    private async Task ValidateUserNotExist(string username)
+    {
+        string endpoint = $"{_client.BaseAddress}/users?username={username}";
+        Console.WriteLine(endpoint);
+        using (var request = new HttpRequestMessage(HttpMethod.Get, endpoint))
+        {
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", CurrentToken);
+            var response = await _client.SendAsync(request);
+            response.EnsureSuccessStatusCode();
+
+            var result = await BuildJsonResponse<IdpGetUsersResponse>(response);
+            if (result.users.Count() != 0)
+            {
+                throw new BadRequestException("User already exist");
+            }
+        }
+    }
+
+    private async Task StoreGameUser(Guid gameId, IdpRegisterResponse result)
+    {
+        var newUser = new UserEntity
+        {
+            Username = result.username,
+            Uid = result.uid,
+        };
+        await _userRepo.CreateAsync(newUser);
+        var gameUser = new GameUserEntity
+        {
+            UserId = newUser.Id,
+            GameId = gameId
+        };
+        await _gameUserServices.Create(gameUser);
+    }
+
+    [AllowAnonymous]
+    [HttpPost("{id}/register")]
+    public async Task<IActionResult> Register(Guid id, RegisterRequest registerRequest)
+    {
+        await ValidateUserNotExist(registerRequest.Username);
+        string registerEndpoint = $"{_client.BaseAddress}/register";
+        var jsonData = BuildJsonRegisterReqBody(registerRequest);
+        var contentData = new StringContent(jsonData, Encoding.UTF8, Constants.Http.JSON_CONTENT_TYPE);
+        var response = await _client.PostAsync(registerEndpoint, contentData);
+        if (!response.IsSuccessStatusCode)
+        {
+                throw new BadRequestException(await BuildJsonResponse<object>(response));
+        }
+        var result = await BuildJsonResponse<IdpRegisterResponse>(response);
+        await StoreGameUser(id, result);
+        return CreatedAtAction(nameof(Register), result);
+    }
+
+    private string BuildJsonRegisterReqBody(RegisterRequest registerRequest)
+    {
+        var reqData = new Dictionary<string, string>
+        {
+            { "username", registerRequest.Username },
+            { "password", registerRequest.Password },
+            { "reenterPassword", registerRequest.ReenterPassword },
+        };
+        return JsonConvert.SerializeObject(reqData);
+    }
+    #endregion auth
 }
