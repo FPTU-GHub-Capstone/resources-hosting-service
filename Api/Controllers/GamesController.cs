@@ -926,7 +926,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> DeleteCharacterType([FromRoute] Guid id, [FromRoute] Guid characterTypeId)
     {
         RequiredScope(
-            "games:*:delete",
+            $"games:{id}:update",
             "charactertypes:*:delete",
             $"charactertypes:{id}:delete"
         );
