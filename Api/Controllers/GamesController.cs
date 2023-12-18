@@ -2003,6 +2003,10 @@ public class GamesController : BaseController
     [HttpPost("{id}/login")]
     public async Task<IActionResult> Login(Guid id, LoginRequest loginRequest)
     {
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         await ValidateGameUser(id, loginRequest);
         string loginEndpoint = $"{_client.BaseAddress}/login";
         var jsonData = BuildJsonLoginReqBody(loginRequest);
@@ -2064,6 +2068,10 @@ public class GamesController : BaseController
     [HttpPost("{id}/register")]
     public async Task<IActionResult> Register(Guid id, RegisterRequest registerRequest)
     {
+        if ((await _gameRepo.FoundOrThrowAsync(id, Constants.Entities.GAME + Constants.Errors.NOT_EXIST_ERROR)).IsActive == false)
+        {
+            throw new BadRequestException("Pay to continue");
+        }
         await ValidateUserNotExist(registerRequest.Username);
         string registerEndpoint = $"{_client.BaseAddress}/register";
         var jsonData = BuildJsonRegisterReqBody(registerRequest);
