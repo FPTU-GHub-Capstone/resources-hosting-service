@@ -20,7 +20,7 @@ public class WalletCategoriesController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetWalletCategories()
     {
-        RequiredScope("walletcategories:*:get");
+        RequiredScope("games:*:get", "walletcategories:*:get");
         return Ok(await _walletCategoryServices.List());
     }
 }

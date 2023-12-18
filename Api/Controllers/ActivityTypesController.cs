@@ -20,7 +20,7 @@ public class ActivityTypesController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetActivityTypes()
     {
-        RequiredScope("activitytypes:*:get");
+        RequiredScope("games:*:get", "activitytypes:*:get");
         return Ok(await _activityTypeServices.List());
     }
 }

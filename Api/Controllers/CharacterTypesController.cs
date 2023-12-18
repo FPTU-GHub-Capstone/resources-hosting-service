@@ -23,7 +23,7 @@ public class CharacterTypesController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetCharacterTypes()
     {
-        RequiredScope("charactertypes:*:get");
+        RequiredScope("games:*:get", "charactertypes:*:get");
         var ctList = await _characterTypeServices.List();
         List<CharacterTypeResponse> ctListResponse = new();
         foreach (var ct in ctList)

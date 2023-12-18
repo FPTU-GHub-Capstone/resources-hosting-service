@@ -28,7 +28,7 @@ public class WalletsController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetWallets()
     {
-        RequiredScope("wallets:*:get");
+        RequiredScope("games:*:get", "wallets:*:get");
         return Ok(await _walletServices.List());
     }
 }

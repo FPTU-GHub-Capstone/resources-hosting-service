@@ -21,7 +21,10 @@ public class ActivitiesController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetActivitíes()
     {
-        RequiredScope("activities:*:get");
+        RequiredScope(
+            "games:*:get",
+            "activities:*:get"
+        );
         return Ok(await _activityServices.List());
     }
 }

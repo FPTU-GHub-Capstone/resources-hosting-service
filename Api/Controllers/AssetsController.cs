@@ -21,7 +21,7 @@ public class AssetsController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetAssets()
     {
-        RequiredScope("assets:*:get");
+        RequiredScope("games:*:get", "assets:*:get");
         return Ok(await _assetServices.List());
     }
 }

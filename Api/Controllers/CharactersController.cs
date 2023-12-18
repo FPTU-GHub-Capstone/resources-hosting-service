@@ -29,7 +29,7 @@ public class CharactersController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetCharacters()
     {
-        RequiredScope("characters:*:get");
+        RequiredScope("games:*:get", "characters:*:get");
         return Ok(await _characterServices.List());
     }
 

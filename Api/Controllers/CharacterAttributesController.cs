@@ -21,7 +21,7 @@ public class CharacterAttributesController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetCharacterAttributes()
     {
-        RequiredScope("characterattributes:*:get");
+        RequiredScope("games:*:get", "characterattributes:*:get");
         return Ok(await _charAttServices.List());
     }
 }

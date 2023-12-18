@@ -26,7 +26,7 @@ public class UsersController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetUsers([FromQuery] string? email)
     { 
-        RequiredScope("users:*:get");
+        RequiredScope("games:*:get", "users:*:get");
         return Ok(await _userServices.List(email));
     }
 

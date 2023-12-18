@@ -20,7 +20,7 @@ public class GameServersController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetGameServers()
     {
-        RequiredScope("gameservers:*:get");
+        RequiredScope("games:*:get", "gameservers:*:get");
         return Ok(await _gameServerServices.List());
     }
 }

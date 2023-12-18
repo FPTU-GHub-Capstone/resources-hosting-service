@@ -20,7 +20,7 @@ public class AssetTypesController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetAssetTypes()
     {
-        RequiredScope("assettypes:*:get");
+        RequiredScope("games:*:get", "assettypes:*:get");
         return Ok(await _assetTypeServices.List());
     }
 }

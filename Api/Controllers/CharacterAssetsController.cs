@@ -21,7 +21,10 @@ public class CharacterAssetsController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetCharacterAssets([FromQuery] Guid? characterId)
     {
-        RequiredScope("characterassets:*:get");
+        RequiredScope(
+            "games:*:get",
+            "characterassets:*:get"
+        );
         return Ok(await _characterAssetServices.List(characterId));
     }
 }

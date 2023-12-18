@@ -22,7 +22,7 @@ public class AttributeGroupController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetAttributeGroups()
     {
-        RequiredScope("attributegroups:*:get");
+        RequiredScope("games:*:get", "attributegroups:*:get");
         var attributes = await _attributeServices.List();
         List<AttributeGroupResponse> attGrpList = new();
         foreach (var attribute in attributes)

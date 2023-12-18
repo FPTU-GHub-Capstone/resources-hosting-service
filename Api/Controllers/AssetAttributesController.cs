@@ -20,7 +20,10 @@ public class AssetAttributesController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetAssetAttributes()
     {
-        RequiredScope("assetattributes:*:get");
+        RequiredScope(
+            "games:*:get",
+            "assetattributes:*:get"
+        );
         return Ok(await _assetAttServices.List());
     }
 }

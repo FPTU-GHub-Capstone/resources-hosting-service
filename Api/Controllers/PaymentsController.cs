@@ -19,7 +19,7 @@ public class PaymentsController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetPayments()
     {
-        RequiredScope("payments:*:get");
+        RequiredScope("games:*:get", "payments:*:get");
         return Ok(await _paymentServices.List());
     }
 }

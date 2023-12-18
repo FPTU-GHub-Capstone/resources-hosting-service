@@ -20,7 +20,7 @@ public class LevelsController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetLevels()
     {
-        RequiredScope("levels:*:get");
+        RequiredScope("games:*:get", "levels:*:get");
         return Ok(await _levelServices.List());
     }
 }
