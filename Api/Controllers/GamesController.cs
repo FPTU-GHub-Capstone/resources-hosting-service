@@ -960,8 +960,7 @@ public class GamesController : BaseController
         }
         await _characterTypeRepo.FoundOrThrowAsync(character.CharacterTypeId, Constants.Entities.CHARACTER_TYPE + Constants.Errors.NOT_EXIST_ERROR);
         await _gameServerRepo.FoundOrThrowAsync(character.GameServerId, Constants.Entities.GAME_SERVER + Constants.Errors.NOT_EXIST_ERROR); 
-        var newC = new CharacterEntity();
-        newC.UserId = (await _userRepo.FirstOrDefaultAsync(u => u.Uid == GetCurrentUid())).Id;
+        var newC = new CharacterEntity { UserId = (await _userRepo.FirstOrDefaultAsync(u => u.Uid == GetCurrentUid())).Id };
         Mapper.Map(character, newC);
         await _characterServices.Create(newC);
         await UpdateWriteGameRecord(id);
