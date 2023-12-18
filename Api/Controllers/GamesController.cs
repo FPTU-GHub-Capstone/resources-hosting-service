@@ -1976,7 +1976,7 @@ public class GamesController : BaseController
     public async Task<IActionResult> UpdateStatus([FromBody] ResetRecordRequest resetRecordRequest)
     {
         RequiredScope("games:*:updatestatus");
-        await _gameServices.UpdateStatus(resetRecordRequest.ids, resetRecordRequest.IsActive);
+        await _gameServices.UpdateStatus(resetRecordRequest.ids, resetRecordRequest.isActive);
         return NoContent();
     }
     [NonAction]

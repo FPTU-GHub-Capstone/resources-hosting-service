@@ -90,8 +90,8 @@ public class GameServices : IGameServices
         {
             game.MonthlyReadUnits = 0;
             game.MonthlyWriteUnits = 0;
-            await _gameRepo.UpdateAsync(game);
         }
+        await _gameRepo.UpdateRangeAsync(gameList);
     }
 
     public async Task UpdateStatus(Guid[] gameIds, bool isActive)
@@ -101,6 +101,7 @@ public class GameServices : IGameServices
         {
             game.IsActive = isActive;
         }
+        await _gameRepo.UpdateRangeAsync(gameList);
     }
     public async Task Create(GameEntity game)
     {
