@@ -1989,7 +1989,6 @@ public class GamesController : BaseController
 
     private async Task ValidateGameUser(Guid gameId, LoginRequest loginRequest)
     {
-        var game = await _gameRepo.FoundOrThrowAsync(gameId);
         var user = await _userRepo.FirstOrDefaultAsync(user => user.Username == loginRequest.Username) ?? throw new UnauthorizedAccessException();
         var gameUser = await _gameUserRepo.FirstOrDefaultAsync(gu => gu.GameId == gameId && gu.UserId == user.Id);
         if (gameUser == null)
