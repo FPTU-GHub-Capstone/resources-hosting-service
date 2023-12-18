@@ -9,6 +9,6 @@ namespace WebApiLayer.UserFeatures.Requests
         [Required]
         public Guid[] ids { get; set; }
         [Required]
-        public bool IsActive { get; set; }
+        public bool isActive { get; set; }
     }
 }
