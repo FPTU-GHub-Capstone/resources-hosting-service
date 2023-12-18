@@ -11,8 +11,6 @@ namespace WebApiLayer.UserFeatures.Requests
         [Required]
         public int PointReward { get; set; }
         [Required]
-        public Guid UserId { get; set; }
-        [Required]
         public Guid CharacterTypeId { get; set; }
         [Required]
         public Guid GameServerId { get; set; }
