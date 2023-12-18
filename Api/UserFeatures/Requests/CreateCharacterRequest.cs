@@ -10,7 +10,6 @@ namespace WebApiLayer.UserFeatures.Requests
         public string CurrentProperty { get; set; }
         [Required]
         public int PointReward { get; set; }
-        public Guid? UserId { get; set; }
         [Required]
         public Guid CharacterTypeId { get; set; }
         [Required]

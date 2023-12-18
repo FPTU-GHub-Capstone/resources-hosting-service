@@ -8,6 +8,5 @@ namespace WebApiLayer.UserFeatures.Requests
     {
         public string? CurrentProperty { get; set; }
         public int? PointReward { get; set; }
-        public Guid? UserId { get; set; }
     }
 }

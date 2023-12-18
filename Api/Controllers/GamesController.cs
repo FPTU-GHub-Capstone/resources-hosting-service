@@ -8,6 +8,7 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using RepositoryLayer.Repositories;
 using ServiceLayer.Business;
+using System;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json.Nodes;
@@ -574,8 +575,11 @@ public class GamesController : BaseController
         Mapper.Map(attributeGroup, attGrpEnt);
         attGrpEnt.Effect = attributeGroup.Effect.ToString();
         await _attributeGroupServices.Create(attGrpEnt);
+        var agResponse = new AttributeGroupResponse();
+        Mapper.Map(attGrpEnt, agResponse);
+        agResponse.Effect = JsonObject.Parse(attGrpEnt.Effect);
         await UpdateWriteGameRecord(id);
-        return CreatedAtAction(nameof(GetAttributeGroup), new { id = id, attributegroupid = attGrpEnt.Id }, attGrpEnt);
+        return CreatedAtAction(nameof(GetAttributeGroup), new { id = id, attributegroupid = attGrpEnt.Id }, agResponse);
     }
 
     [HttpGet("{id}/attribute-groups/{attributeGroupId}")]
@@ -781,22 +785,18 @@ public class GamesController : BaseController
         return Ok(await _characterServices.ListCharByGameId(id));
     }
 
-    [AllowAnonymous]
     [HttpPost("{id}/characters")]
     public async Task<IActionResult> CreateCharacter([FromRoute] Guid id, [FromBody] CreateCharacterRequest character)
     {
-        //RequiredScope(
-        //    "characters:create",
-        //    $"characters:{id}:create",
-        //    $"games:{id}:update"
-        //);
-        if (character.UserId != null)
-        {
-            await _userRepo.FoundOrThrowAsync((Guid)character.UserId, Constants.Entities.USER + Constants.Errors.NOT_EXIST_ERROR);
-        }
+        RequiredScope(
+            "characters:create",
+            $"characters:{id}:create",
+            $"games:{id}:update"
+        );
         await _characterTypeRepo.FoundOrThrowAsync(character.CharacterTypeId, Constants.Entities.CHARACTER_TYPE + Constants.Errors.NOT_EXIST_ERROR);
-        await _gameServerRepo.FoundOrThrowAsync(character.GameServerId, Constants.Entities.GAME_SERVER + Constants.Errors.NOT_EXIST_ERROR);
+        await _gameServerRepo.FoundOrThrowAsync(character.GameServerId, Constants.Entities.GAME_SERVER + Constants.Errors.NOT_EXIST_ERROR); 
         var newC = new CharacterEntity();
+        newC.UserId = (await _userRepo.FirstOrDefaultAsync(u => u.Uid == GetCurrentUid())).Id;
         Mapper.Map(character, newC);
         await _characterServices.Create(newC);
         await UpdateWriteGameRecord(id);
@@ -880,6 +880,9 @@ public class GamesController : BaseController
         Mapper.Map(charType, newCT);
         newCT.BaseProperties = charType.BaseProperties.ToString();
         await _characterTypeServices.Create(newCT);
+        var ctResponse = new CharacterTypeResponse();
+        Mapper.Map(newCT, ctResponse);
+        ctResponse.BaseProperties = JsonObject.Parse(newCT.BaseProperties);
         await UpdateWriteGameRecord(id);
         return CreatedAtAction(nameof(GetCharacterType), new { id = id, charactertypeid = newCT.Id }, newCT);
     }
