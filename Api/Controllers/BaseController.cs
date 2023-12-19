@@ -27,7 +27,11 @@ public abstract class BaseController : ControllerBase
     {
         const string bearerPrefix = "Bearer ";
         var token = Request.Headers["Authorization"].ToString();
-        return token.Substring(bearerPrefix.Length);
+        if (token.Length > bearerPrefix.Length)
+        {
+            return token.Substring(bearerPrefix.Length);
+        }
+        return "";
     }
 
     protected string GetCurrentUid()

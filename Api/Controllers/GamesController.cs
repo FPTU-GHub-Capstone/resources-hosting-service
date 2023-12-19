@@ -2070,7 +2070,7 @@ public class GamesController : BaseController
         {
             throw new BadRequestException("Pay to continue");
         }
-        await ValidateUserNotExist(registerRequest.Username);
+        //await ValidateUserNotExist(registerRequest.Username);
         string registerEndpoint = $"{_client.BaseAddress}/register";
         var jsonData = BuildJsonRegisterReqBody(registerRequest);
         var contentData = new StringContent(jsonData, Encoding.UTF8, Constants.Http.JSON_CONTENT_TYPE);
